@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu-desplegable</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Tourney&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <ul class="notifications"></ul>
+    <div class="Card-Loading invisible">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <span class="Card-Loading-span" >Loading...</span>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <nav>
+        <span id="open-close"><i id="menu" class='bx bx-list-minus'></i></span>
+        <img src="icono.png" class="icono" alt="">
+        <span class="Beppo">Beppo Levi</span>
+    </nav>
+    <aside class="aside" id="aside">   
+
+        <div class="container-login Perfil-Syle">
+          <h2>IniciarSesión</h2>
+          <div class="log">
+              <i class='bx bxs-user'></i> <label for=""> Usuario/DNI</label>
+          </div>
+          <div>
+              <input id="Login" class="form-control" type="text">
+          </div>
+          <div class="log" >
+              <i class='bx bx-lock-alt'></i> <label for=""> Contraseña</label>
+          </div>
+          <div>
+              <input id="Contraseña" class="form-control" type="password">
+          </div>
+          <div>
+              <button id="Btn-login" class="btn btn-light">Login</button> <button id="registro" class="btn btn-light">Registro</button>
+          </div>
+          <div>
+              <a href="#" class="link-light">Olvidaste tu Contraseña?</a>
+          </div>
+      </div>
+
+        <div class="container-accordion">
+          <h2>Carreras</h2>
+          <div>
+              <div class="accordion-menu">
+                  <div class="accordion-header">
+                    <span class="arrow-container">
+                      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+                    </span>
+                    <span>Desarrollo de Software</span>
+                  </div>
+                  <div class="accordion-content container-opcion">
+                    <div><a href="#Desarrollo de Software-Objetivos">Objetivos de la carrera</a></div>
+                    <div><a href="#Desarrollo de Software-Materias">Materias</a></div>
+                    <div><a href="#Desarrollo de Software-Regimen">Régimen De Correlatividades</a></div>
+                  </div>
+              </div>
+      </div>
+
+<!-- ***********************************************************-->
+      <div class="accordion-menu">
+        <div class="accordion-header">
+          <span class="arrow-container">
+            <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+          </span>
+          <span>Analista&nbsp;en&nbsp;Medio Ambiente</span>
+        </div>
+        <div class="accordion-content container-opcion">
+          <div><a href="#AnalistaenMedio Ambiente-Objetivos">Objetivos de la carrera</a></div>
+          <div><a href="#AnalistaenMedio Ambiente-Materias">Materias</a></div>
+          <div><a href="#AnalistaenMedio Ambiente-Regimen">Régimen De Correlatividades</a></div>
+        </div>
+    </div>
+</div>
+<!-- ***********************************************************-->
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Comercio&nbsp;Exterior</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#ComercioExterior-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#ComercioExterior-Materias">Materias</a></div>
+    <div><a href="#ComercioExterior-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Comercialización&nbsp;y Administración de Empresas</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#ComercializaciónyAdministracióndeEmpresas-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#ComercializaciónyAdministracióndeEmpresas-Materias">Materias</a></div>
+    <div><a href="#ComercializaciónyAdministracióndeEmpresas-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Higiene&nbsp;y&nbsp;Seguridad en el Trabajo</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#HigieneySeguridadenelTrabajo-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#HigieneySeguridadenelTrabajo-Materias">Materias</a></div>
+    <div><a href="#HigieneySeguridadenelTrabajo-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Sistema&nbsp;de&nbsp;Control</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#SistemadeControl-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#SistemadeControl-Materias">Materias</a></div>
+    <div><a href="#SistemadeControl-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Microelectrónica</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#Microelectrónica-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#Microelectrónica-Materias">Materias</a></div>
+    <div><a href="#Microelectrónica-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span>Químico&nbsp;Superior Industrial</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#QuímicouperiorIndustrial-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#QuímicouperiorIndustrial-Materias">Materias</a></div>
+    <div><a href="#QuímicouperiorIndustrial-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+<div class="accordion-menu">
+  <div class="accordion-header">
+    <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+    </span>
+    <span class="materia" >Químico&nbsp;Superior Analista</span>
+  </div>
+  <div class="accordion-content container-opcion">
+    <div><a href="#QuímicoSuperior Analista-Objetivos">Objetivos de la carrera</a></div>
+    <div><a href="#QuímicoSuperior Analista-Materias">Materias</a></div>
+    <div><a href="#QuímicoSuperior Analista-Regimen">Régimen De Correlatividades</a></div>
+  </div>
+</div>
+</div>
+
+
+
+        <div class="container-svg">
+            <h2>Nuestras Sedes</h2>
+            <div>
+                <span>Reconquista 813</span>
+            </div>
+            <div>
+                <span>Avda. San Martín 245</span>
+            </div>
+            <div>
+                <span>9 de Julio 1247</span>
+            </div>
+        </div>
+        <div class="container-svg">
+            <h2>Contactanos</h2>
+            <div>
+                <!---->
+            </div>
+            <div>
+                <!---->
+            </div>
+            <div>
+                <!---->
+            </div>
+        </div>
+    </aside>
+    <section id="content" class="container-page">
+      <div class="container-text">
+        <h1 class="Titulo-Style">Bienvenido al Sitio WEB del I.S.E.T. Nro 25 BEPPO LEVI.</h1><br>
+       <label for="">Tomaste la decisión de estudiar y estás listo para el proceso de transformación que implica tu capacitación.
+        Es importante tu esfuerzo por progresar y nosotros lo valoramos. Es tiempo de poner manos a la obra.
+        Más tarde verás crecer, sin duda, el fruto de tu trabajo, con un Título Oficial, expedido por el Ministerio de la República de la Argentina.</label>
+       </div>
+   
+       <div class="container-redes">
+               <div class="icon-redes row ">
+                   <div class="btn-redes col-6"><i class='bx bxl-facebook-square'></i><samp>Seguir</samp></div>
+                   <div class="btn-redes col-6"><i class='bx bxl-instagram'></i><samp>Seguir</samp></div></div>     
+               </div>
+   
+         <div class="container-carreras">
+           <span class="titulo-carrera">Carreras</span> 
+           <div class="container-carrera" >
+               <h6  class="Titulo-Style"><i class='bx bx-book-alt'></i>Desarrollo de Software</h6>
+              <h1 id="Desarrollo de Software-Objetivos" >Objetivos de la carrera</h1>
+              <h4>Preparar profesionales capacitados para:</h4>
+            <ul>
+               <li>El Técnico Superior en Desarrollo de Software será capaz de utilizar las herramientas informáticas existentes y hacerlas funcionar de manera eficaz y eficiente, contemplando en su formación distintas áreas de conocimiento, entre las cuales se encuentran:
+                   Programación, metodologías de desarrollo, arquitectura y redes, diseño de sistemas, bases de datos, dirección de proyectos informáticos, siendo imprescindible que en su formación profesional adquiera las capacidades para adaptarse a los cambios constantes en la materia, con un perfil creativo e innovador y con mentalidad de trabajo en equipo.</li>
+               <li>Desarrollar una formación técnica y profesional específica para producir artefactos de software con todo lo que ello comprende.</li>
+               <li>Reconocer las prácticas y los procedimientos comunes en los entornos organizacionales para favorecer la administración de la información y el desarrollo de software.</li>
+               <li>Desarrollar habilidades que integren conocimientos teórico-prácticos, capacidad de análisis crítico, resolución de problemas y toma de decisiones en contextos complejos de incertidumbre; que comprende a la sociedad como una construcción humana dotada con el tiempo, el espacio y la historia.</li>
+               <li>Operar de modo amplio y autónomo en el ámbito local y regional a través de la formación en el área de desarrollo de software.</li>
+               <li>Gestionar saberes que permitan adaptarse a los rápidos adelantos de las tecnologías de la información y la comunicación y actuar con flexibilidad y disposición para aprender a aprender durante toda la vida.</li>
+               <li>Lograr una actitud ética y preparación para ser ciudadano activo, responsable y comprometido con la realidad, entendiendo y atendiendo a las demandas y necesidades del contexto socio productivo en el cual se desarrolla, aplicando las normas de sostenibilidad ambiental, con una mirada integral y cuidadosa del medio ambiente.</li>
+               <li>Desarrollar habilidades comunicativas, sociales y laborales que favorezcan el trabajo en equipo, promuevan la motivación y liderazgo a nivel personal y también se orienten al logro de los objetivos de la organización.</li>
+               <li>Desarrollar capacidades emprendedoras requeridas para ser protagonistas de procesos de cambio, dirigidos a mejorar la empleabilidad, la productividad y la construcción de sus propios proyectos ocupacionales.</li>
+            </ul>
+            <h1 id="Desarrollo de Software-Materias" >MATERIAS</h1>
+            
+            <ul class="list-materias">
+               <h4 class="titulo-materias">Primer Año</h4>
+               <li>Comunicación (1er. Cuatrimestre)</li>
+               <li>Unidad de Definición Institucional I – Filosofía (2do. Cuatrimestre)</li>
+               <li>Matemática</li>
+               <li>Inglés Técnico I</li>
+               <li>Administración</li>
+               <li>Tecnología de Información</li>
+               <li>Lógica y Estructura de Datos</li>
+               <li>Ingeniería de Software I</li>
+               <li>Sistemas Operativos</li>
+            </ul>
+            <ul class="list-materias">
+               <h4 class="titulo-materias">Segundo Año</h4>
+               <li>Problemáticas Socio Contemporáneas (1er. Cuatrimestre)</li>
+               <li>Unidad de Definición Institucional II Historia Argentina (2do. Cuatrimestre)</li>
+               <li>Inglés Técnico II</li>
+               <li>Innovación y Desarrollo Emprendedor</li>
+               <li>Estadística</li>
+               <li>Programación I</li>
+               <li>Ingeniería de Software II</li>
+               <li>Bases de Datos I</li>
+               <li>Práctica Profesionalizante I</li>
+            </ul>
+            <ul class="list-materias">
+               <h4 class="titulo-materias">Tercer Año</h4>
+               <li>Ética y Responsabilidad Social</li>
+               <li>Derecho y Legislación Laboral</li>
+               <li>Redes y Comunicación</li>
+               <li>Programación II</li>
+               <li>Gestión de Proyectos de Software</li>
+               <li>TBases de Datos II</li>
+               <li>Práctica Profesionalizante II</li>
+            </ul>
+              
+            <h1 id="Desarrollo de Software-Regimen" >RÉGIMEN DE CORRELATIVIDADES</h1>
+   
+            <div class="table-container">
+               <table>
+                 <thead>
+                   <tr>
+                     <th>Cursos requeridos</th>
+                     <th>Cursos predecesores</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr>
+                     <td>Inglés Técnico II</td>
+                     <td>Inglés Técnico I</td>
+                   </tr>
+                   <tr>
+                     <td>Programación I</td>
+                     <td>Lógica y Estructura de Datos</td>
+                   </tr>
+                   <tr>
+                     <td>Ingeniería de Software II</td>
+                     <td>Ingeniería de Software I</td>
+                   </tr>
+                   <tr>
+                     <td>Redes y Comunicación</td>
+                     <td>Tecnología de la Información y Sistemas Operativos</td>
+                   </tr>
+                   <tr>
+                     <td>Programación II</td>
+                     <td>Programación I</td>
+                   </tr>
+                   <tr>
+                     <td>Bases de Datos II</td>
+                     <td>Bases de Datos I y Sistemas Operativos</td>
+                   </tr>
+                   <tr>
+                     <td>Gestión de Proyectos de Software</td>
+                     <td>Ingeniería de Software II</td>
+                   </tr>
+                   <tr>
+                     <td>Práctica Profesionalizante II</td>
+                     <td>Práctica Profesionalizante I – Administración – Innovación y Desarrollo Emprendedor</td>
+                   </tr>
+                 </tbody>
+               </table>
+             </div>
+           </div>
+   
+   
+           <div class="container-carrera" >
+            <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Analista en Medio Ambiente</h6> 
+               <h1 id="AnalistaenMedio Ambiente-Objetivos" >Objetivos de la carrera</h1>
+               <h4>Preparar profesionales capacitados para:</h4>
+             <ul>
+                <li>Capacitar y concientizar sobre los aspectos de la problemática ambiental.</li>
+                <li>Investigar en todas las áreas afines a su especialidad.</li>
+                <li>Propiciar la integración de los habitantes del lugar a la toma de decisiones para la conservación del patrimonio propio, de la biodiversidad y del desarrollo de conductas bioéticas por parte de los gobernantes.</li>
+                <li>Integrarse a equipos interdisciplinarios que actúen en el estudio y resolución de los problemas del medio ambiente.</li>
+                <li>Desarrollar métodos y estrategias que puedan prevenir las causas y eventualmente solucionar los efectos del impacto sobre el medio.</li>
+                <li>Crear, conducir y gerencia las áreas inherentes a la problemática ambiental.</li>
+             </ul>
+             <h1 id="AnalistaenMedio Ambiente-Materias">MATERIAS</h1>
+             
+             <ul class="list-materias">
+                <h4 class="titulo-materias">Promero Año</h4>
+                <li>Matemática I</li>
+                <li>Química I</li>
+                <li>Física I</li>
+                <li>Biología</li>
+                <li>Biodiversidad I</li>
+                <li>Metodología de la Investigación</li>
+                <li>Ecología I</li>
+                <li>Ecogeografía</li>
+                <li>Inglés I</li>
+                <li>Informática I</li>
+                <li>Antropología Filosófica</li>
+             </ul>
+             <ul class="list-materias">
+                <h4 class="titulo-materias">Segundo Año</h4>
+                <li>Matemática II</li>
+                <li>Química II</li>
+                <li>Física II</li>
+                <li>Química Biológica y Microbiología</li>
+                <li>Biodiversidad II</li>
+                <li>Psicología Ambiental</li>
+                <li>Ecología II</li>
+                <li>Economía y Medio Ambiente</li>
+                <li>Legislación Ambiental</li>
+                <li>Inglés II</li>
+                <li>Informática II</li>
+                <li>Formación Nacional</li>
+                <li>Problemática Ambiental Urbana</li>
+             </ul>
+             <ul class="list-materias">
+                <h4 class="titulo-materias">Tercero Año</h4>
+                <li>Estadística</li>
+                <li>Inglés III</li>
+                <li>Informática Aplicada</li>
+                <li>Bioética</li>
+                <li>Ecología III</li>
+                <li>Auditoría Ambiental</li>
+                <li>Termodinámica</li>
+                <li>Físicoquímica</li>
+                <li>Química y Toxicología Ambiental</li>
+                <li>Ingeniería Ambiental</li>
+                <li>Ecología Humana</li>
+                <li>Ecología Cultural</li>
+             </ul>
+               
+             <h1 id="AnalistaenMedio Ambiente-Regimen" >RÉGIMEN DE CORRELATIVIDADES</h1>
+    
+             <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cursos requeridos</th>
+                      <th>Cursos predecesores</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Matemática II</td>
+                      <td>Matemática I</td>
+                    </tr>
+                    <tr>
+                       <td>Química II</td>
+                       <td>Química I</td>
+                    </tr>
+                    <tr>
+                       <td>Fisica I</td>
+                       <td>Matemática I - Fisica I</td>
+                    </tr>
+                    <tr>
+                       <td>Química Biológica y Microbiología</td>
+                       <td>Química I - Biología</td>
+                    </tr>
+                    <tr>
+                       <td>Biodiversidad II</td>
+                       <td>Biología - Biodiversidad I</td>
+                    </tr>
+                    <tr>
+                       <td>Psicología Ambiental</td>
+                       <td>Antropología Filosófica</td>
+                    </tr>
+                    <tr>
+                       <td>Inglés II</td>
+                       <td>Inglés I</td>
+                    </tr>
+                    <tr>
+                       <td>Informática II</td>
+                       <td>Informática I</td>
+                    </tr>
+                    <tr>
+                       <td>Ecología II</td>
+                       <td>Ecología I - Biodiversidad I - Ecogeografía</td>
+                   </tr>
+                   <tr>
+                       <td>Problemática Ambiental Urbana</td>
+                       <td>Ecología I</td>
+                   </tr>
+                   <tr>
+                       <td>Estadística</td>
+                       <td>Matemática II</td>
+                 </tr>
+                 <tr>
+                       <td>Inglés III</td>
+                       <td>Inglés II</td>
+                </tr>
+                <tr>
+                       <td>Informática Aplicada</td>
+                       <td>Informática II</td>
+                </tr>
+                <tr>
+                       <td>Bioética</td>
+                       <td>Antropología Filosófica - Biodiversidad II - Psicología Ambiental</td>
+                </tr>
+                 <tr>
+                        <td>Ecología III</td>
+                        <td>Ecología II</td>
+                  </tr>
+                    <tr>
+                        <td>Auditoría Ambiental</td>
+                        <td>Química II - Química Biológica y Microbiología</td>
+                 </tr>
+                  <tr>
+                        <td>Termodinámica</td>
+                        <td>Matemática II - Química II - Física II</td>
+                 </tr>
+                  <tr>
+                        <td>Fisicoquímica</td>
+                        <td>Matemática II - Química II - Física II</td>
+                 </tr>
+                  <tr>
+                        <td>Química y Toxicología Ambiental</td>
+                        <td>Química II - Química Biológica y Microbiología</td>
+                  </tr>
+                   <tr>
+                        <td>Ingeniería Ambiental</td>
+                        <td>Economía y Medio Ambiente - Problemática Ambiental Urbana</td>
+                  </tr>
+                  <tr>
+                        <td>Ecología Humana</td>
+                        <td>Biodiversidad II - Ecología II - Problemática Ambiental Urbana</td>
+                  </tr>
+                  <tr>
+                        <td>Ecología Cultural</td>
+                        <td>Biodiversidad II - Ecología II - Problemática Ambiental Urbana</td>
+                  </tr>                     
+                  </tbody>
+                </table>
+              </div>
+    
+            </div>
+   
+<!-- ***********************************************************-->
+          <div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Comercio Exterior</h6> 
+     <h1 id="ComercioExterior-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Comprender los mecanismos y reglas de juego que rigen relaciones comerciales entre países.</li>
+      <li>Utilizar los mecanismos establecidos en los acuerdos de integración a nivel latinoamericano y mundial.</li>
+      <li>Aplicar procedimientos operativos de un sistema de costos orientados al comercio internacional.</li>
+      <li>Determinar las fuentes alternativas de financiamiento de un proyecto de exportación y establecer las ventajas comparativas que ofrece cada una de ellas, así como también manejas los recursos básicos utilizados en la negociación internacional.</li>
+      <li>Ubicar el marco legal que rige el comercio internacional de bienes y servicios.</li>
+      <li>Realizar el conjunto de operaciones que hagan factible el contrato de seguro de exportación y la selección de transporte internacional.</li>
+      <li>Completar y tramitarla documentación que se requiere para los comercios de exportación e importación.</li>
+      <li>Realizar estudios de mercados externos y desarrollo de productos.</li>
+      <li>Formular estrategias para importar y exportar en nuevos mercados con productos y servicios tradicionales y no tradicionales.</li>
+      <li>Analizar la economía nacional e internacional.</li>
+      <li>Planificar, coordinar, ejecutar y controlar todas las actividades y tareas que directa o indirectamente vinculen al sector exportador o importador con instituciones de carácter público o privado.</li>
+      <li>Asesorar en actividades relacionadas al comercio exterior.</li>
+   </ul>
+   <h1 id="ComercioExterior-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Economía 1</li>
+      <li>Introducción al comercio exterior</li>
+      <li>Derecho Comercial</li>
+      <li>Administración</li>
+      <li>Matemática Aplicada</li>
+      <li>Contabilidad 1</li>
+      <li>Antropología Filosófica</li>
+      <li>Técnica y Práctica Aduanera</li>
+      <li>Computación 1</li>
+      <li>Inglés 1</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Mercadotecnia</li>
+      <li>Estadística</li>
+      <li>Financiamiento y Cambio</li>
+      <li>Patentes y Marcas</li>
+      <li>Formación Nacional</li>
+      <li>Análisis de Costos</li>
+      <li>Matemática Financiera</li>
+      <li>Técnica y Práctica Aduanera 2</li>
+      <li>Computación 2</li>
+      <li>Inglés 2</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Mercadotecnia Internacional</li>
+      <li>Costos de Exportación e Importación</li>
+      <li>Controles de calidad y Normalización</li>
+      <li>Integración y Cooperación Internacional</li>
+      <li>Estructuras Económicas Regionales</li>
+      <li>Funcionamiento del Comercio Exterior Argentino</li>
+      <li>Valorización y Clasificación Arancelaria</li>
+      <li>Distribución Física Internacional</li>
+      <li>Relaciones Económicas Internacionales</li>
+      <li>Inglés 3</li>
+      <li>Portugués</li>
+   </ul>
+     
+   <h1 id="ComercioExterior-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Para rendir</td>
+            <td>Debe tener aprobada</td>
+          </tr>
+          <tr>
+             <td>Mercadotecnia</td>
+             <td>Economía I</td>
+          </tr>
+          <tr>
+             <td>Estadística</td>
+             <td>Matemática Aplicada</td>
+          </tr>
+          <tr>
+             <td>Régimen Impositivo</td>
+             <td>Derecho Comercial</td>
+          </tr>
+          <tr>
+             <td>Financiamiento y Cambio</td>
+             <td>Economía I - Contabilidad I</td>
+          </tr>
+          <tr>
+             <td>Patentes y Marcas</td>
+             <td>Derecho Comercial</td>
+          </tr>
+          <tr>
+             <td>Análisis de Costos</td>
+             <td>Contabilidad I</td>
+          </tr>
+          <tr>
+             <td>Matemática Financiera</td>
+             <td>Matemática Aplicada</td>
+          </tr>
+          <tr>
+            <td>Técnica y Práctica Aduanera II</td>
+            <td>Técnica y Práctica Aduanera I</td>
+          </tr>
+          <tr>
+             <td>Computación II</td>
+             <td>Computación I</td>
+          </tr>
+          <tr>
+             <td>Inglés II</td>
+             <td>Inglés I</td>
+          </tr>
+          <tr>
+             <td>Mercadotecnia Internacional</td>
+             <td>Introducción al Comercio Exterior - Mercadotecnia</td>
+          </tr>
+          <tr>
+             <td>Costo de Exportación e Importación</td>
+             <td>Análisis de Costo</td>
+          </tr>
+          <tr>
+             <td>Integración y Cooperación Internacional</td>
+             <td>Economía I - Introducción al Comercio Exterior</td>
+          </tr>
+          <tr>
+             <td>Estructuras Económicas Regionales</td>
+             <td>Economía I - Introducción al Comercio Exterior</td>
+          </tr>
+          <tr>
+             <td>Funcionamiento del Comercio Exterior Argentino</td>
+             <td>Economía I - Introducción al Comercio Exterior - Derecho Comercial</td>
+          </tr>
+          <tr>
+             <td>Valoración y Clasificación Arancelaria</td>
+             <td>Técnica y Práctica Aduanera II</td>
+          </tr>
+           <tr>
+             <td>Distribución Fisica Internacional</td>
+             <td>Economía I - Introducción al Comercio Exterior</td>
+          </tr>
+           <tr>
+             <td>Relaciones Económicas Internacionales</td>
+             <td>Economía I - Introducción al Comercio Exterior</td>
+          </tr>
+           <tr>
+              <td>Inglés III</td>
+              <td>2da</td>
+           </tr>
+        </tbody>
+      </table>
+    </div>
+        </div>
+<!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Comercialización y Administración de Empresas</h6> 
+     <h1 id="ComercializaciónyAdministracióndeEmpresas-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Diseñar el organigrama interno de los departamentos de una empresa o sociedad comercial.</li>
+      <li>Asesorar sobre cuestiones vinculadas al acceso al crédito, operatoria bancaria y financiamiento de operaciones comerciales.</li>
+      <li>Diseñar estrategias de comercialización de bienes y servicios.</li>
+      <li>Adaptar los productos a las necesidades de los distintos mercados y nichos comerciales.</li>
+      <li>Realizar una racional gestión de los recursos humanos dentro de la empresa.</li>
+      <li>Planificar el establecimiento de canales de comercialización y distribución de mercaderías.</li>
+      <li>Diseñar estrategias de publicidad y promoción para la colocación de productos en el mercado.</li>
+   </ul>
+   <h1 id="ComercializaciónyAdministracióndeEmpresas-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Economía I</li>
+      <li>Introducción al Comercio Exterior</li>
+      <li>Derecho Comercial</li>
+      <li>Administración</li>
+      <li>Matemática Aplicada</li>
+      <li>Contabilidad I</li>
+      <li>Antropología Filosófica</li>
+      <li>Técnica y Práctica Aduanera I</li>
+      <li>Computación I</li>
+      <li>Inglés I</li>
+
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Mercadotecnia</li>
+      <li>Estadística</li>
+      <li>Régimen Impositivo</li>
+      <li>Financiamiento y Cambio</li>
+      <li>Patentes y Marcas</li>
+      <li>Formación Nacional</li>
+      <li>Análisis de Costos</li>
+      <li>Matemática Financiera</li>
+      <li>Técnica y Práctica Aduanera II</li>
+      <li>Computación II</li>
+      <li>Inglés II</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Mercadotecnia Internacional</li>
+      <li>Administración de la Empresa</li>
+      <li>Planeamiento y Mercadeo Estratégico</li>
+      <li>Geografía Económica</li>
+      <li>Promoción y Publicidad</li>
+      <li>Derecho Aplicado</li>
+      <li>Economía II</li>
+      <li>Contabilidad II</li>
+      <li>Práctica Profesional y Redacción Comercial</li>
+      <li>Inglés III</li>
+      <li>Ética y Deodontología Profesional</li>
+   </ul>
+     
+   <h1 id="ComercializaciónyAdministracióndeEmpresas-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mercadotecnia</td>
+            <td>Economía I</td>
+          </tr>
+          <tr>
+            <td>Estadística</td>
+            <td>Matemática Aplicada</td>
+          </tr>
+          <tr>
+            <td>Régimen Impositivo</td>
+            <td>Derecho Comercial</td>
+          </tr>
+          <tr>
+            <td>Financiamiento y Cambio</td>
+            <td>Economía I - Contabilidad I</td>
+          </tr>
+          <tr>
+            <td>Patentes y Marcas</td>
+            <td>Derecho Comercial</td>
+          </tr>
+          <tr>
+            <td>Análisis de Costos</td>
+            <td>Contabilidad I</td>
+          </tr>
+          <tr>
+            <td>Matemática Financiera</td>
+            <td>Matemática Aplicada</td>
+          </tr>
+          <tr>
+            <td>Técnica y Práctica Aduanera II</td>
+            <td>Técnica y Práctica Aduanera I</td>
+          </tr>
+          <tr>
+            <td>Computación II</td>
+            <td>Computación I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Mercadotecnia Internacional</td>
+            <td>Introducción al Comercio Exterior - Mercadotecnia</td>
+          </tr>
+          <tr>
+            <td>Administración de la Empresa</td>
+            <td>Administración</td>
+          </tr>
+          <tr>
+            <td>Planeamiento y Mercadeo Estratégico</td>
+            <td>Mercadotecnia</td>
+          </tr>
+          <tr>
+            <td>Geografía Económica</td>
+            <td>Economía I</td>
+          </tr>
+          <tr>
+            <td>Promoción y Publicidad</td>
+            <td>Derecho Comercial - Mercadotecnia</td>
+          </tr>
+          <tr>
+            <td>Derecho Aplicado</td>
+            <td>Derecho Comercial</td>
+          </tr>
+          <tr>
+            <td>Economía II</td>
+            <td>Economía I</td>
+          </tr>
+           <tr>
+            <td>Contabilidad II</td>
+            <td>Contabilidad I</td>
+          </tr>
+           <tr>
+            <td>Práctica Profesionalizante y Redacción Comercial</td>
+            <td>Administración</td>
+          </tr>
+           <tr>
+            <td>Inglés III</td>
+            <td>Inglés I</td>
+           </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+ 
+ <!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Higiene y Seguridad en el Trabajo</h6> 
+     <h1 id="HigieneySeguridadenelTrabajo-Objetivos" >Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Prevenir accidentes eliminando condiciones inseguras en el medio laboral.</li>
+      <li>Ser ayudante del ingeniero para el cumplimiento de sus fines específicos.</li>
+      <li>Concientizar sobre las leyes y reglamentaciones vigentes.</li>
+      <li>Controlar trabajos en frío y en caliente en el medio laboral.</li>
+      <li>Detectar a través de la ley el cubrimiento preventivo de riesgos del incendio.</li>
+      <li>Controlar el cumplimiento de los planes de mejoras indicadas por las ART.</li>
+      <li>Integrar grupos interdisciplinarios en aspectos de la Ley N° 19587, Dec. Reglamentario N° 351/79, actualizaciones y toda norma especifica futura.</li>
+   </ul>
+   <h1 id="HigieneySeguridadenelTrabajo-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Física I</li>
+      <li>Química I</li>
+      <li>Dibujo Técnico</li>
+      <li>Álgebra</li>
+      <li>Organización Laboral</li>
+      <li>Seguridad I</li>
+      <li>Incendio I</li>
+      <li>Higiene I</li>
+      <li>Antropología Filosófica</li>
+      <li>Computación I</li>
+      <li>Inglés I</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Física II</li>
+      <li>Química II</li>
+      <li>Análisis Matemático</li>
+      <li>Seguridad II</li>
+      <li>Incendio II</li>
+      <li>Higiene II</li>
+      <li>Tecnología de los Materiales</li>
+      <li>Formación Nacional</li>
+      <li>Computación II</li>
+      <li>Inglés II</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Selección y Capacitación de Personal</li>
+      <li>Legislación Laboral</li>
+      <li>Saneamiento Ambiental</li>
+      <li>Psicología Laboral</li>
+      <li>Seguridad III</li>
+      <li>Higiene III</li>
+      <li>Ética Profesional</li>
+      <li>Computación Aplicada</li>
+      <li>Inglés III</li>
+      <li>Práctica Profesional</li>
+   </ul>
+     
+   <h1 id="HigieneySeguridadenelTrabajo-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Física II</td>
+            <td>Física I - Álgebra</td>
+          </tr>
+          <tr>
+            <td>Química II</td>
+            <td>Química I</td>
+          </tr>
+          <tr>
+            <td>Análisis Matemático</td>
+            <td>Álgebra</td>
+          </tr>
+          <tr>
+            <td>Seguridad II</td>
+            <td>Seguridad I</td>
+          </tr>
+          <tr>
+            <td>Higiene II</td>
+            <td>Higiene I</td>
+          </tr>
+          <tr>
+            <td>Tecnología de los Materiales</td>
+            <td>Física I - Química I</td>
+          </tr>
+          <tr>
+            <td>Incendio II</td>
+            <td>Incendio I</td>
+          </tr>
+          <tr>
+            <td>Computación II</td>
+            <td>Computación I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Inglés III</td>
+            <td>Inglés II</td>
+          </tr>
+          <tr>
+            <td>Saneamiento Ambiental</td>
+            <td>Química II</td>
+          </tr>
+          <tr>
+            <td>Seguridad III</td>
+            <td>Seguridad II</td>
+          </tr>
+          <tr>
+            <td>Higiene III</td>
+            <td>Higiene II</td>
+          </tr>
+          <tr>
+            <td>Computación Aplicada</td>
+            <td>Computación II</td>
+          </tr>
+          <tr>
+            <td>Práctica Profesional</td>
+            <td>Selección y Capacitación de Personal - Legislación Laboral - Saneamiento ambiental- Psicología Laboral - Higiene III - Seguridad III - Ética Profesional - Computación Aplicada - Inglés III </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>       
+
+<!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Sistema de Control</h6> 
+     <h1 id="SistemadeControl-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Realizar detecciones de fallas en sistemas de control de mediana complejidad, que incluyan automatismos electrónicos, hidráulicos y neumáticos</li>
+      <li>Reparar componentes y subsistemas de los sistemas globales de control</li>
+      <li>Efectuar la correcta especialización de partes de componentes de los sistemas de control</li>
+      <li>Evaluar distintas alternativas de control seleccionando la adecuada para cada caso</li>
+      <li>Participar en equipos profesionales que apliquen la informática para el diseño a través de la utilización de tecnología CAD/CAM</li>
+      <li>Actualizarse en un área que cambia dinámicamente e integrarse en equipos multidisciplinarios</li>
+      <li>Poner en juego la creatividad que basada en el saber, permite brindar soluciones a problemas nunca antes enfrentados para incrementar la productividad</li>
+   </ul>
+   <h1 id="SistemadeControl-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Matemática</li>
+      <li>Teoría de Circuitos I</li>
+      <li>Electrónica I</li>
+      <li>Laboratorio de Mediciones</li>
+      <li>Laboratorio I</li>
+      <li>Computación I</li>
+      <li>Técnicas Digitales</li>
+      <li>Inglés I</li>
+      <li>Antropología Filosófica</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Matemática Aplicada</li>
+      <li>Teoría de Circuitos II</li>
+      <li>Electrónica II</li>
+      <li>Laboratorio II</li>
+      <li>Computación II</li>
+      <li>Introducción a los Microprocesadores</li>
+      <li>Modelización de sistemas Físicos</li>
+      <li>Sistemas de Control</li>
+      <li>Inglés II</li>
+      <li>Formación Nacional</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Electrónica de Potencia</li>
+      <li>Máquinas Eléctricas</li>
+      <li>Laboratorio de Máquinas</li>
+      <li>Hidráulica y Neumática Aplicada</li>
+      <li>Sistemas de control Automático</li>
+      <li>Computación Aplicada</li>
+      <li>Proyectos</li>
+      <li>Higiene y Seguridad en el Trabajo</li>
+   </ul>
+     
+   <h1 id="SistemadeControl-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Matemática Aplicada</td>
+            <td>Matemática</td>
+          </tr>
+          <tr>
+            <td>Teoría de Circuitos II</td>
+            <td>Teoría de Circuitos I</td>
+          </tr>
+          <tr>
+            <td>Electrónica II</td>
+            <td>Electrónica I - Laboratorio I</td>
+          </tr>
+          <tr>
+            <td>Laboratorio II</td>
+            <td>Electrónica I - Laboratorio I</td>
+          </tr>
+          <tr>
+            <td>Computación II</td>
+            <td>Computación I</td>
+          </tr>
+          <tr>
+            <td>Introducción a los Microprocesadores</td>
+            <td>Electrónica I - Técnicas Digitales</td>
+          </tr>
+          <tr>
+            <td>Modelización de Sistemas Físicos</td>
+            <td>Matemática</td>
+          </tr>
+          <tr>
+            <td>Sistemas de Control</td>
+            <td>Matemática - Teoría de Circuitos I - Electrónica I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Electrónica de Potencia</td>
+            <td>Teoría de Circuitos II - Electrónica II</td>
+          </tr>
+          <tr>
+            <td>Máquinas Eléctricas</td>
+            <td>Teoría de Circuitos II</td>
+          </tr>
+          <tr>
+            <td>Laboratorio da Máquinas</td>
+            <td>Teoría de Circuitos II</td>
+          </tr>
+          <tr>
+            <td>Hidráulica y Neumática Aplicada</td>
+            <td>Modelización de Sistemas Físicos</td>
+          </tr>
+          <tr>
+            <td>Sistemas de Control Automático</td>
+            <td>Matemática Aplicada - Modelizacion de Sistemas Físicos - Sistemas de Control</td>
+          </tr>
+          <tr>
+            <td>Computación Aplicada</td>
+            <td>Computación II</td>
+          </tr>
+          <tr>
+            <td>Proyectos</td>
+            <td>Matemática Aplicada - Teoría de Circuitos - Electrónica II - Laboratorio II - Computación II - Introducción a los Microprocesadores - Sistemas de Control - Modelización de Sistemas Físicos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div> 
+
+<!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Microelectrónica</h6> 
+     <h1 id="Microelectrónica-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Realizar detecciones de fallas en sistemas digitales basados en microprocesadores de mediana complejidad, inclusive en sus interfases específicas</li>
+      <li>Repara subsistemas de los sistemas globales mencionados</li>
+      <li>Poseer los conocimientos sólidos para efectuar la especificación correcta de partes de componentes de sistemas globales basados en microelectrónica ( de aplicación comercial o industrial )</li>
+      <li>Evaluar, en función del problema técnico específico, las distintas alternativas de diseño o construcción formando parte de equipos profesionales especializados</li>
+      <li>Aplicar los conocimientos de informática que le permitan encarar diseños usando tecnología CAD/CAM, e inclusive aplicar software y hardware de computadoras de tipo PC</li>
+   </ul>
+   <h1 id="Microelectrónica-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Matemática</li>
+      <li>Teoría de Circuitos I</li>
+      <li>Electrónica I</li>
+      <li>Laboratorio de Mediciones</li>
+      <li>Laboratorio I</li>
+      <li>Computación I</li>
+      <li>Técnicas Digitales</li>
+      <li>Inglés I</li>
+      <li>Antropología Filosófica</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Matemática Aplicada</li>
+      <li>Teoría de Circuitos II</li>
+      <li>Electrónica II</li>
+      <li>Laboratorio II</li>
+      <li>Computación II</li>
+      <li>Introducción a los Microprocesadores</li>
+      <li>Modelización de sistemas Físicos</li>
+      <li>Sistemas de Control</li>
+      <li>Inglés II</li>
+      <li>Formación Nacional</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Microprocesadores Aplicados</li>
+      <li>Sistemas de Control Digital</li>
+      <li>Transmisión Digital de Datos</li>
+      <li>Computación Aplicada</li>
+      <li>Introducción a la Robótica</li>
+      <li>Proyectos</li>
+      <li>Higiene y Seguridad en el Trabajo</li>
+   </ul>
+     
+   <h1 id="Microelectrónica-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Matemática Aplicada</td>
+            <td>Matemática</td>
+          </tr>
+          <tr>
+            <td>Teoría de Circuitos II</td>
+            <td>Teoría de Circuitos I</td>
+          </tr>
+          <tr>
+            <td>Electrónica II</td>
+            <td>Electrónica I - Laboratorio I</td>
+          </tr>
+          <tr>
+            <td>Laboratorio II</td>
+            <td>Electrónica I - Laboratorio I</td>
+          </tr>
+          <tr>
+            <td>Computación II</td>
+            <td>Computación I</td>
+          </tr>
+          <tr>
+            <td>Introducción a los Microprocesadores</td>
+            <td>Electrónica I - Técnicas Digitales</td>
+          </tr>
+          <tr>
+            <td>Modelización de Sistemas Físicos</td>
+            <td>Matemática</td>
+          </tr>
+          <tr>
+            <td>Sistemas de Control</td>
+            <td>Matemática - Teoría de Circuitos - Electrónica I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Microprocesadores Aplicados</td>
+            <td>Electrónica II - Laboratorio II - Introducción a los Mircroprocesadores</td>
+          </tr>
+          <tr>
+            <td>Sistemas de Control Digital</td>
+            <td>Matemática Aplicada - Modelización de Sistemas Físicos - Sistemas de Control</td>
+          </tr>
+          <tr>
+            <td>Transmisión Digital de Datos</td>
+            <td>Técnicas Digitales - Matemática Aplicada - Electrónica II</td>
+          </tr>
+          <tr>
+            <td>Computación Aplicada</td>
+            <td>Computación II</td>
+          </tr>
+          <tr>
+            <td>Introducción a la Robótica</td>
+            <td>Matemática Aplicada - Teoría de Circuitos II - Electrónica II - Laboratorio II - Computación II - Introducción a los microprocesadores - Sistemas de Control - Modelización de Sistemas Físicos</td>
+          </tr>
+          <tr>
+            <td>Proyectos</td>
+            <td>Matemática Aplicada - Teoría de Circuitos - Electrónica II - Laboratorio II - Computación II - Introducció a los microprocesadores - Sistemas de Control - Modelización de Sistemas Físicos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div> 
+
+<!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Químico Superior Industrial</h6> 
+     <h1 id="QuímicouperiorIndustrial-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Desarrollar, asistir y controlar procesos químicos en plantas industriales</li>
+      <li>Aplicar los conocimientos necesarios que permitan cuidar la higiene y seguridad en el trabajo</li>
+      <li>Determinar las condiciones de operación que permitan maximizar el cuidado del medio ambiente</li>
+      <li>Programar y controlar la producción</li>
+      <li>Asistir en la instalación, ampliación y mejoramiento de las plantas industriales y sus procesos</li>
+      <li>Formar seres humanos con conocimiento teóricos y prácticos, inculcando hábitos de investigación y desarrollo de inquietudes personales que le permitan seguir perfeccionándose</li>
+      <li>Integrar equipos de trabajo multidisciplinarios</li>
+   </ul>
+   <h1 id="QuímicouperiorIndustrial-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Química General e Inorgánica</li>
+      <li>Laboratorio de Química General e Inorgánica</li>
+      <li>Matemática I</li>
+      <li>Física I</li>
+      <li>Inglés I</li>
+      <li>Antropología Filosófica</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Química Orgánica</li>
+      <li>Laboratorio de Química Orgánica</li>
+      <li>Química Analítica</li>
+      <li>Laboratorio de Química Analítica</li>
+      <li>Introducción a la Fisicoquímica</li>
+      <li>Inglés II</li>
+      <li>Matemática II</li>
+      <li>Física II</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Control e Instrumentación</li>
+      <li>Diseño de Reactores</li>
+      <li>Operaciones Químicas</li>
+      <li>Procesos Químicos</li>
+      <li>Garantía de Calidad y Control Estadísticos de Procesos</li>
+      <li>Computación Aplicada</li>
+      <li>Formación Nacional</li>
+      <li>Higiene y seguridad en el trabajo</li>
+      <li>Inglés III</li>
+      <li>Procesos Alimenticios</li>
+   </ul>
+     
+   <h1 id="QuímicouperiorIndustrial-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Química Orgánica</td>
+            <td>Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Orgánica</td>
+            <td>Química General e Inorgánica - Laboratorio de Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Química Analítica</td>
+            <td>Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Analítica</td>
+            <td>Química General e Inorgánica - Laboratorio de Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Introducción a la Fisicoquímica</td>
+            <td>Química General e Inorgánica - Matemática I - Física I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Matemática II</td>
+            <td>Matemática I</td>
+          </tr>
+          <tr>
+            <td>Física II</td>
+            <td>Matemática I - Física I</td>
+          </tr>
+          <tr>
+            <td>Control e Instrumentación</td>
+            <td>Física II</td>
+          </tr>
+          <tr>
+            <td>Diseño de Reactores</td>
+            <td>Introducción a la Fisicoquímica</td>
+          </tr>
+          <tr>
+            <td>Procesos Químicos</td>
+            <td>Química Orgánica Aplicada</td>
+          </tr>
+          <tr>
+            <td>Procesos Alimenticios</td>
+            <td>Química Orgánica - Química Analítica</td>
+          </tr>
+          <tr>
+            <td>Garantía de Calidad y Control Estadístico de Procesos</td>
+            <td>Matemática II</td>
+          </tr>
+          <tr>
+            <td>Inglés III</td>
+            <td>Inglés II</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div> 
+
+<!-- ***********************************************************-->
+<div class="container-carrera" >
+  <h6 class="Titulo-Style"><i class='bx bx-book-alt'></i>Comercialización y Administración de Empresas</h6> 
+     <h1 id="QuímicoSuperior Analista-Objetivos">Objetivos de la carrera</h1>
+     <h4>Preparar profesionales capacitados para:</h4>
+   <ul>
+      <li>Resolver los problemas tecnológicos inculcando hábitos de investigación y desarrollos de inquietudes personales</li>
+      <li>Seguir estudiando, perfeccionándose y transmitiendo conocimientos en un área que se transforma dinámica e ininterrumpidamente</li>
+      <li>Realizar análisis físicos- químicos y microbiológicos en general</li>
+      <li>Cuidar la higiene y seguridad del trabajo mediante la correcta aplicación de la tecnología existente</li>
+      <li>Interpretar los resultados de los análisis obtenidos y proponer las modificaciones que crea conveniente para asegurar la calidad de materias primas y productos terminados</li>
+      <li>Perfeccionarse en el manejo y conocimiento de las diferentes técnicas operatorias de material, equipos e instrumental</li>
+      <li>Desarrollar hábitos de integración que le permitan incorporarse a grupos de trabajo multidisciplinarios</li>
+   </ul>
+   <h1 id="QuímicoSuperior Analista-Materias">MATERIAS</h1>  
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Primer Año</h4>
+      <li>Química General e Inorgánica</li>
+      <li>Laboratorio de Química General e Inorgánica</li>
+      <li>Matemática I</li>
+      <li>Física I</li>
+      <li>Inglés I</li>
+      <li>Antropología Filosófica</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Segundo Año</h4>
+      <li>Química Orgánica</li>
+      <li>Laboratorio de Química Orgánica</li>
+      <li>Química Analítica</li>
+      <li>Laboratorio de Química Analítica</li>
+      <li>Introducción a la Fisicoquímica</li>
+      <li>Inglés II</li>
+      <li>Matemática II</li>
+      <li>Física II</li>
+   </ul>
+   <ul class="list-materias">
+      <h4 class="titulo-materias">Tercer Año</h4>
+      <li>Química Analítica Aplicada</li>
+      <li>Laboratorio de Química Analítica Aplicada</li>
+      <li>Química Orgánica Aplicada</li>
+      <li>Laboratorio de Química Orgánica Aplicada</li>
+      <li>Garantía de Calidad y Control Estadístico de Procesos</li>
+      <li>Computación Aplicada</li>
+      <li>Formación Nacional</li>
+      <li>Higiene y seguridad en el trabajo</li>
+      <li>Inglés III</li>
+   </ul>
+     
+   <h1 id="QuímicoSuperior Analista-Regimen">RÉGIMEN DE CORRELATIVIDADES</h1>
+
+   <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Cursos requeridos</th>
+            <th>Cursos predecesores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Química Orgánica</td>
+            <td>Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Orgánica</td>
+            <td>Química General e Inorgánica - Laboratorio de Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Química Analítica</td>
+            <td>Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Analítica</td>
+            <td>Química General e Inorgánica - Laboratorio de Química General e Inorgánica</td>
+          </tr>
+          <tr>
+            <td>Introducción a la Fisicoquímica</td>
+            <td>Química General e Inorgánica - Matemática I - Física I</td>
+          </tr>
+          <tr>
+            <td>Inglés II</td>
+            <td>Inglés I</td>
+          </tr>
+          <tr>
+            <td>Matemática II</td>
+            <td>Matemática I</td>
+          </tr>
+          <tr>
+            <td>Física II</td>
+            <td>Matemática I - Física I</td>
+          </tr>
+          <tr>
+            <td>Química Analítica Aplicada</td>
+            <td>Laboratorio de Química Orgánica - Química Analítica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Analítica Aplicada</td>
+            <td>Laboratorio de Química Orgánica - Química Analítica</td>
+          </tr>
+          <tr>
+            <td>Química Orgánica Aplicada</td>
+            <td>Química Orgánica - Laboratorio de Química Orgánica</td>
+          </tr>
+          <tr>
+            <td>Laboratorio de Química Orgánica Aplicada</td>
+            <td>Química Orgánica - Laboratorio de Química Orgánica</td>
+          </tr>
+          <tr>
+            <td>Garantía de Calidad y Control Estadístic de Procesos</td>
+            <td>Matemática II</td>
+          </tr>
+          <tr>
+            <td>Inglés III</td>
+            <td>Inglés II</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div> 
+
+</div>
+   
+   
+       <div class="container-sedes row">
+           <h1>Nuestras Sedes</h1><br>
+           <h4>Días y horarios de Atención: Lunes a Viernes de 18:00 a 22:00 horas</h4><br>
+                <div class="col-4">
+                   <label for="">Reconquista 813</label><br>
+                   <label for="">(2202) Puerto Gral. San Martín</label><br>
+                   <label for="">Santa Fe – República Argentina</label><br>
+                   <label for="">Tel.: (03476) 447580</label>
+               </div>
+                <div class="col-4">
+                   <label for="">Avda. San Martín 245</label><br>
+                   <label for="">(2202) Puerto Gral. San Martín</label><br>
+                   <label for="">Santa Fe – República Argentina</label><br>
+                   <label for="">Tel.: (03476) 426219</label></div>
+                <div class="col-4">
+                   <label for="">9 de Julio 1247</label><br>
+                   <label for="">(2000) Rosario</label><br>
+                   <label for="">Santa Fe – República Argentina</label><br>
+                   <label for="">Tel.: (0341) 4247844</label></div></div>
+               </div>
+     </section>
+     </div>
+     <script type="module" src="/src/index.js"></script>
+     <script src="/src/Visual.js"></script>
+</body>
+</html>
+
+
