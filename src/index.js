@@ -1,7 +1,9 @@
 import ApiService from './Login.js';
+import GetMateria from './GetMateria.js';
 import ListaAlumnos from './MenuAdministrador.js';
 import ModificarAlumno from './ModificarAlumno.js';
 import Registro from './Registro.js';
+import Inscipcion from './Inscipcion.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
 
 const apiService = new ApiService();
@@ -9,6 +11,8 @@ const enviarButton = document.getElementById("Btn-login");
 const storedNotification = localStorage.getItem('notification');
 const notifications = document.querySelector(".notifications");
 const cardLoading = document.querySelector('.Card-Loading');
+const cardLoadingmateria = document.querySelector('.Card-Loading-incripcion');
+
 const notification = storedNotification ? JSON.parse(storedNotification) : {
   success: {
     inicioOk: false,
@@ -20,6 +24,15 @@ const updateNotification = (inicioOk, inicioText) => {
   notification.success.inicioText = inicioText;
   localStorage.setItem('notification', JSON.stringify(notification));
 };
+
+function borrarTodasLasCookies() {
+  var cookies = document.cookie.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var igualPos = cookie.indexOf("=");
+      var nombre = igualPos > -1 ? cookie.substr(0, igualPos) : cookie;
+  }
+}
 
 
 async function loadHTMLFromAPI() {
@@ -45,27 +58,58 @@ async function loadHTMLFromAPI() {
   });
 }
 
-async function loadicon(){
-  var iconosEdicion = document.querySelectorAll('.bx-edit');
-  iconosEdicion.forEach(function (icono) {
-      icono.addEventListener('click', function () {
-          var idAlumno = icono.getAttribute('data-id');
-          localStorage.setItem('idAlumno', idAlumno);
-          try {
-              window.location.href = "Perfil-AdministradorMaster/ModificarInfoAlumno.html";
-          } catch (error) {
-              console.error(error);
-          }
-      });
-  });
+async function enviarSeleccionados(Materias) {
+  let token = sessionStorage.getItem('TokenLogin');
+  let arraystrng = ""
+  let pasadas = 0
+  const progressBar = document.querySelector('.progress-bar');
+  const porcentajeTexto = document.querySelector('.progress-bar');
+  const totalMaterias = Materias.length;
+  for (let i = 0; i < totalMaterias; i++) {
+    if(Materias[i].regularidad != "ninguno"){
+      const objeto = Materias[i];
+      const radioValuesInstance = new Inscipcion();
+      const resultado = await radioValuesInstance.enviarDatos(objeto, token);
+      if (resultado === 'Se agrego la materia con éxito') {
+        arraystrng +=`<li class="Exitosa"><i class='bx bx-check'></i><span>${Materias[i].materia}</span></li>`
+      } else {
+        arraystrng +=`<li class="Erronea"><i class='bx bx-x'></i><span>${Materias[i].materia}</span></li>`
+      }
+      document.getElementById("list-aprobadas-rechazadas").innerHTML = arraystrng
+    }
+    pasadas++
+    const progreso = `${pasadas}/${totalMaterias}`;
+      const porcentaje = (pasadas / totalMaterias) * 100;
+      progressBar.style.width = porcentaje + '%';
+      porcentajeTexto.innerText = Math.round(porcentaje) + '%';
+  }
+  let botones = `<div class="Btn-centrar">
+  <button id="btn-cartel-aceptar" class="btn btn-light">ACEPTAR</button>
+  </div>`
+  document.getElementById("list-aprobadas-rechazadas").innerHTML = arraystrng + botones
 }
 
+async function loadicon(){
+  var iconosEdicion = document.querySelectorAll('.bx-edit');
+  console.log("Cantidad de iconos encontrados:", iconosEdicion.length);
+  iconosEdicion.forEach(function (icono) {
+    icono.addEventListener('click', function () {
+      var idAlumno = icono.getAttribute('data-id');
+      localStorage.setItem('idAlumno', idAlumno);
+      console.log("ID de alumno almacenado:", idAlumno);
+      try {
+        window.location.href = "Perfil-AdministradorMaster/ModificarInfoAlumno.html";
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
+}
 if (enviarButton !== null) {
 
   enviarButton.addEventListener("click", async () => {
     cardLoading.classList.remove('invisible');
     cardLoading.classList.add('visible');
-    console.log(cardLoading)
     const usuario = document.getElementById("Login").value; 
     const contraseña = document.getElementById("Contraseña").value;
     const responseData = await apiService.enviarDatos(usuario, contraseña);
@@ -95,10 +139,28 @@ if (enviarButton !== null) {
     else
     {
       const toastCreator = new ToastCreator(notifications);
-      toastCreator.createToast('error' , responseData.value.msg );
-      cardLoading.classList.remove('visible')
-      cardLoading.classList.add('invisible');
 
+     console.log(responseData.value.acceso)
+      if (responseData.value.acceso){
+        toastCreator.createToast('error' , responseData.value.msg );
+        cardLoading.classList.remove('visible')
+        cardLoading.classList.add('invisible');
+      }
+      else
+      {
+        if ('usuario' in responseData.errors){
+            for(let i = 0 ; i < responseData.errors.usuario.length ; i++){
+              toastCreator.createToast('error' , responseData.errors.usuario[i]);
+            }
+          }else
+          {
+            for(let i = 0 ; i <  responseData.errors.contrasenia.length ; i++){
+              toastCreator.createToast('error' , responseData.errors.contrasenia[i]);
+            }
+          }
+        cardLoading.classList.remove('visible')
+        cardLoading.classList.add('invisible');
+      }
     }
   });
 }
@@ -106,7 +168,10 @@ if (enviarButton !== null) {
 export async function CrearMenuAlumno()
 {
   let idAlumno = localStorage.getItem('idAlumno');
+  document.getElementById("nombrecompleto-perfil").innerText = "Cargando..." 
   const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
+  sessionStorage.setItem('NombreAlumno', Alumno.nombreCompleto);
+  document.getElementById("nombrecompleto-perfil").innerText = Alumno.nombreCompleto; 
   var elemento = document.getElementById("verificado");
   if (Alumno.verificacion) {
     elemento.classList.add("Verificado");
@@ -131,6 +196,14 @@ export async function CrearMenuAlumno()
      <h4 class="h4">Examenes</h4>
   </div>
   <div class="accordion-content examen-stilo">`
+   const tieneTiempoPermanente = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'permanente');
+   const tieneTiempotemporal = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'temporal');
+   console.log(!tieneTiempotemporal)
+   if (!tieneTiempoPermanente) {
+    var boton = `<div class="alert alert-primary" role="alert">
+    No estas inscripto a ninguna materia , <a id="Btn-incripcion-materias" href="#" class="alert-link">INSCRIBIRME</a></div>`
+    document.getElementById("Lista-Materias").innerHTML = boton  
+   }else{
       for(var i = 0 ; i < Alumno.listaMateria.length ; i++)
       {
         if(Alumno.listaMateria[i].tiempo === "permanente")
@@ -139,17 +212,102 @@ export async function CrearMenuAlumno()
         } 
         else
         {
-           examenes += `<a href="Perfil-Alumno/OpcionesDeExamenes.html"><div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia}</span><i id="rotate-icon" class='rotate-icon col-9 bx bxs-brightness'></i></div></a>`
-
+        examenes += `<a href="Perfil-Alumno/OpcionesDeExamenes.html"><div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia}</span><i id="rotate-icon" class='rotate-icon col-9 bx bxs-brightness'></i></div></a>`
         }
       }
+      if (!tieneTiempotemporal)
+      {
+        document.getElementById("Lista-Examenes").innerHTML = ""
+      }else
+      {
+        document.getElementById("Lista-Examenes").innerHTML = examenes + fin
+      }
       document.getElementById("Lista-Materias").innerHTML = primero + fin
-      document.getElementById("Lista-Examenes").innerHTML = examenes + fin
+    }
  }
  
+ async function CrearRegistro() {
+  try {
+    let token = sessionStorage.getItem('TokenLogin');
+    let idAlumno = localStorage.getItem('idAlumno');
+    const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
+    const lista = new GetMateria(Alumno.carrera);
+    const materia = await lista.BuscarLista(token);
+    let primero = ""
+    let segundo = ""
+    let tercero = ""
+    let checkMateriasprimero = "";
+    let checkMateriassegundo = "";
+    let checkMateriastercero = "";
+    for (let i = 0; i < materia.length; i++) {
+      if(materia[i].anio == "primero" && (Alumno.anio == "primero" || Alumno.anio == "segundo" || Alumno.anio == "tercero")){
+        primero =`<h2>Primero</h2>`
+        checkMateriasprimero += `<div class="container-materia ">
+        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
+          <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}2" value="libre">
+          <label class="form-check-label" for="${materia[i].nombreMateria}2">Libre</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}3" value="ninguno">
+          <label class="form-check-label" for="${materia[i].nombreMateria}3">Ninguno</label>
+        </div>
+      </div>`;
+      
+      }
+
+      if(materia[i].anio == "segundo" && (Alumno.anio == "segundo" || Alumno.anio == "tercero" )){
+        segundo =`<h2>Segundo</h2>`
+        checkMateriassegundo += `<div class="container-materia ">
+        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
+          <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}2" value="libre">
+          <label class="form-check-label" for="${materia[i].nombreMateria}2">Libre</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}3" value="ninguno">
+          <label class="form-check-label" for="${materia[i].nombreMateria}3">Ninguno</label>
+        </div>
+      </div>`;
+      }
+
+      if(materia[i].anio == "tercero" && Alumno.anio == "tercero" ){
+        tercero =`<h2>tercero</h2>`
+        checkMateriastercero += `<div class="container-materia ">
+        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
+          <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}2" value="libre">
+          <label class="form-check-label" for="${materia[i].nombreMateria}2">Libre</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}3" value="ninguno">
+          <label class="form-check-label" for="${materia[i].nombreMateria}3">Ninguno</label>
+        </div>
+      </div>`;
+      }
+    }
+    return primero + checkMateriasprimero + segundo + checkMateriassegundo + tercero + checkMateriastercero
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 
-export function CrearMenuAdministrador() {
+
+async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
   const lista = new ListaAlumnos();
@@ -263,7 +421,8 @@ dato += datosPersonales + ListaMaterias
 datosPersonales = "";
 }
 document.getElementById("myList").innerHTML = dato
-  })
+loadicon()
+})
 .catch(error => {
 console.error('Error:', error);
 });
@@ -299,10 +458,7 @@ if (window.location.href.includes("Perfil-AdministradorMaster")){
 
 document.addEventListener('DOMContentLoaded', async function () {
   if (window.location.href.includes("Perfil-AdministradorMaster.html") || window.location.href.includes("index-AdministradorMaster.html") ) {
-    await loadHTMLFromAPI();
-    setTimeout(async function (){
-      await loadicon()
-    }, 10000);
+    await loadHTMLFromAPI()
     if(notification.success.inicioOk)
     {
       const toastCreator = new ToastCreator(notifications);
@@ -310,6 +466,64 @@ document.addEventListener('DOMContentLoaded', async function () {
       updateNotification(false, "");
     };
   } // temina el if
+
+  let nombreCompleto = sessionStorage.getItem('NombreAlumno');
+  console.log(nombreCompleto)
+  var elemento = document.getElementById("nombrecompleto-perfil");
+  console.log(elemento)
+  if (elemento) {
+    elemento.innerText = nombreCompleto; 
+  }else {
+    console.log("El elemento con ID 'nombrecompleto-perfil' no fue encontrado.");
+  }
+
+  if (window.location.href.includes("Incripcion-Examenes.html")){
+    const texthtml = await CrearRegistro()
+    document.getElementById("container-materia").innerHTML = texthtml ;
+    const btninscripcion = document.getElementById('btn-inscripcion');
+    btninscripcion.addEventListener('click', async function() {
+    const radioValuesInstance = new Inscipcion();
+    const ancla = document.getElementById('mi-ancla');
+    ancla.scrollIntoView({ behavior: 'smooth' });
+    cardLoadingmateria.classList.remove('invisible');
+    cardLoadingmateria.classList.add('visible');
+    const selectedRadioValues = radioValuesInstance.getSelectedValues(localStorage.getItem('idAlumno') , "temporal");
+    enviarSeleccionados(selectedRadioValues).then((resultado) => {
+      const btnAceptar = document.getElementById('btn-cartel-aceptar');
+                btnAceptar.addEventListener('click', () => {
+                btnAceptar.click();
+                window.location.href = '/Perfil-Alumno.html';
+               });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  });
+  } //termina el if
+
+  if (window.location.href.includes("Incripcion-Materia.html")){
+    const texthtml = await CrearRegistro()
+    document.getElementById("container-materia").innerHTML = texthtml ;
+    const btninscripcion = document.getElementById('btn-inscripcion');
+    btninscripcion.addEventListener('click', async function() {
+    const radioValuesInstance = new Inscipcion();
+    const ancla = document.getElementById('mi-ancla');
+    ancla.scrollIntoView({ behavior: 'smooth' });
+    cardLoadingmateria.classList.remove('invisible');
+    cardLoadingmateria.classList.add('visible');
+    const selectedRadioValues = radioValuesInstance.getSelectedValues(localStorage.getItem('idAlumno') , "permanente");
+    enviarSeleccionados(selectedRadioValues).then((resultado) => {
+      const btnAceptar = document.getElementById('btn-cartel-aceptar');
+                btnAceptar.addEventListener('click', () => {
+                btnAceptar.click();
+                window.location.href = '/Perfil-Alumno.html';
+               });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  });
+  } //termina el if
 
   if (window.location.href.includes("Registro-Alumno.html")) {
     const btnCrear = document.getElementById('Btn-Crear');
@@ -332,47 +546,101 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
   } // temina el if
-  
+
   if (window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
-      window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html") ) {
+      window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html") ||
+      window.location.href.includes("Perfil-Alumno/Modificar-Contrase") ) {
       let idAlumno = localStorage.getItem('idAlumno');
-      document.getElementById("Label-nombre").innerText = "Cargando...";
-      document.getElementById("Label-direccion").innerText = "Cargando...";
-      document.getElementById("Label-localidad").innerText = "Cargando...";
-      document.getElementById("Label-telefono").innerText = "Cargando...";
-      document.getElementById("Label-email").innerText = "Cargando...";
+      if(window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
+      window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html")){
+        document.getElementById("Label-nombre").innerText = "Cargando...";
+        document.getElementById("Label-direccion").innerText = "Cargando...";
+        document.getElementById("Label-localidad").innerText = "Cargando...";
+        document.getElementById("Label-telefono").innerText = "Cargando...";
+        document.getElementById("Label-email").innerText = "Cargando...";
+      }
       const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
       setTimeout(async function (){
-        document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto;
-        document.getElementById("Label-direccion").innerText = Alumno.direccion;
-        document.getElementById("Label-localidad").innerText = Alumno.localidad;
-        document.getElementById("Label-telefono").innerText = Alumno.telefono;
-        document.getElementById("Label-email").innerText = Alumno.email;
-        handleClick("input-nombre" , "button-nombre");
-        handleClick("input-direccion" , "button-direccion");
-        handleClick("input-localidad" , "button-localidad");
-        handleClick("input-telefono" ,"button-telefono");
-        handleClick("input-email" ,"button-email");
+        if(window.location.href.includes("Perfil-Alumno/Modificar-Contrase"))
+        {
+          handleClickpss("input-password" ,"Button-Password");       
+        }else
+        {
+          document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto;
+          document.getElementById("Label-direccion").innerText = Alumno.direccion;
+          document.getElementById("Label-localidad").innerText = Alumno.localidad;
+          document.getElementById("Label-telefono").innerText = Alumno.telefono;
+          document.getElementById("Label-email").innerText = Alumno.email;
+          handleClick("input-nombre" , "button-nombre");
+          handleClick("input-direccion" , "button-direccion");
+          handleClick("input-localidad" , "button-localidad");
+          handleClick("input-telefono" ,"button-telefono");
+          handleClick("input-email" ,"button-email");
+        }
       }, 5000);
     
         function handleClick(inputId ,buttonId  ) {
           const button = document.getElementById(buttonId);
-          var alert = ModificarAlumno.agregarEventoClick(inputId , button)
+          ModificarAlumno.agregarEventoClick(inputId , button)
+        }
+        function handleClickpss(inputId ,buttonId  ) {
+          if(document.getElementById("input-password").value == document.getElementById("input-repassword").value ){
+            const button = document.getElementById(buttonId);
+            ModificarAlumno.agregarEventoClick(inputId , button)
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error', "las contraseñas no coinciden");
+          }
         }
       }
-  if (window.location.href.includes("Perfil-Alumno.html")) 
-  {
-    CrearMenuAlumno()
-  }
+      if (window.location.href.includes("Perfil-Alumno.html")) {
+        try {
+          document.getElementById('Nombre').innerText = "Cargando...";
+          document.getElementById('Eimail').innerText = "Cargando...";
+          document.getElementById('Carrera').innerText = "Cargando...";
+          document.getElementById('Año').innerText = "Cargando...";
+          await CrearMenuAlumno();
+          
+          setTimeout(async function() {
+            const barracarga = document.querySelector('.Lista-alumnos');
+            const materias = document.querySelector('.Lista-Materias');
+            if (barracarga) {
+              barracarga.classList.add('invisible');
+              materias.classList.remove('invisible');
+              materias.classList.add('visible');
+            } else {
+              console.error('La lista de alumnos no fue encontrada.');
+            }
+          }, 2000);
+          
+          const botonInscribirse = document.getElementById('Btn-incripcion-materias');
+          if (botonInscribirse) {
+            botonInscribirse.addEventListener('click', function() {
+              window.location.href = 'Perfil-Alumno/Incripcion-Materia.html';
+            });
+          } else {
+            console.log('El botón no está presente en el documento.');
+          }
+        } catch (error) {
+          console.error('Error al cargar el menú del alumno:', error);
+        }
+      }
 
-  if (window.location.href.includes("Perfil-AdministradorMaster.html")) 
+  if (window.location.href.includes("Perfil-AdministradorMaster.html")||(window.location.href.includes("Perfil-Alumno.html")))
   {
     const progressBar = document.querySelector('.progress-bar');
     const porcentajeTexto = document.querySelector('.progress-bar');
-    let width = 1; 
-
+    let width = 0;
     const intervalo = 100; 
-    const duracion = 7000; 
+    let duracion = 0; 
+    if(window.location.href.includes("Perfil-Alumno.html")){
+            duracion = 2000;
+    }else
+    {
+            duracion= 7000;     
+    }
     const incremento = (100 / (duracion / intervalo)); 
     
     const intervalID = setInterval(() => {
@@ -383,7 +651,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         progressBar.style.width = width + '%';
         porcentajeTexto.textContent = Math.round(width) + '%';
       }
-      }, intervalo);
+      },intervalo);
   } 
 
   //va en todos
@@ -404,7 +672,4 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
     });
   }, 2000);
-  document.getElementById('registro').addEventListener('click', function() { 
-    window.location.href = 'Registro-Alumno.html';
-});
 });

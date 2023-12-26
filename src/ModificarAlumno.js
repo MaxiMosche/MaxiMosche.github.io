@@ -17,7 +17,7 @@ export default class ModificarAlumno {
     static async manejarAtributos(atributo, mensajes) {
         const toastCreator = new ToastCreator(notifications);
         for (let i = 0; i < mensajes.length; i++) {
-          toastCreator.createToast('error', atributo + mensajes[i]);
+          toastCreator.createToast('error', mensajes[i]);
         }
       }
       
@@ -31,7 +31,6 @@ export default class ModificarAlumno {
 
 
     static async ObtenerAlumnoDatos(docomento , token) {
-      console.log("Documento : " + document + " Token : " + token);
         const apiUrl = `https://beppoleviapi.azurewebsites.net/api/Alumno/Individual?id=${docomento}`;
         const requestOptions = {
             method: 'GET',
@@ -101,6 +100,9 @@ export default class ModificarAlumno {
                         case 'input-email':
                             Alumno.email = valor.valor
                             break;
+                        case 'input-password':
+                            Alumno.contrasenia = valor.valor
+                              break;
                         default:
                             // Manejar caso por defecto si no se encuentra la coincidencia
                             break;
@@ -115,32 +117,39 @@ export default class ModificarAlumno {
                         ModificarAlumno.limpiarYAsignarPlaceholder("input-email");
                             if(responseData.ok)
                             {
+                              console.log("pasa por aca")
+                              if(window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
+                              window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html")){
                                 document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto;
                                 document.getElementById("Label-direccion").innerText = Alumno.direccion;
                                 document.getElementById("Label-localidad").innerText = Alumno.localidad;
                                 document.getElementById("Label-telefono").innerText = Alumno.telefono;
                                 document.getElementById("Label-email").innerText = Alumno.email;
+                              }
                                 const toastCreator = new ToastCreator(notifications);
                                 toastCreator.createToast('success' , 'Exito' );
                             }else
                             {
+                              console.log(responseData.data)
                                 const keys = Object.keys(responseData.data);
                                 keys.forEach(key => {
                                     switch (key) {
-                                    case 'Telefono':
+                                      case 'Telefono':
                                       ModificarAlumno.manejarAtributos("Telefono: ", responseData.data.Telefono);
                                       break;
                                       case 'NombreCompleto':
                                       ModificarAlumno.manejarAtributos('NombreCompleto :' , responseData.data.NombreCompleto);
                                       break;
                                       case 'Direccion':
-                                      ModificarAlumno.manejarAtributos('Domicilio:: ' , responseData.data.Direccion);
+                                      ModificarAlumno.manejarAtributos('Domicilio: ' , responseData.data.Direccion);
                                       break;
                                       case 'Localidad':
                                       ModificarAlumno.manejarAtributos('Localidad: ' , responseData.data.Localidad);
                                       break;
                                       case 'Email':
                                       ModificarAlumno.manejarAtributos('Email: ' , responseData.data.Email);
+                                      case 'Contrasenia':
+                                        ModificarAlumno.manejarAtributos('Email: ' , responseData.data.Contrasenia);
                                       break;
                                     }
                                 });

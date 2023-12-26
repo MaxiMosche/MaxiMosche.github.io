@@ -30,8 +30,29 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
+.container-menu-icon {
+  display: inline-block;
+  width: 100%;
+  line-height: 1; 
+}
+
+.container-menu-icon i {
+  vertical-align: middle;
+  font-size: 1.5em;
+  margin-right: 5px;
+}
+
 #li-loading{
   margin-top: 20px;
+}
+
+.progress-materia{
+  font-size: 25px !important;
+  height: 25px !important;
+}
+
+.progress-materia .progress-materiadiv{
+  height: 20px !important;
 }
 
 .progress-bar{
@@ -40,7 +61,58 @@ body{
 .progress{
   font-size: 25px !important;
   height: 50px !important;
-  background-color: var(--border-color)!important;
+}
+.Card-Loading-incripcion {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px !important;
+  background-color: var(--items-color);
+  z-index: 9;
+  border: solid 1px var(--border-color);
+  text-align: center;
+}
+
+.Card-Loading-incripcion ul {
+  display: inline-block; 
+  list-style: none;
+  padding: 0;
+  text-align: left; 
+  border-top: solid 1px var(--border-color);
+  border-bottom: solid 1px var(--border-color);
+}
+
+.Card-Loading-incripcion li {
+  display: block;
+  line-height: 1;
+  font-size: 17px;
+}
+
+.Card-Loading-incripcion li i{
+  margin-right: 10px;
+  vertical-align: middle;
+  font-size: 40px!important; 
+  margin-right: 5px;
+}
+
+.Btn-centrar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+}
+
+.Btn-centrar .btn{
+  width: 150px;
+}
+
+.Exitosa{
+  color: #0ABF30;
+}
+
+.Erronea{
+  color: var(--error);
 }
 
 .Card-Loading {
@@ -77,24 +149,32 @@ body{
 }
 
 .swal2-popup {
-  width: 80%; /* Ancho del popup */
-  max-width: 600px; /* Máximo ancho del popup */
-  height: auto; /* Altura automática */
-  padding: 20px; /* Espaciado interno del popup */
-  border-radius: 10px; /* Radio de borde para esquinas redondeadas */
+  width: 80%; 
+  max-width: 600px; 
+  height: auto; 
+  padding: 20px; 
+  border-radius: 10px; 
 }
 
-/* Personalización del tamaño de la alerta */
+.btn-info{
+  position: relative;
+  width: 40%!important;
+  height: 50px!important;
+  color: var(--fondo-color)!important;
+  font-size: 30px!important;
+}
+
+
 .swal2-popup {
-  font-size: 20px; /* Tamaño de fuente para todo el contenido */
+  font-size: 20px; 
 }
 
 .swal2-title {
-  font-size: 30px; /* Tamaño de fuente para el título */
+  font-size: 30px;
 }
 
 .swal2-content {
-  font-size: 20px; /* Tamaño de fuente para el texto del cuerpo */
+  font-size: 20px; 
 }
 
 .visible {
@@ -697,6 +777,15 @@ h2{
     font-size: 25px;
   }
 
+  .alert-primary{
+   position: relative;
+   top : 10px;
+   left: 55px;
+   width: 90%;
+   font-size: 20px;
+   height: 50px;
+  }
+
   .container-config a{
    position: relative;
    right: 5%;
@@ -716,7 +805,7 @@ h2{
   .arrow-menu-size{
     margin-right: 20px !important;
     font-size: 35px!important;
-  } 
+  }
   
   .arrow-container.rotated .arrow {
     transform: rotate(90deg);
@@ -1638,8 +1727,39 @@ color: var(--text-color);
   @media screen and (min-width: 500px) and (max-width: 800px){ /* de 500 a 800 */
 
 
+    .alert-primary{
+      position: relative;
+      top : 180px;
+      left: 20px;
+      width: 93%;
+      font-size: 15px;
+      height: 50px;
+     }
+
+    .container-menu-icon i {
+      vertical-align: middle;
+      font-size: 35px; 
+      margin-right: 5px;
+    }
+
   .desplegar{
       transform: translateX(100%);
+  }
+
+  .list-progres{
+    position: relative;
+    top: 165px;
+  }
+  .Lista-Materias{
+    position: relative;
+    top: 5px ;
+  }
+  .progress-bar{
+    height: 25px !important;
+  }
+  .progress{
+    font-size: 25px !important;
+    height: 25px !important;
   }
   .aside{
     background-color: var(--items-color);
@@ -1752,6 +1872,14 @@ color: var(--text-color);
 
   @media screen and (max-width: 820px) {
 
+  .alert-primary{
+      position: relative;
+      top : 180px;
+      left: 20px;
+      width: 93%;
+      font-size: 20px;
+      height: 50px;
+  }
   .accordion{
     position: relative;
     top: 130px;
@@ -2078,4 +2206,11 @@ color: var(--text-color);
         .list-group-item{
          font-size: 18px;
        }
+
+       .btn-info{
+        position: relative;
+        width: 60%!important;
+        height: 30px!important;
+        color: var(--fondo-color)!important;
+      }
 }

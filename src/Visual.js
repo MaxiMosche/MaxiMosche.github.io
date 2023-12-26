@@ -166,7 +166,6 @@ rotateIcons.forEach((rotateIcon) => {
 
 
 var accordions = document.getElementsByClassName("acordion");
-  
   for (var i = 0; i < accordions.length; i++) {
     accordions[i].addEventListener("click", function() {
       this.classList.toggle("active");

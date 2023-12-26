@@ -1,5 +1,5 @@
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from'./Alerts.js';
-const notifications = document.querySelector(".notifications");
+const notifications = document.querySelector('.notifications');
 export default class Registro 
 {
       
@@ -21,6 +21,7 @@ export default class Registro
                   switch (key) {
                   case 'Telefono':
                     imprimirErrores("Telefono: ", responsejson.errors.Telefono);
+                    break;
                     case 'NombreCompleto':
                     imprimirErrores('NombreCompleto :' , responsejson.errors.NombreCompleto);
                     break;

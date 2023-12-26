@@ -19,11 +19,25 @@ class ApiService {
   
       try {
         const response = await fetch(this.apiUrl, requestOptions);
+        const responseData = await response.json();
         if (response.ok) {
-          const responseData = await response.json();
+          if(responseData.value.ok){
+            return responseData;
+          }
+          else
+          {     
+            responseData.value.acceso = true;
+            return responseData;
+          }
+        }
+         else
+        {
+          if (!responseData.value) {
+            responseData.value = {}; 
+          }
+          responseData.value.ok = false;
+          responseData.value.acceso = false;
           return responseData;
-        } else {
-          throw new Error('Error en la solicitud');
         }
       } catch (error) {
         throw error;
