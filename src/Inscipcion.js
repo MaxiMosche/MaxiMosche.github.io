@@ -34,13 +34,11 @@ class Inscipcion {
           radioGroups[groupName] = document.querySelectorAll(`input[name="${groupName}"]`);
         }
       });
-  
       return radioGroups;
     }
   
     getSelectedValues(dni , tiempo_) {
       const selectedRadioValues = [];
-  
       for (const groupName in this.radios) {
         const values = {
           id : 0,
@@ -53,7 +51,7 @@ class Inscipcion {
         };
         selectedRadioValues.push(values);
       }
-  
+      
       return selectedRadioValues;
     }
   }

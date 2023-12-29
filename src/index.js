@@ -4,14 +4,28 @@ import ListaAlumnos from './MenuAdministrador.js';
 import ModificarAlumno from './ModificarAlumno.js';
 import Registro from './Registro.js';
 import Inscipcion from './Inscipcion.js';
+import AlumnoMateria from './AlumnoMateria.js';
+import GetCarrera from './GetCarrera.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
 
+if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
+  let token = sessionStorage.getItem('TokenLogin');
+  console.log(token)
+  if(token == null){
+    window.location.href = "index.html"
+  }
+}
+
 const apiService = new ApiService();
-const enviarButton = document.getElementById("Btn-login");
+const enviarButton = document.getElementById('Btn-login');
 const storedNotification = localStorage.getItem('notification');
 const notifications = document.querySelector(".notifications");
 const cardLoading = document.querySelector('.Card-Loading');
 const cardLoadingmateria = document.querySelector('.Card-Loading-incripcion');
+
+function capitalizarPrimeraLetra(cadena) {
+  return cadena.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase()});
+}
 
 const notification = storedNotification ? JSON.parse(storedNotification) : {
   success: {
@@ -71,9 +85,9 @@ async function enviarSeleccionados(Materias) {
       const radioValuesInstance = new Inscipcion();
       const resultado = await radioValuesInstance.enviarDatos(objeto, token);
       if (resultado === 'Se agrego la materia con éxito') {
-        arraystrng +=`<li class="Exitosa"><i class='bx bx-check'></i><span>${Materias[i].materia}</span></li>`
+        arraystrng +=`<li class="Exitosa"><i class='bx bx-check'></i><span>${Materias[i].materia.toUpperCase()}</span></li>`
       } else {
-        arraystrng +=`<li class="Erronea"><i class='bx bx-x'></i><span>${Materias[i].materia}</span></li>`
+        arraystrng +=`<li class="Erronea"><i class='bx bx-x'></i><span>${Materias[i].materia.toUpperCase()}</span></li>`
       }
       document.getElementById("list-aprobadas-rechazadas").innerHTML = arraystrng
     }
@@ -105,83 +119,26 @@ async function loadicon(){
     });
   });
 }
-if (enviarButton !== null) {
-
-  enviarButton.addEventListener("click", async () => {
-    cardLoading.classList.remove('invisible');
-    cardLoading.classList.add('visible');
-    const usuario = document.getElementById("Login").value; 
-    const contraseña = document.getElementById("Contraseña").value;
-    const responseData = await apiService.enviarDatos(usuario, contraseña);
-    if(responseData.value.ok)
-    {
-      if(responseData.value.ok === "administrdor")
-      {
-        if(responseData.value.iDadministrador == 1)
-        {
-          sessionStorage.setItem('TokenLogin', responseData.value.token);
-          updateNotification(true, responseData.value.msg);
-          window.location.href = "Perfil-AdministradorMaster.html"
-        }
-        else 
-        {
-          sessionStorage.setItem('TokenLogin', responseData.value.token);
-          window.location.href = "Perfil-Administrador.html"
-        }
-      }
-      if(responseData.value.ok === "alumno")
-      {
-          sessionStorage.setItem('TokenLogin', responseData.value.token);
-          localStorage.setItem('idAlumno' , responseData.value.numeroDocumento);
-          window.location.href = "Perfil-Alumno.html"
-      }
-    }
-    else
-    {
-      const toastCreator = new ToastCreator(notifications);
-
-     console.log(responseData.value.acceso)
-      if (responseData.value.acceso){
-        toastCreator.createToast('error' , responseData.value.msg );
-        cardLoading.classList.remove('visible')
-        cardLoading.classList.add('invisible');
-      }
-      else
-      {
-        if ('usuario' in responseData.errors){
-            for(let i = 0 ; i < responseData.errors.usuario.length ; i++){
-              toastCreator.createToast('error' , responseData.errors.usuario[i]);
-            }
-          }else
-          {
-            for(let i = 0 ; i <  responseData.errors.contrasenia.length ; i++){
-              toastCreator.createToast('error' , responseData.errors.contrasenia[i]);
-            }
-          }
-        cardLoading.classList.remove('visible')
-        cardLoading.classList.add('invisible');
-      }
-    }
-  });
-}
 
 export async function CrearMenuAlumno()
 {
+  console.log("esta entrando a crearmenualumno")
   let idAlumno = localStorage.getItem('idAlumno');
+  console.log(idAlumno)
   document.getElementById("nombrecompleto-perfil").innerText = "Cargando..." 
   const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
   sessionStorage.setItem('NombreAlumno', Alumno.nombreCompleto);
-  document.getElementById("nombrecompleto-perfil").innerText = Alumno.nombreCompleto; 
+  document.getElementById("nombrecompleto-perfil").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto); 
   var elemento = document.getElementById("verificado");
   if (Alumno.verificacion) {
     elemento.classList.add("Verificado");
   } else {
     elemento.classList.add("NoVerificado");
   }
-  document.getElementById("Nombre").innerText = Alumno.nombreCompleto;
-  document.getElementById("Eimail").innerText = Alumno.email;
-  document.getElementById("Carrera").innerText = Alumno.carrera;
-  document.getElementById("Año").innerText = Alumno.anio;
+  document.getElementById("Nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
+  document.getElementById("Eimail").innerText = capitalizarPrimeraLetra(Alumno.email);
+  document.getElementById("Carrera").innerText = capitalizarPrimeraLetra(Alumno.carrera);
+  document.getElementById("Año").innerText = capitalizarPrimeraLetra(Alumno.anio);
   var primero = `<div class="accordion"><div class="accordion-header border-accordion">
   <span class="arrow-container ">
     <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
@@ -189,7 +146,7 @@ export async function CrearMenuAlumno()
   <div class="accordion-content container-opcion ">`
   var fin = `</div></div>`
   var examenes = `<div class="accordion">
-  <div class="accordion-header border-accordion">
+  <div class="accordion-header examen-posit border-accordion">
     <span class="arrow-container">
       <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
     </span>
@@ -198,7 +155,6 @@ export async function CrearMenuAlumno()
   <div class="accordion-content examen-stilo">`
    const tieneTiempoPermanente = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'permanente');
    const tieneTiempotemporal = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'temporal');
-   console.log(!tieneTiempotemporal)
    if (!tieneTiempoPermanente) {
     var boton = `<div class="alert alert-primary" role="alert">
     No estas inscripto a ninguna materia , <a id="Btn-incripcion-materias" href="#" class="alert-link">INSCRIBIRME</a></div>`
@@ -208,11 +164,12 @@ export async function CrearMenuAlumno()
       {
         if(Alumno.listaMateria[i].tiempo === "permanente")
         {
-        primero += `<div class="row"><span class="col-6">${Alumno.listaMateria[i].materia}</span><span class="col-3">${Alumno.listaMateria[i].regularidad}</span></div>`
+        primero += `<div class=" materia-form"><span class="Regularidad2-w800">${Alumno.listaMateria[i].materia.toUpperCase()}</span><span id="Regularidad-w800" class="Regularidad-w800">${Alumno.listaMateria[i].regularidad.toUpperCase()}</span></div>`
         } 
         else
         {
-        examenes += `<a href="Perfil-Alumno/OpcionesDeExamenes.html"><div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia}</span><i id="rotate-icon" class='rotate-icon col-9 bx bxs-brightness'></i></div></a>`
+          console.log(Alumno.listaMateria[i].id)
+        examenes += `<div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia.toUpperCase()}</span><i id="rotate-icon" data-id-valor="${Alumno.listaMateria[i].id}" class='rotate-icon col-9 bx bxs-brightness'></i></div>`
         }
       }
       if (!tieneTiempotemporal)
@@ -224,6 +181,19 @@ export async function CrearMenuAlumno()
       }
       document.getElementById("Lista-Materias").innerHTML = primero + fin
     }
+ }
+
+
+ async function selectcarrera(){
+  var nuevalista = new GetCarrera()
+  var ListaCarreras = `<option selected>CARRERA</option>`;
+  document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
+  console.log(document.getElementById("Select-Carrera").innerHTML = ListaCarreras)
+  const listacarreras = await nuevalista.BuscarLista()
+  for(let i = 0 ; i < listacarreras.length ; i++){
+    ListaCarreras += `<option value="${listacarreras[i].nombreCarrera}">${capitalizarPrimeraLetra(listacarreras[i].nombreCarrera)}</option>`
+  }
+  document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
  }
  
  async function CrearRegistro() {
@@ -243,7 +213,7 @@ export async function CrearMenuAlumno()
       if(materia[i].anio == "primero" && (Alumno.anio == "primero" || Alumno.anio == "segundo" || Alumno.anio == "tercero")){
         primero =`<h2>Primero</h2>`
         checkMateriasprimero += `<div class="container-materia ">
-        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="materia"><span>${materia[i].nombreMateria.toUpperCase()}</span></div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
           <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
@@ -261,9 +231,10 @@ export async function CrearMenuAlumno()
       }
 
       if(materia[i].anio == "segundo" && (Alumno.anio == "segundo" || Alumno.anio == "tercero" )){
+        console.log("pasa por segundo")
         segundo =`<h2>Segundo</h2>`
         checkMateriassegundo += `<div class="container-materia ">
-        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="materia"><span>${materia[i].nombreMateria.toUpperCase()}</span></div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
           <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
@@ -282,7 +253,7 @@ export async function CrearMenuAlumno()
       if(materia[i].anio == "tercero" && Alumno.anio == "tercero" ){
         tercero =`<h2>tercero</h2>`
         checkMateriastercero += `<div class="container-materia ">
-        <div class="materia"><span>${materia[i].nombreMateria}</span></div>
+        <div class="materia"><span>${materia[i].nombreMateria.toUpperCase()}</span></div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="${materia[i].nombreMateria}" id="${materia[i].nombreMateria}1" value="regular">
           <label class="form-check-label" for="${materia[i].nombreMateria}1">Regular</label>
@@ -304,9 +275,6 @@ export async function CrearMenuAlumno()
     throw error;
   }
 }
-
-
-
 async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
@@ -466,14 +434,30 @@ document.addEventListener('DOMContentLoaded', async function () {
       updateNotification(false, "");
     };
   } // temina el if
+  
+  if (window.location.href.includes("index.html")){
+    document.getElementById('registro').addEventListener('click', function() {
+      window.location.href = 'Registro-Alumno.html';
+    });
+  }
+  
+  if (window.location.href.includes("Registro-Alumno.html")){
+    console.log("entra en registro")
+    selectcarrera()
+  }
 
   let nombreCompleto = sessionStorage.getItem('NombreAlumno');
-  console.log(nombreCompleto)
   var elemento = document.getElementById("nombrecompleto-perfil");
-  console.log(elemento)
-  if (elemento) {
-    elemento.innerText = nombreCompleto; 
-  }else {
+  if (elemento != null ) {
+     if(nombreCompleto != null){
+      elemento.innerText = capitalizarPrimeraLetra(nombreCompleto); 
+     }
+     else
+     {
+      elemento.innerText = "ALUMNO"
+     }
+    
+  }else { 
     console.log("El elemento con ID 'nombrecompleto-perfil' no fue encontrado.");
   }
 
@@ -482,22 +466,38 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById("container-materia").innerHTML = texthtml ;
     const btninscripcion = document.getElementById('btn-inscripcion');
     btninscripcion.addEventListener('click', async function() {
+    
     const radioValuesInstance = new Inscipcion();
     const ancla = document.getElementById('mi-ancla');
     ancla.scrollIntoView({ behavior: 'smooth' });
     cardLoadingmateria.classList.remove('invisible');
     cardLoadingmateria.classList.add('visible');
     const selectedRadioValues = radioValuesInstance.getSelectedValues(localStorage.getItem('idAlumno') , "temporal");
-    enviarSeleccionados(selectedRadioValues).then((resultado) => {
-      const btnAceptar = document.getElementById('btn-cartel-aceptar');
-                btnAceptar.addEventListener('click', () => {
-                btnAceptar.click();
-                window.location.href = '/Perfil-Alumno.html';
-               });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    let verificadocheck = true
+    for(let i = 0; i < selectedRadioValues.length ; i++ ){
+      if(selectedRadioValues[i].regularidad == null){
+        verificadocheck = false
+      }
+    }
+    if(verificadocheck){
+      enviarSeleccionados(selectedRadioValues).then((resultado) => {
+        const btnAceptar = document.getElementById('btn-cartel-aceptar');
+                  btnAceptar.addEventListener('click', () => {
+                  btnAceptar.click();
+                  window.location.href = '/Perfil-Alumno.html';
+                 });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+    else
+    {
+      cardLoadingmateria.classList.remove('visible');
+      cardLoadingmateria.classList.add('invisible');
+      const toastCreator = new ToastCreator(notifications);
+      toastCreator.createToast('error' , 'Seleccione todas las Materias' );
+    }
   });
   } //termina el if
 
@@ -512,16 +512,32 @@ document.addEventListener('DOMContentLoaded', async function () {
     cardLoadingmateria.classList.remove('invisible');
     cardLoadingmateria.classList.add('visible');
     const selectedRadioValues = radioValuesInstance.getSelectedValues(localStorage.getItem('idAlumno') , "permanente");
-    enviarSeleccionados(selectedRadioValues).then((resultado) => {
-      const btnAceptar = document.getElementById('btn-cartel-aceptar');
-                btnAceptar.addEventListener('click', () => {
-                btnAceptar.click();
-                window.location.href = '/Perfil-Alumno.html';
-               });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    let verificadocheck = true
+    for(let i = 0; i < selectedRadioValues.length ; i++ ){
+      if(selectedRadioValues[i].regularidad == null){
+        verificadocheck = false
+      }
+    }
+    if(verificadocheck){
+      enviarSeleccionados(selectedRadioValues).then((resultado) => {
+        const btnAceptar = document.getElementById('btn-cartel-aceptar');
+                  btnAceptar.addEventListener('click', () => {
+                  btnAceptar.click();
+                  window.location.href = '/Perfil-Alumno.html';
+                 });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+    else
+    {
+      cardLoadingmateria.classList.remove('visible');
+      cardLoadingmateria.classList.add('invisible');
+      const toastCreator = new ToastCreator(notifications);
+      toastCreator.createToast('error' , 'Seleccione todas las Materias' );
+    }
+
   });
   } //termina el if
 
@@ -531,7 +547,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       const objetoJson = formularioRegistro()
       var veri = await Registro.Registrar(objetoJson);
       if (veri == true) {
-        console.log("paso por dentro del verificar");
         cargarSweetAlert().then(() => {
           Swal.fire({
             title: '¡Registrado con Éxito!',
@@ -546,6 +561,77 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
   } // temina el if
+
+  if (window.location.href.includes("Modificar.html")) {
+    function handleClickModificar(buttonId) {
+      var elemento = document.getElementById(buttonId);
+      elemento.addEventListener('click', function () {
+        const selectRegularidad = document.getElementById('selectRegularidad').value;
+        let token = sessionStorage.getItem('TokenLogin');
+        let AlumnoMateiraString = sessionStorage.getItem('ObjetoAlumnoMateria');
+        let AlumnoMateira = JSON.parse(AlumnoMateiraString);
+        AlumnoMateira.regularidad = selectRegularidad;
+        const Classalumnomateria = new AlumnoMateria();
+        const toastCreator = new ToastCreator(notifications);
+       console.log(AlumnoMateira)
+        Classalumnomateria.modificarAlumnoMateria(AlumnoMateira, token)
+          .then(alert => {
+            if (alert) {
+              toastCreator.createToast('success', "Se Modificó Con Éxito");
+            } else {
+              toastCreator.createToast('error', "No se pudo modificar");
+            }
+          })
+          .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+            toastCreator.createToast('error', "Error al realizar la solicitud");
+          });
+      });
+    }
+
+  
+    function handleClickEliminar(buttonId) {
+      var elemento = document.getElementById(buttonId);
+      elemento.addEventListener('click', function () {
+        let token = sessionStorage.getItem('TokenLogin');
+        let AlumnoMateiraString = sessionStorage.getItem('ObjetoAlumnoMateria');
+        let AlumnoMateira = JSON.parse(AlumnoMateiraString);
+        const Classalumnomateria = new AlumnoMateria();
+        const toastCreator = new ToastCreator(notifications);
+        cargarSweetAlert().then(() => {
+          Swal.fire({
+            title: '¿Estás seguro que quieres eliminar el examen?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (alert) {
+                Classalumnomateria.eliminarAlumnoMateria(AlumnoMateira, token)
+                cargarSweetAlert().then(() => {
+                  Swal.fire({
+                    title: '¡Se elimino con Éxito!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                  }).then(() => {
+                    window.location.href = "/Perfil-Alumno.html";
+                  });
+                })
+              } else {
+                toastCreator.createToast('error', "No se pudo eliminar");
+              }
+            }
+          });
+        });
+      });
+    }
+  
+    handleClickEliminar("Btn-EliminarAlumnoMateria");
+    handleClickModificar("Btn-ModificarAlumnoMateria");
+  }
 
   if (window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
       window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html") ||
@@ -566,11 +652,11 @@ document.addEventListener('DOMContentLoaded', async function () {
           handleClickpss("input-password" ,"Button-Password");       
         }else
         {
-          document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto;
-          document.getElementById("Label-direccion").innerText = Alumno.direccion;
-          document.getElementById("Label-localidad").innerText = Alumno.localidad;
-          document.getElementById("Label-telefono").innerText = Alumno.telefono;
-          document.getElementById("Label-email").innerText = Alumno.email;
+          document.getElementById("Label-nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
+          document.getElementById("Label-direccion").innerText = capitalizarPrimeraLetra(Alumno.direccion);
+          document.getElementById("Label-localidad").innerText = capitalizarPrimeraLetra(Alumno.localidad);
+          document.getElementById("Label-telefono").innerText = capitalizarPrimeraLetra(Alumno.telefono);
+          document.getElementById("Label-email").innerText = capitalizarPrimeraLetra(Alumno.email);
           handleClick("input-nombre" , "button-nombre");
           handleClick("input-direccion" , "button-direccion");
           handleClick("input-localidad" , "button-localidad");
@@ -596,16 +682,45 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
       }
       if (window.location.href.includes("Perfil-Alumno.html")) {
+      console.log("pasa por perfil alumno")
         try {
           document.getElementById('Nombre').innerText = "Cargando...";
           document.getElementById('Eimail').innerText = "Cargando...";
           document.getElementById('Carrera').innerText = "Cargando...";
           document.getElementById('Año').innerText = "Cargando...";
-          await CrearMenuAlumno();
-          
+          await CrearMenuAlumno();     
           setTimeout(async function() {
             const barracarga = document.querySelector('.Lista-alumnos');
-            const materias = document.querySelector('.Lista-Materias');
+            const materias = document.querySelector('.Lista-Materias');        
+            var elemento = document.querySelectorAll('.rotate-icon');
+                 if(elemento){
+                  Array.from(elemento).forEach(function(elemento) {
+                    elemento.addEventListener('click', function() {
+                      var idValor = this.getAttribute('data-id-valor');
+                      sessionStorage.setItem('IdValorAlumnoMateria', idValor);
+                      handleClickAlumnoMateria();
+                    });
+                });
+                 }
+           async function handleClickAlumnoMateria() {
+              let idAlumnoMateria = sessionStorage.getItem('IdValorAlumnoMateria');
+              let idAlumno = localStorage.getItem('idAlumno');
+              const Alumno = await ModificarAlumno.filtrarPorId(idAlumno)
+                for (let i = 0 ; i < Alumno.listaMateria.length ; i++){
+                  if(Alumno.listaMateria[i].id == idAlumnoMateria ){
+                    const Dato = {
+                      "id": Alumno.listaMateria[i].id,
+                      "numeroDocumento": Alumno.numeroDocumento,
+                      "materia": Alumno.listaMateria[i].materia,
+                      "regularidad": Alumno.listaMateria[i].regularidad,
+                      "tiempo": "temporal"
+                    };
+                    sessionStorage.setItem('ObjetoAlumnoMateria', JSON.stringify(Dato));
+                    window.location.href = 'Perfil-Alumno/OpcionesDeExamenes/Modificar.html';
+                        }
+                      }
+                           
+                 }
             if (barracarga) {
               barracarga.classList.add('invisible');
               materias.classList.remove('invisible');
@@ -653,7 +768,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
       },intervalo);
   } 
-
+  
   //va en todos
   setTimeout(function () {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
@@ -673,3 +788,63 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   }, 2000);
 });
+
+if (enviarButton !== null) {
+  console.log("SALE EL BOTON LOGIN")
+  enviarButton.addEventListener("click", async () => {
+    console.log("hace el click")
+    cardLoading.classList.remove('invisible');
+    cardLoading.classList.add('visible');
+    const usuario = document.getElementById("Login").value; 
+    const contraseña = document.getElementById("Contraseña").value;
+    const responseData = await apiService.enviarDatos(usuario, contraseña);
+    if(responseData.value.ok)
+    {
+      if(responseData.value.ok === "administrdor")
+      {
+        if(responseData.value.iDadministrador == 1)
+        {
+          sessionStorage.setItem('TokenLogin', responseData.value.token);
+          updateNotification(true, responseData.value.msg);
+          window.location.href = "Perfil-AdministradorMaster.html"
+        }
+        else 
+        {
+          sessionStorage.setItem('TokenLogin', responseData.value.token);
+          window.location.href = "Perfil-Administrador.html"
+        }
+      }
+      if(responseData.value.ok === "alumno")
+      {
+          sessionStorage.setItem('TokenLogin', responseData.value.token);
+          localStorage.setItem('idAlumno' , responseData.value.numeroDocumento);
+          window.location.href = "Perfil-Alumno.html"
+      }
+    }
+    else
+    {
+     const toastCreator = new ToastCreator(notifications);
+     console.log(responseData.value.acceso)
+      if (responseData.value.acceso){
+        toastCreator.createToast('error' , responseData.value.msg );
+        cardLoading.classList.remove('visible')
+        cardLoading.classList.add('invisible');
+      }
+      else
+      {
+        if ('usuario' in responseData.errors){
+            for(let i = 0 ; i < responseData.errors.usuario.length ; i++){
+              toastCreator.createToast('error' , responseData.errors.usuario[i]);
+            }
+          }else
+          {
+            for(let i = 0 ; i <  responseData.errors.contrasenia.length ; i++){
+              toastCreator.createToast('error' , responseData.errors.contrasenia[i]);
+            }
+          }
+        cardLoading.classList.remove('visible')
+        cardLoading.classList.add('invisible');
+      }
+    }
+  });
+}

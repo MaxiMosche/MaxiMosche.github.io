@@ -86,19 +86,19 @@ export default class ModificarAlumno {
                 if (idAlumno && valor.valor) {
                     switch (valor.id) {
                         case 'input-nombre':
-                            Alumno.nombreCompleto = valor.valor
+                            Alumno.nombreCompleto = valor.valor.toLowerCase()
                             break;
                         case 'input-direccion':
-                            Alumno.direccion = valor.valor
+                            Alumno.direccion = valor.valor.toLowerCase()
                             break;
                         case 'input-localidad':
-                            Alumno.localidad = valor.valor
+                            Alumno.localidad = valor.valor.toLowerCase()
                             break;
                         case 'input-telefono':
-                            Alumno.telefono = valor.valor
+                            Alumno.telefono = valor.valor.toLowerCase()
                             break;
                         case 'input-email':
-                            Alumno.email = valor.valor
+                            Alumno.email = valor.valor.toLowerCase()
                             break;
                         case 'input-password':
                             Alumno.contrasenia = valor.valor
@@ -117,14 +117,13 @@ export default class ModificarAlumno {
                         ModificarAlumno.limpiarYAsignarPlaceholder("input-email");
                             if(responseData.ok)
                             {
-                              console.log("pasa por aca")
                               if(window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
                               window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html")){
-                                document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto;
-                                document.getElementById("Label-direccion").innerText = Alumno.direccion;
-                                document.getElementById("Label-localidad").innerText = Alumno.localidad;
-                                document.getElementById("Label-telefono").innerText = Alumno.telefono;
-                                document.getElementById("Label-email").innerText = Alumno.email;
+                                document.getElementById("Label-nombre").innerText = Alumno.nombreCompleto.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                                document.getElementById("Label-direccion").innerText = Alumno.direccion.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                                document.getElementById("Label-localidad").innerText = Alumno.localidad.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                                document.getElementById("Label-telefono").innerText = Alumno.telefono.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+                                document.getElementById("Label-email").innerText = Alumno.email.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
                               }
                                 const toastCreator = new ToastCreator(notifications);
                                 toastCreator.createToast('success' , 'Exito' );
