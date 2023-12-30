@@ -6,6 +6,7 @@ import Registro from './Registro.js';
 import Inscipcion from './Inscipcion.js';
 import AlumnoMateria from './AlumnoMateria.js';
 import GetCarrera from './GetCarrera.js';
+import ModificarRegistros from './ModificarRegistros.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
@@ -442,7 +443,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
   
   if (window.location.href.includes("Registro-Alumno.html")){
-    console.log("entra en registro")
     selectcarrera()
   }
 
@@ -562,6 +562,24 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   } // temina el if
 
+  if (window.location.href.includes("/BorrarExamenes.html")){
+    const botonBorrar = document.getElementById('BorrarRegistros');
+    botonBorrar.addEventListener('click', accionBorrar);
+   async function accionBorrar() {
+     let token = sessionStorage.getItem('TokenLogin');
+     var NuevoModificar = new ModificarRegistros()
+     var verificar = await NuevoModificar.EliminarRegistros(token)
+     if(verificar){
+       const toastCreator = new ToastCreator(notifications);
+       toastCreator.createToast('success', "Se Eliminaron Los Registros Con Éxito");
+     }else
+     {
+       const toastCreator = new ToastCreator(notifications);
+       toastCreator.createToast('error', "Algo Salio Mal");
+     }
+    }
+}
+
   if (window.location.href.includes("Modificar.html")) {
     function handleClickModificar(buttonId) {
       var elemento = document.getElementById(buttonId);
@@ -588,7 +606,6 @@ document.addEventListener('DOMContentLoaded', async function () {
           });
       });
     }
-
   
     function handleClickEliminar(buttonId) {
       var elemento = document.getElementById(buttonId);
