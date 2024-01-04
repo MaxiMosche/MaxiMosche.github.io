@@ -672,26 +672,28 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById("Label-telefono").innerText = "Cargando...";
         document.getElementById("Label-email").innerText = "Cargando...";
       }
-      const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
-      setTimeout(async function (){
-        if(window.location.href.includes("Perfil-Alumno/Modificar-Contrase"))
-        {
-          handleClickpss("input-password" ,"Button-Password");       
-        }else
-        {
-          document.getElementById("Label-nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
-          document.getElementById("Label-direccion").innerText = capitalizarPrimeraLetra(Alumno.direccion);
-          document.getElementById("Label-localidad").innerText = capitalizarPrimeraLetra(Alumno.localidad);
-          document.getElementById("Label-telefono").innerText = capitalizarPrimeraLetra(Alumno.telefono);
-          document.getElementById("Label-email").innerText = capitalizarPrimeraLetra(Alumno.email);
-          handleClick("input-nombre" , "button-nombre");
-          handleClick("input-direccion" , "button-direccion");
-          handleClick("input-localidad" , "button-localidad");
-          handleClick("input-telefono" ,"button-telefono");
-          handleClick("input-email" ,"button-email");
-        }
-      }, 5000);
-    
+      ModificarAlumno.filtrarPorId(idAlumno)
+  .then(Alumno => {
+    if(window.location.href.includes("Perfil-Alumno/Modificar-Contrase"))
+    {
+      handleClickpss("input-password" ,"Button-Password");       
+    }else
+    {
+      document.getElementById("Label-nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
+      document.getElementById("Label-direccion").innerText = capitalizarPrimeraLetra(Alumno.direccion);
+      document.getElementById("Label-localidad").innerText = capitalizarPrimeraLetra(Alumno.localidad);
+      document.getElementById("Label-telefono").innerText = capitalizarPrimeraLetra(Alumno.telefono);
+      document.getElementById("Label-email").innerText = capitalizarPrimeraLetra(Alumno.email);
+      handleClick("input-nombre" , "button-nombre");
+      handleClick("input-direccion" , "button-direccion");
+      handleClick("input-localidad" , "button-localidad");
+      handleClick("input-telefono" ,"button-telefono");
+      handleClick("input-email" ,"button-email");
+    }
+  })
+  .catch(error => {
+    // Manejo de errores si la promesa es rechazada
+  }); 
         function handleClick(inputId ,buttonId  ) {
           const button = document.getElementById(buttonId);
           ModificarAlumno.agregarEventoClick(inputId , button)
