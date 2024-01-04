@@ -4,6 +4,7 @@ export default class Registro
 {
       
      static async Registrar(objetoJson) {
+      console.log(objetoJson)
         const requestOptions = {
             method: 'POST',
             headers: {

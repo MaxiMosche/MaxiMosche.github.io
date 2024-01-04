@@ -279,122 +279,132 @@ export async function CrearMenuAlumno()
 async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
-  const lista = new ListaAlumnos();
-  lista.BuscarLista(token)
-  .then(Alumno => {
-    var datosPersonales = ""
-    var ListaMaterias = ""
-    var Lpermanente = ""
-    var Ltemporal = ""
-    var iniciolistamaterias = `</div>
-    <div class="table-container">
-    <table>
-    <h1>Materias</h1>
-    <thead>
-    <tr>
-    <th>Materia</th>
-    <th>Año</th>
-    <th>Regularidad</th>
-    </tr>
-    </thead>
-    <tbody>`
-    var inicioListaexamenes =   `<div class="table-container">
-      <h1>Examenes</h1>
+const lista = new ListaAlumnos();
+(async () => {
+    const paginas = await listaAlumnos.obtenerPaginas(token);
+    const alumno = await listaAlumnos.obtenerAlumnos(token, paginas);
+    console.log(alumno);
+})();
+lista.obtenerPaginas(token)
+  .then(async (paginas) => {
+    for (let i = 1; i <= paginas; i++) {
+      await lista.obtenerAlumnosPorPagina(token, i)
+        .then((Alumno) => {
+          console.log(Alumno)
+          var datosPersonales = ""
+          var ListaMaterias = ""
+          var Lpermanente = ""
+          var Ltemporal = ""
+          var iniciolistamaterias = `</div>
+          <div class="table-container">
+          <table>
+          <h1>Materias</h1>
+          <thead>
+          <tr>
+          <th>Materia</th>
+          <th>Año</th>
+          <th>Regularidad</th>
+          </tr>
+          </thead>
+          <tbody>`
+          var inicioListaexamenes =   `<div class="table-container">
+            <h1>Examenes</h1>
+            <table>
+            <thead>
+            <tr>
+            <th>Materia</th>
+            <th>Año</th>
+            <th>Regularidad</th>
+            </tr>
+            </thead>
+            <tbody>`
+      for (let i = 0; i < Alumno.length; i++) {
+      datosPersonales += `
+      <li> 
+      <button class="acordion"><span>${Alumno[i].nombreCompleto}</span><i class='bx bx-show'></i></button>
+      <div class="panel">
+      <div class="table-container">
       <table>
+      <h1>Informacion Del Alumno</h1>
       <thead>
       <tr>
-      <th>Materia</th>
-      <th>Año</th>
-      <th>Regularidad</th>
+      <th>Informacion</th>
+      <th>Dato Del Alumno</th>
+      <th></th>
       </tr>
       </thead>
-      <tbody>`
-for (let i = 0; i < Alumno.length; i++) {
-datosPersonales += `
-<li> 
-<button class="acordion"><span>${Alumno[i].nombreCompleto}</span><i class='bx bx-show'></i></button>
-<div class="panel">
-<div class="table-container">
-<table>
-<h1>Informacion Del Alumno</h1>
-<thead>
-<tr>
-<th>Informacion</th>
-<th>Dato Del Alumno</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Verificado</td>
-<td><i class='bx bx-badge-check ${(Alumno[i].verificacion) ? " Verificado" : " NoVerificado"}'></i></td>
-<td><i class='bx bx-edit' data-id="${Alumno[i].numeroDocumento}"></i></td>
-</tr>
-<tr>
-<td>DNI</td>
-<td>${Alumno[i].numeroDocumento}</td>
-<td></td>
-</tr>
-<tr>
-<td>Mail</td>
-<td>${Alumno[i].email}</td>
-<td></td>
-</tr>
-<tr>
-<td>Carrera</td>
-<td>${Alumno[i].carrera}</td>
-<td></td>
-</tr>
-<tr>
-<td>Telefono</td>
-<td>${Alumno[i].telefono}</td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>`
-if (Alumno[i].listaMateria === undefined) {
-}
-else
-{
-for (let x = 0; x < Alumno[i].listaMateria.length; x++)
-{
-if(Alumno[i].listaMateria[x].tiempo === "permanente")
-{
-Lpermanente +=`<tr>
- <td>${Alumno[i].listaMateria[x].materia}</td> 
- <td>Primero</td>
- <td>libre</td>
- </tr>`
-}
-else
-{
-Ltemporal += `<tr>
- <td>${Alumno[i].listaMateria[x].materia}</td> 
- <td>Primero</td>
- <td>libre</td>
- </tr>`
-}
-}        
-}
-Lpermanente += `</tbody>
-</table>
-</div>`
-Ltemporal += `</tbody>
-</table>
-</div> `
-ListaMaterias = iniciolistamaterias + Lpermanente + inicioListaexamenes + Ltemporal + `</div></div></li>`;
-Lpermanente = "" ;
-Ltemporal = "" ;
-dato += datosPersonales + ListaMaterias
-datosPersonales = "";
-}
-document.getElementById("myList").innerHTML = dato
-loadicon()
-})
-.catch(error => {
-console.error('Error:', error);
-});
+      <tbody>
+      <tr>
+      <td>Verificado</td>
+      <td><i class='bx bx-badge-check ${(Alumno[i].verificacion) ? " Verificado" : " NoVerificado"}'></i></td>
+      <td><i class='bx bx-edit' data-id="${Alumno[i].numeroDocumento}"></i></td>
+      </tr>
+      <tr>
+      <td>DNI</td>
+      <td>${Alumno[i].numeroDocumento}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Mail</td>
+      <td>${Alumno[i].email}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Carrera</td>
+      <td>${Alumno[i].carrera}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Telefono</td>
+      <td>${Alumno[i].telefono}</td>
+      <td>
+      </td>
+      </tr>
+      </tbody>
+      </table>`
+      if (Alumno[i].listaMateria === undefined) {
+      }
+      else
+      {
+      for (let x = 0; x < Alumno[i].listaMateria.length; x++)
+      {
+      if(Alumno[i].listaMateria[x].tiempo === "permanente")
+      {
+      Lpermanente +=`<tr>
+       <td>${Alumno[i].listaMateria[x].materia}</td> 
+       <td>Primero</td>
+       <td>libre</td>
+       </tr>`
+      }
+      else
+      {
+      Ltemporal += `<tr>
+       <td>${Alumno[i].listaMateria[x].materia}</td> 
+       <td>Primero</td>
+       <td>libre</td>
+       </tr>`
+      }
+      }        
+      }
+      Lpermanente += `</tbody>
+      </table>
+      </div>`
+      Ltemporal += `</tbody>
+      </table>
+      </div> `
+      ListaMaterias = iniciolistamaterias + Lpermanente + inicioListaexamenes + Ltemporal + `</div></div></li>`;
+      Lpermanente = "" ;
+      Ltemporal = "" ;
+      dato += datosPersonales + ListaMaterias
+      datosPersonales = "";
+      }
+      document.getElementById("myList").innerHTML = dato
+      loadicon()
+        })
+        .catch((error) => console.error(`Error al obtener la página ${i}:`, error));
+    }
+  })
+  .catch((error) => console.error('Error al obtener el número de páginas:', error));
 }
 
 export function formularioRegistro()

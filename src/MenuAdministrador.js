@@ -1,29 +1,66 @@
 class ListaAlumnos {
   constructor() {
-    this.apiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/ListaAlumnos';
+    this.paginatedApiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/Paginado';
+    this.apiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/ListaAlumnos?pagina=';
+    this.cache = [];
   }
 
-  async BuscarLista(token) {
+  async obtenerPaginas(token) {
     const requestOptions = {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,  // Usar el token pasado como argumento
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     };
 
     try {
-      const response = await fetch(this.apiUrl, requestOptions);
+      const response = await fetch(this.paginatedApiUrl, requestOptions);
+      if (response.ok) {
+        const paginas = await response.text();
+        console.log(parseInt(paginas))
+        return parseInt(paginas);
+      } else {
+        throw new Error('Error al obtener el número de páginas');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
+  async obtenerAlumnos(token, paginas) {
+    try {
+      for (let i = 1; i <= paginas; i++) {
+        const response = await this.obtenerAlumnosPorPagina(token, i);
+        this.cache = this.cache.concat(response);
+      }
+      return this.cache;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async obtenerAlumnosPorPagina(token, pagina) {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    try {
+      const response = await fetch(`${this.apiUrl}${pagina}`, requestOptions);
       if (response.ok) {
         const responseData = await response.json();
         return responseData;
       } else {
-        throw new Error('Error en la solicitud');
+        throw new Error(`Error al obtener la página ${pagina}`);
       }
     } catch (error) {
       throw error;
     }
   }
 }
+
 export default ListaAlumnos
