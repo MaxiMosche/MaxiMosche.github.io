@@ -398,6 +398,27 @@ body::-webkit-scrollbar-thumb{
   background-color: var(--items-color) !important;
   color: var(--text-color)!important;
 }
+.ElementoStilo2{
+  font-size: 20px;
+  border-bottom: 1px solid var(--border-color)!important;
+}
+
+ .ElementoEstilo{
+  position: relative;
+  top:10px;
+  left: 50px;
+  font-size: 20px;
+  width: calc(100% - 100px);
+  text-align: left ;
+  background-color: var(--items-color) !important;
+  color: var(--text-color)!important;
+  border-bottom: 1px solid var(--border-color)!important;
+}
+ .ElementoEstilo input{
+  margin-left: 10px;
+}
+
+
 
 .recorte{
   position: absolute;
@@ -1485,7 +1506,7 @@ color: var(--text-color);
 }
 
 .table-container-perfil tr,td {
-  font-size: 20px !important;
+  font-size: 15px !important;
 }
 
 .btn-redes{
@@ -1601,7 +1622,7 @@ color: var(--text-color);
   }
   
   .table-container h1{
-    font-size: 35px;
+    font-size: 25px;
     background-color: var(--items-color);
     border-top: 1px solid var(--border-color);
   }
@@ -1860,6 +1881,7 @@ color: var(--text-color);
       width: 100%;
       font-size: 18px;
     }
+    
 
     .search-input {
         padding: 5px;

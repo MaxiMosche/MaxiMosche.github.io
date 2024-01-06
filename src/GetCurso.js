@@ -1,6 +1,6 @@
 class GetCarrera {
     constructor() {
-      this.url = 'https://beppolevi.azurewebsites.net/api/Curso/ListaCursos';
+      this.url = 'https://beppolevi.azurewebsites.net/api/Cursos/ListaCursos';
     }
   
     async BuscarLista(token) {       

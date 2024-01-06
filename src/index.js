@@ -8,6 +8,7 @@ import AlumnoMateria from './AlumnoMateria.js';
 import GetCarrera from './GetCarrera.js';
 import ModificarRegistros from './ModificarRegistros.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
+import GetCurso from './GetCurso.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -184,6 +185,18 @@ export async function CrearMenuAlumno()
     }
  }
 
+ async function selectCurso(){
+  var nuevalista = new GetCurso()
+  var ListaCarreras = `<option selected>CURSO</option>`;
+  document.getElementById("Select-Curso").innerHTML = ListaCarreras;
+  console.log(document.getElementById("Select-Curso"))
+  const listacarreras = await nuevalista.BuscarLista()
+  for(let i = 0 ; i < listacarreras.length ; i++){
+    console.log(listacarreras[i].letraEscala)
+    ListaCarreras += `<option value="${listacarreras[i].letraEscala}">${capitalizarPrimeraLetra(listacarreras[i].letraEscala)}</option>`
+  }
+  document.getElementById("Select-Curso").innerHTML = ListaCarreras;
+ }
 
  async function selectcarrera(){
   var nuevalista = new GetCarrera()
@@ -291,15 +304,15 @@ lista.obtenerPaginas(token)
     for (let i = 1; i <= paginas; i++) {
       await lista.obtenerAlumnosPorPagina(token, i)
         .then((Alumno) => {
-         var inicio = `<li class="list-group-item">
-         <input class="form-check-input me-1" type="checkbox" id="selectAll">
-         <label for="selectAll">Seleccionar Todos</label>
-       </li>`;
-         for(let i = 0 ; i < Alumno.length ; i++){ 
-          dato += `<li class="Elemento list-group-item" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
-         <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
-         <label class="form-check-label" for="firstCheckbox">${Alumno[i].numeroDocumento} - ${Alumno[i].nombreCompleto}</label>
-       </li>`
+          var inicio = `<li class="list-group-item">
+          <input class="form-check-input me-1" type="checkbox" id="selectAll">
+          <label for="selectAll">Seleccionar Todos</label>
+        </li>`;
+          for(let i = 0 ; i < Alumno.length ; i++){ 
+           dato += `<li class="Elemento ElementoEstilo" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
+          <input class="form-check-input me-1" type="checkbox" id="firstCheckbox">
+          <label class="form-check-label" for="firstCheckbox" >${Alumno[i].numeroDocumento}&nbsp&nbsp-&nbsp&nbsp${capitalizarPrimeraLetra(Alumno[i].nombreCompleto)}</label>
+        </li>`
          }
          document.getElementById("myList").innerHTML = inicio + dato;
          const selectAllCheckbox = document.getElementById('selectAll');
@@ -360,8 +373,8 @@ lista.obtenerPaginas(token)
             <tbody>`
       for (let i = 0; i < Alumno.length; i++) {
       datosPersonales += `
-      <li class="Elemento" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}"> 
-      <button class="acordion"><span >${Alumno[i].nombreCompleto}</span><i class='bx bx-show'></i></button>
+      <li class="Elemento ElementoStilo2" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}"> 
+      <button class="acordion"><span >${capitalizarPrimeraLetra(Alumno[i].nombreCompleto)}</span><i class='bx bx-show'></i></button>
       <div class="panel">
       <div class="table-container">
       <table>
@@ -386,22 +399,27 @@ lista.obtenerPaginas(token)
       </tr>
       <tr>
       <td>Mail</td>
-      <td>${Alumno[i].email}</td>
-      <td></td>
-      </tr>
-      <tr>
-      <td>Curso</td>
-      <td>${Alumno[i].curso}</td>
+      <td>${capitalizarPrimeraLetra(Alumno[i].email)}</td>
       <td></td>
       </tr>
       <tr>
       <td>Carrera</td>
-      <td>${Alumno[i].carrera}</td>
+      <td>${capitalizarPrimeraLetra(Alumno[i].carrera)}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Año</td>
+      <td>${capitalizarPrimeraLetra(Alumno[i].anio)}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Curso</td>
+      <td>${capitalizarPrimeraLetra(Alumno[i].curso)}</td>
       <td></td>
       </tr>
       <tr>
       <td>Telefono</td>
-      <td>${Alumno[i].telefono}</td>
+      <td>${capitalizarPrimeraLetra(Alumno[i].telefono)}</td>
       <td>
       </td>
       </tr>
@@ -416,7 +434,7 @@ lista.obtenerPaginas(token)
       if(Alumno[i].listaMateria[x].tiempo === "permanente")
       {
       Lpermanente +=`<tr>
-       <td>${Alumno[i].listaMateria[x].materia}</td> 
+       <td>${Alumno[i].listaMateria[x].materia.toUpperCase()}</td> 
        <td>Primero</td>
        <td>libre</td>
        </tr>`
@@ -424,7 +442,7 @@ lista.obtenerPaginas(token)
       else
       {
       Ltemporal += `<tr>
-       <td>${Alumno[i].listaMateria[x].materia}</td> 
+       <td>${Alumno[i].listaMateria[x].materia.toUpperCase()}</td> 
        <td>Primero</td>
        <td>libre</td>
        </tr>`
@@ -484,6 +502,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (window.location.href.includes("Perfil-AdministradorMaster.html") || window.location.href.includes("index-AdministradorMaster.html") ) {
     await loadHTMLFromAPI()
     selectcarrera()
+    selectCurso()
     const filters = {
       buscador: "",
       año: "",
@@ -552,6 +571,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (window.location.href.includes("Herramientas.html")){
   await CrearHerramientasAdministrador()
   await selectcarrera()
+  await selectCurso()
    const filters = {
      buscador: "",
      año: "",
