@@ -1,6 +1,6 @@
 class ModificarRegistros {
     constructor() {
-      this.apiUrl = `https://beppoleviapi.azurewebsites.net/api/Control/EliminarRegistros`;
+      this.apiUrl = `https://beppolevi.azurewebsites.net/api/Control/EliminarRegistros`;
     }
     async EliminarRegistros(token) {       
       const requestOptions = {

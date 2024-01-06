@@ -31,7 +31,7 @@ export default class ModificarAlumno {
 
 
     static async ObtenerAlumnoDatos(docomento , token) {
-        const apiUrl = `https://beppoleviapi.azurewebsites.net/api/Alumno/Individual?id=${docomento}`;
+        const apiUrl = `https://beppolevi.azurewebsites.net/api/Alumno/Individual?id=${docomento}`;
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -53,7 +53,7 @@ export default class ModificarAlumno {
     }
 
     static async enviarDatos(objetoJson , token) {
-        const apiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/Modificar';
+        const apiUrl = 'https://beppolevi.azurewebsites.net/api/Alumno/Modificar';
         const requestOptions = {
           method: 'PUT',
           headers: {

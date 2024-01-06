@@ -1,6 +1,6 @@
 class ListaMaterias {
     constructor(carrera) {
-      this.apiUrl = `https://beppoleviapi.azurewebsites.net/api/Materias/FiltroCarrera?carrera=${carrera}`;
+      this.apiUrl = `https://beppolevi.azurewebsites.net/api/Materias/FiltroCarrera?carrera=${carrera}`;
     }
     async BuscarLista(token) {       
       const requestOptions = {

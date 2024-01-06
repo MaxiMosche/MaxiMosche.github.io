@@ -1,7 +1,7 @@
 class ListaAlumnos {
   constructor() {
-    this.paginatedApiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/Paginado';
-    this.apiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/ListaAlumnos?pagina=';
+    this.paginatedApiUrl = 'https://beppolevi.azurewebsites.net/api/Alumno/Paginado';
+    this.apiUrl = 'https://beppolevi.azurewebsites.net/api/Alumno/ListaAlumnos?pagina=';
     this.cache = [];
   }
 

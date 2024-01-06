@@ -6,7 +6,7 @@ class Inscipcion {
     async enviarDatos(objetoEnviar, token) {
       const datosAEnviar = JSON.stringify(objetoEnviar);
       console.log(datosAEnviar)
-      const url = 'https://beppoleviapi.azurewebsites.net/api/AlumnoMateria/Agregar';
+      const url = 'https://beppolevi.azurewebsites.net/api/AlumnoMateria/Agregar';
       const parametrosSolicitud = {
         method: 'POST',
         headers: {

@@ -1,6 +1,6 @@
 class ApiService {
     constructor() {
-      this.apiUrl = 'https://beppoleviapi.azurewebsites.net/Login';
+      this.apiUrl = 'https://beppolevi.azurewebsites.net/Login';
     }
     
     async enviarDatos(usuario, contraseña) {

@@ -276,6 +276,46 @@ export async function CrearMenuAlumno()
     throw error;
   }
 }
+
+async function CrearHerramientasAdministrador(){
+  var dato = ""
+  let token = sessionStorage.getItem('TokenLogin');
+const lista = new ListaAlumnos();
+(async () => {
+    const paginas = await listaAlumnos.obtenerPaginas(token);
+    const alumno = await listaAlumnos.obtenerAlumnos(token, paginas);
+    console.log(alumno);
+})();
+lista.obtenerPaginas(token)
+  .then(async (paginas) => {
+    for (let i = 1; i <= paginas; i++) {
+      await lista.obtenerAlumnosPorPagina(token, i)
+        .then((Alumno) => {
+         var inicio = `<li class="list-group-item">
+         <input class="form-check-input me-1" type="checkbox" id="selectAll">
+         <label for="selectAll">Seleccionar Todos</label>
+       </li>`;
+         for(let i = 0 ; i < Alumno.length ; i++){ 
+          dato += `<li class="Elemento list-group-item" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
+         <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+         <label class="form-check-label" for="firstCheckbox">${Alumno[i].numeroDocumento} - ${Alumno[i].nombreCompleto}</label>
+       </li>`
+         }
+         document.getElementById("myList").innerHTML = inicio + dato;
+         const selectAllCheckbox = document.getElementById('selectAll');
+         console.log(selectAllCheckbox)
+         const checkboxes = document.querySelectorAll('.form-check-input');
+       
+         selectAllCheckbox.addEventListener('change', function() {
+           checkboxes.forEach(checkbox => {
+             checkbox.checked = selectAllCheckbox.checked;
+           });
+         });
+        })
+        .catch((error) => console.error(`Error al obtener la página ${i}:`, error));
+    }
+  })
+}
 async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
@@ -320,8 +360,8 @@ lista.obtenerPaginas(token)
             <tbody>`
       for (let i = 0; i < Alumno.length; i++) {
       datosPersonales += `
-      <li> 
-      <button class="acordion"><span>${Alumno[i].nombreCompleto}</span><i class='bx bx-show'></i></button>
+      <li class="Elemento" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}"> 
+      <button class="acordion"><span >${Alumno[i].nombreCompleto}</span><i class='bx bx-show'></i></button>
       <div class="panel">
       <div class="table-container">
       <table>
@@ -347,6 +387,11 @@ lista.obtenerPaginas(token)
       <tr>
       <td>Mail</td>
       <td>${Alumno[i].email}</td>
+      <td></td>
+      </tr>
+      <tr>
+      <td>Curso</td>
+      <td>${Alumno[i].curso}</td>
       <td></td>
       </tr>
       <tr>
@@ -438,6 +483,65 @@ if (window.location.href.includes("Perfil-AdministradorMaster")){
 document.addEventListener('DOMContentLoaded', async function () {
   if (window.location.href.includes("Perfil-AdministradorMaster.html") || window.location.href.includes("index-AdministradorMaster.html") ) {
     await loadHTMLFromAPI()
+    selectcarrera()
+    const filters = {
+      buscador: "",
+      año: "",
+      carrera: "",
+      curso: ""
+    };
+    document.addEventListener("keyup", e => {
+      if (e.target.matches("#buscador")) {
+        if (e.key === "Escape") {
+          e.target.value = "";
+          filters.buscador = "";
+        } else {
+          filters.buscador = e.target.value.toLowerCase();
+        }
+        filterElements();
+      }
+    });
+    
+    document.addEventListener("change", e => {
+      if (e.target.matches("#año")) {
+        filters.año = e.target.value.toLowerCase();
+      } else if (e.target.matches("#Select-Carrera")) {
+        filters.carrera = e.target.value.toLowerCase();
+      } else if (e.target.matches("#Select-Curso")) {
+        filters.curso = e.target.value.toLowerCase();
+      }
+      filterElements();
+    });
+    
+    function filterElements() {
+      document.querySelectorAll(".Elemento").forEach(Elemento => {
+        const id = Elemento.dataset.id.toLowerCase();
+        const dni = Elemento.dataset.dni.toLowerCase();
+        const año = Elemento.dataset.i.toLowerCase();
+        const carrera = Elemento.dataset.c.toLowerCase();
+        const curso = Elemento.dataset.cu.toLowerCase();
+    
+        if(filters.curso === "curso"){
+          filters.curso = ""
+        }
+        if (filters.carrera === "carrera"){
+          filters.carrera = ""
+        }
+        if (filters.año === "año"){
+          filters.año = ""
+        }
+        const cumpleBuscador = filters.buscador === "" || id.includes(filters.buscador) || dni.includes(filters.buscador);
+        const cumpleAño = filters.año === "" || año.includes(filters.año);
+        const cumpleCarrera = filters.carrera === "" || carrera.includes(filters.carrera);
+        const cumpleCurso = filters.curso === "" || curso.includes(filters.curso);
+    
+        if (cumpleBuscador && cumpleAño && cumpleCarrera && cumpleCurso) {
+          Elemento.classList.remove("invisible");
+        } else {
+          Elemento.classList.add("invisible");
+        }
+      });
+    }
     if(notification.success.inicioOk)
     {
       const toastCreator = new ToastCreator(notifications);
@@ -445,6 +549,70 @@ document.addEventListener('DOMContentLoaded', async function () {
       updateNotification(false, "");
     };
   } // temina el if
+  if (window.location.href.includes("Herramientas.html")){
+  await CrearHerramientasAdministrador()
+  await selectcarrera()
+   const filters = {
+     buscador: "",
+     año: "",
+     carrera: "",
+     curso: ""
+   };
+   
+   document.addEventListener("keyup", e => {
+     if (e.target.matches("#buscador")) {
+       if (e.key === "Escape") {
+         e.target.value = "";
+         filters.buscador = "";
+       } else {
+        console.log(e.target.value.toLowerCase())
+         filters.buscador = e.target.value.toLowerCase();
+       }
+       filterElements();
+     }
+   });
+   
+   document.addEventListener("change", e => {
+     if (e.target.matches("#año")) {
+       filters.año = e.target.value.toLowerCase();
+     } else if (e.target.matches("#Select-Carrera")) {
+       filters.carrera = e.target.value.toLowerCase();
+     } else if (e.target.matches("#Select-Curso")) {
+       filters.curso = e.target.value.toLowerCase();
+     }
+     filterElements();
+   });
+   
+   function filterElements() {
+     document.querySelectorAll(".Elemento").forEach(Elemento => {
+       const id = Elemento.dataset.id.toLowerCase();
+       const dni = Elemento.dataset.dni.toLowerCase();
+       const año = Elemento.dataset.i.toLowerCase();
+       const carrera = Elemento.dataset.c.toLowerCase();
+       const curso = Elemento.dataset.cu.toLowerCase();
+   
+       if(filters.curso === "curso"){
+         filters.curso = ""
+       }
+       if (filters.carrera === "carrera"){
+         filters.carrera = ""
+       }
+       if (filters.año === "año"){
+         filters.año = ""
+       }
+       const cumpleBuscador = filters.buscador === "" || id.includes(filters.buscador) || dni.includes(filters.buscador);
+       const cumpleAño = filters.año === "" || año.includes(filters.año);
+       const cumpleCarrera = filters.carrera === "" || carrera.includes(filters.carrera);
+       const cumpleCurso = filters.curso === "" || curso.includes(filters.curso);
+   
+       if (cumpleBuscador && cumpleAño && cumpleCarrera && cumpleCurso) {
+         Elemento.classList.remove("invisible");
+       } else {
+         Elemento.classList.add("invisible");
+       }
+     });
+   }
+  }
   
   if (window.location.href.includes("index.html")){
     document.getElementById('registro').addEventListener('click', function() {

@@ -1,7 +1,7 @@
 class AlumnoMateria {
     constructor() {
-      this.modificarUrl = 'https://beppoleviapi.azurewebsites.net/api/AlumnoMateria/Modificar';
-      this.eliminarUrl = 'https://beppoleviapi.azurewebsites.net/api/AlumnoMateria/Eliminar';
+      this.modificarUrl = 'https://beppolevi.azurewebsites.net/api/AlumnoMateria/Modificar';
+      this.eliminarUrl = 'https://beppolevi.azurewebsites.net/api/AlumnoMateria/Eliminar';
     }
   
     modificarAlumnoMateria(data, token) {

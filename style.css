@@ -384,6 +384,10 @@ body::-webkit-scrollbar-thumb{
     border-radius: 5px;
 }
 
+.invisibilidad{
+  visibility: hidden;
+}
+
 .list-group-item {
   position: relative;
   top:10px;
@@ -2191,7 +2195,7 @@ color: var(--text-color);
         width: 300px!important;
       }
     
-      .container-select .col-3 {
+      .container-select .col-4 {
         width: auto; 
         float: none; 
       }

@@ -13,7 +13,7 @@ export default class Registro
             body: JSON.stringify(objetoJson)
           };
           try {
-            const apiUrl = 'https://beppoleviapi.azurewebsites.net/api/Alumno/Agregar';
+            const apiUrl = 'https://beppolevi.azurewebsites.net/api/Alumno/Agregar';
             const response = await fetch(apiUrl, requestOptions);
             if (response.statusText == "Bad Request") {
               const responsejson = await response.json();
