@@ -301,21 +301,22 @@
      <section id="menu-her" class=" menu-herramientas">
         <ul class="lista settingon">
           <li><img src="/icons8-ms-excel-48.png" alt=""><span>Descargar</span></li>
-          <li><i class='bx bxs-user-plus'></i><span>Agregar</span></li>
-          <li><i class='bx bxs-user-check'></i><span>Verificar</span></li>
+          <li><i class='bx bxs-user-plus'></i><span>Asignar</span></li>
+          <li><i id="Btn-verificar" class='bx bxs-user-check'></i><span>Verificar</span></li>
         </ul>
         <div class="row cont-agregar settingoff">
             <div class="select col-3">
-              <select class="form-select">
+              <select id="Select-Curso1" class="form-select">
                 <option selected>Curso</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
               </select>
             </div>
-             <button class="col-3 btn btn-dark">Agregar</button>
+             <button id="Btn-agregar" class="col-3 btn btn-dark">Agregar</button>
         </div>
      </section>
+     <section class="Cartel-Carga">
+      <ul id="listaLoading" class="lista-Cargas invisible">
+      </ul>
+       </section>
      </div>
      <script type="module" src="/src/index.js"></script>
      <script src="/src/Visual.js"></script>

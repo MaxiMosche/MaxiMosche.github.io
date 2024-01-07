@@ -30,6 +30,37 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
+.Cartel-Carga {
+  position: fixed;
+  top: 220px;
+  right: 7px;
+  padding: 10px;
+  z-index: 9999; /* Asegura que esté por encima de otros elementos */
+}
+
+.Cartel-Carga .lista-Cargas{
+  width: 300px;
+  list-style-type: none;
+  background-color: var(--fondo-color);
+  border: 1px solid var(--border-color);
+}
+
+.Cartel-Carga .lista-Cargas .progress-bar{
+  margin-left: -10px;
+  height: 10px!important;
+}
+
+.lista-Cargas h4{
+  color: var(--text-color);
+  text-align: center;
+}
+
+.Div-Cant{
+  text-align: center;
+  font-size: 30px;
+  color: var(--text-color);
+}
+
 .container-menu-icon {
   display: inline-block;
   width: 100%;
@@ -1789,7 +1820,9 @@ color: var(--text-color);
   }
 
   @media screen and (min-width: 500px) and (max-width: 800px){ /* de 500 a 800 */
-
+    .Label-Invisible{
+      display: none;
+    }
 
     .alert-primary{
       position: relative;
@@ -1937,6 +1970,10 @@ color: var(--text-color);
 
   @media screen and (max-width: 950px) {
     .Regularidad-w800{
+      display: none;
+    }
+
+    .Label-Invisible{
       display: none;
     }
 

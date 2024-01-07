@@ -9,6 +9,7 @@ import GetCarrera from './GetCarrera.js';
 import ModificarRegistros from './ModificarRegistros.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
 import GetCurso from './GetCurso.js';
+import Validar from './Validar.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -112,7 +113,6 @@ async function loadicon(){
     icono.addEventListener('click', function () {
       var idAlumno = icono.getAttribute('data-id');
       localStorage.setItem('idAlumno', idAlumno);
-      console.log("ID de alumno almacenado:", idAlumno);
       try {
         window.location.href = "Perfil-AdministradorMaster/ModificarInfoAlumno.html";
       } catch (error) {
@@ -196,6 +196,7 @@ export async function CrearMenuAlumno()
     ListaCarreras += `<option value="${listacarreras[i].letraEscala}">${capitalizarPrimeraLetra(listacarreras[i].letraEscala)}</option>`
   }
   document.getElementById("Select-Curso").innerHTML = ListaCarreras;
+  document.getElementById("Select-Curso1").innerHTML = ListaCarreras;
  }
 
  async function selectcarrera(){
@@ -290,6 +291,25 @@ export async function CrearMenuAlumno()
   }
 }
 
+async function ObtenerArregloHerramienta() {
+  const elementos = document.querySelectorAll('li.Elemento');
+  const dniArray = [];
+  
+  elementos.forEach((elemento) => {
+    const checkbox = elemento.querySelector('input[type="checkbox"]');
+    
+    if (
+      window.getComputedStyle(elemento).display !== 'none' &&
+      checkbox.checked
+    ) {
+      const dni = elemento.getAttribute('data-dni');
+      dniArray.push(dni);
+    }
+  });
+  
+  return dniArray;
+}
+
 async function CrearHerramientasAdministrador(){
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
@@ -311,7 +331,8 @@ lista.obtenerPaginas(token)
           for(let i = 0 ; i < Alumno.length ; i++){ 
            dato += `<li class="Elemento ElementoEstilo" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
           <input class="form-check-input me-1" type="checkbox" id="firstCheckbox">
-          <label class="form-check-label" for="firstCheckbox" >${Alumno[i].numeroDocumento}&nbsp&nbsp-&nbsp&nbsp${capitalizarPrimeraLetra(Alumno[i].nombreCompleto)}</label>
+          <label class="form-check-label" for="firstCheckbox" >${Alumno[i].numeroDocumento}&nbsp&nbsp</label>
+          <label class="form-check-label Label-Invisible" for="firstCheckbox" >-&nbsp&nbsp${capitalizarPrimeraLetra(Alumno[i].nombreCompleto)}</label>
         </li>`
          }
          document.getElementById("myList").innerHTML = inicio + dato;
@@ -329,6 +350,7 @@ lista.obtenerPaginas(token)
     }
   })
 }
+
 async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
@@ -572,13 +594,41 @@ document.addEventListener('DOMContentLoaded', async function () {
   await CrearHerramientasAdministrador()
   await selectcarrera()
   await selectCurso()
+  var CartelesLoading = ""
    const filters = {
      buscador: "",
      año: "",
      carrera: "",
      curso: ""
    };
-   
+
+   const boton = document.getElementById('Btn-verificar');
+   boton.addEventListener('click', async () => {  
+    CartelesLoading +=`<li class="ContenidoVisible"><h4>Verificando Alumnos</h4>
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"  style="width: 1%"></div>
+    <div class="Div-Cant"><span></span></div>
+  </li>`
+  document.getElementById('listaLoading').classList.remove('invisible');
+  document.getElementById('listaLoading').innerHTML=CartelesLoading;
+    const ListaAlumnos = [];
+    let pasadas = 0
+    const progressBar = document.querySelector('.progress-bar');
+    const text = document.querySelector('.Div-Cant');
+    const arrayDni = await ObtenerArregloHerramienta();
+    let token = sessionStorage.getItem('TokenLogin');
+    for (const dni of arrayDni) {
+      const Alumno = await ModificarAlumno.filtrarPorId(dni);
+      ListaAlumnos.push(Alumno);
+      const verificacion = await Validar.verificarAlumno(parseInt(dni), token);
+      pasadas++
+      const progreso = `${pasadas}/${arrayDni.length}`;
+      const porcentaje = (pasadas / arrayDni.length) * 100;
+      progressBar.style.width = porcentaje + '%';
+      text.innerText = pasadas + "/" + arrayDni.length
+    }
+    document.getElementById('listaLoading').classList.add('invisible');
+   });
+
    document.addEventListener("keyup", e => {
      if (e.target.matches("#buscador")) {
        if (e.key === "Escape") {
@@ -759,6 +809,12 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
   } // temina el if
+
+//////////////////////////////////////////////////////////////////////////////////////
+const boton = document.getElementById('Btn-agregar');
+boton.addEventListener('click', async () => {
+  await ObtenerArregloHerramienta(); //
+});
 
   if (window.location.href.includes("/BorrarExamenes.html")){
     const botonBorrar = document.getElementById('BorrarRegistros');
