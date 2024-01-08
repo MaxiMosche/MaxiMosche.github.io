@@ -594,7 +594,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   await CrearHerramientasAdministrador()
   await selectcarrera()
   await selectCurso()
-  const CartelesLoading = [];
+  var CartelesLoading = "";
    const filters = {
      buscador: "",
      año: "",
@@ -604,10 +604,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
    const boton = document.getElementById('Btn-verificar');
    boton.addEventListener('click', async () => {  
-    CartelesLoading.push(`<li class="ContenidoVisible"><h4>Verificando Alumnos</h4>
+    CartelesLoading +=`<li class="ContenidoVisible"><h4>Verificando Alumnos</h4>
     <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"  style="width: 1%"></div>
     <div class="Div-Cant"><span></span></div>
-  </li>`)
+  </li>`
   document.getElementById('listaLoading').classList.remove('invisible');
   document.getElementById('listaLoading').innerHTML=CartelesLoading;
     const ListaAlumnos = [];
@@ -626,6 +626,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       progressBar.style.width = porcentaje + '%';
       text.innerText = pasadas + "/" + arrayDni.length
     }
+
     document.getElementById('listaLoading').classList.add('invisible');
    });
 
@@ -810,6 +811,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   } // temina el if
 
+//////////////////////////////////////////////////////////////////////////////////////
+const boton = document.getElementById('Btn-agregar');
+boton.addEventListener('click', async () => {
+  await ObtenerArregloHerramienta(); //
+});
 
   if (window.location.href.includes("/BorrarExamenes.html")){
     const botonBorrar = document.getElementById('BorrarRegistros');
