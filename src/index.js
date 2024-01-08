@@ -811,12 +811,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   } // temina el if
 
-//////////////////////////////////////////////////////////////////////////////////////
-const boton = document.getElementById('Btn-agregar');
-boton.addEventListener('click', async () => {
-  await ObtenerArregloHerramienta(); //
-});
-
   if (window.location.href.includes("/BorrarExamenes.html")){
     const botonBorrar = document.getElementById('BorrarRegistros');
     botonBorrar.addEventListener('click', accionBorrar);
