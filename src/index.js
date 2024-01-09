@@ -127,7 +127,8 @@ async function CargarCartelHerramienta(Cartel) {
 ////////////////////////////
 async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConContenido) {
   let pasadas = 0;
-
+  const nombre = document.getElementById('Nombre-Atributo').value
+  document.getElementById('Nombre-Atributo').value= "";
   if (arrayDni[ParaElFor].length !== 0) {
     document.getElementById('listaLoading').classList.remove('invisible');
     const ul = document.getElementById('listaLoading');
@@ -193,10 +194,8 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
       text.innerText = progreso;
     }
      const NuevoLibro = new LibroExel()
-     const nombre = document.getElementById('Nombre-Atributo').value
     NuevoLibro.generarYDescargarExcel(ObjetoArmado , atributosConContenido , nombre)
     document.getElementById(nuevoCartelId).classList.add('invisible');
-    document.getElementById('Nombre-Atributo').value= "";
   }
 }
 
