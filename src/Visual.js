@@ -59,18 +59,32 @@ const Modificar2 = document.querySelectorAll(".Control-button");
 
 
 const AsignarAlumnos = document.querySelectorAll(".bxs-user-plus");
+
 AsignarAlumnos.forEach(button => {
   button.onclick = function () {
     const container = button.closest(".menu-herramientas");
     const inputDisplay = container.querySelector(".cont-agregar");
     const labelDisplay = container.querySelector(".lista");
-
     inputDisplay.classList.remove("settingoff");
     inputDisplay.classList.add("settingon");
     labelDisplay.classList.remove("settingon");
     labelDisplay.classList.add("settingoff");
   };
 });
+
+const btnDark = document.querySelector(".AgregarAlumnoCurso");
+
+btnDark.onclick = function () {
+  AsignarAlumnos.forEach(button => {
+    const container = button.closest(".menu-herramientas");
+    const inputDisplay = container.querySelector(".cont-agregar");
+    const labelDisplay = container.querySelector(".lista");
+    inputDisplay.classList.remove("settingon");
+    inputDisplay.classList.add("settingoff");
+    labelDisplay.classList.remove("settingoff");
+    labelDisplay.classList.add("settingon");
+  });
+};
 
 
 const editButtons2 = document.querySelectorAll(".Editar");

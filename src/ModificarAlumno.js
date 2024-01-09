@@ -64,7 +64,8 @@ export default class ModificarAlumno {
         };
         try {
           const response = await fetch(apiUrl, requestOptions);
-          if (response.ok) {          
+          if (response.ok) {
+            console.log(response)    
             return  { ok: true, data: objetoJson };
           } else {
             const errores = await response.json();
@@ -155,7 +156,7 @@ export default class ModificarAlumno {
                             }
                         })
                         .catch(error => {
-                            console.error("este es otro error" + error); // Mensaje de error
+                            console.error("este es otro error" + error);
                         });
                 } else {
                     console.error('No se encontró el objeto idAlumno en el localStorage o el valor del input está vacío');

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeppoLevi</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -263,7 +264,7 @@
 
     <section id="content" class="container-page recorte">
 
-      <div class="container-buscador">
+      <div class="container-buscador search-container">
         <div class="search-container">
           <input id="buscador" type="text" class="search-input" placeholder="Buscar">
           <button class="search-button">
@@ -274,22 +275,20 @@
       <div id="row" class="row container-select">
         <div class="col-4 select">
           <select id="Select-Carrera" class="form-select">
-            <option selected>Carrera</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option selected>CARRERA</option>
           </select>
         </div>
         <div class="col-4 select">
-          <select class="form-select">
-            <option selected>Año</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+          <select id="año" class="form-select">
+            <option selected>AÑO</option>
+            <option value="primero">Primero</option>
+            <option value="segundo">Segundo</option>
+            <option value="tercero">Tercero</option>
           </select>
         </div>
         <div class="col-4 select">
           <select id="Select-Curso" class="form-select">
+            <option selected>CURSO</option>
           </select>
         </div>
       </div>
@@ -300,7 +299,7 @@
      </section>
      <section id="menu-her" class=" menu-herramientas">
         <ul class="lista settingon">
-          <li><img src="/icons8-ms-excel-48.png" alt=""><span>Descargar</span></li>
+          <li><img id="Btn-DescargarExel" src="/icons8-ms-excel-48.png" alt=""><span>Descargar</span></li>
           <li><i class='bx bxs-user-plus'></i><span>Asignar</span></li>
           <li><i id="Btn-verificar" class='bx bxs-user-check'></i><span>Verificar</span></li>
         </ul>
@@ -310,8 +309,41 @@
                 <option selected>Curso</option>
               </select>
             </div>
-             <button id="Btn-agregar" class="col-3 btn btn-dark">Agregar</button>
+             <button id="Btn-agregar" class="col-3 btn btn-dark AgregarAlumnoCurso">Agregar</button>
         </div>
+     </section>
+     <section id="section-atributos" class="Seleccion-Atributos-Nombre" >
+      <h4 class="Atributos-Stile">Propiedades&nbsp;Exel&nbsp;:</h4>
+      <div class="input-group mb-3 contenedor-Nombre-Exel">
+        <span class="input-group-text text-input-exel" id="inputGroup-sizing-default">Nombre</span>
+        <input type="text" id="Nombre-Atributo" class="form-control form-control-lg" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+      </div>
+      <div class="container-atributos-stile">
+      <h4 class="Atributos-Stile">Atributos :</h4>
+      <div class="form-check form-switch Atributos-Stile">
+        <input class="form-check-input check-atribute" type="checkbox" id="numeroDocumento">
+        <label class="form-check-label" for="numeroDocumento">Numero&nbsp;Documento</label>
+      </div>
+      <div class="form-check form-switch Atributos-Stile">
+        <input class="form-check-input check-atribute" type="checkbox" id="nombreCompleto">
+        <label class="form-check-label" for="nombreCompleto">Nombre&nbsp;Completo</label>
+      </div>
+      <div class="form-check form-switch Atributos-Stile">
+        <input class="form-check-input check-atribute" type="checkbox" id="carrera">
+        <label class="form-check-label" for="carrera">Carrera</label>
+      </div>
+      <div class="form-check form-switch Atributos-Stile">
+        <input class="form-check-input check-atribute" type="checkbox" id="curso">
+        <label class="form-check-label" for="curso">Curso</label>
+      </div>
+      <div class="form-check form-switch Atributos-Stile">
+        <input class="form-check-input check-atribute" type="checkbox" id="anio">
+        <label class="form-check-label" for="anio">Año</label>
+      </div>
+    </div>
+    <div class="contenedor-botones-stile">
+      <button type="button" id="Btn-Guardar" class="btn btn-primary">Guardar</button><button id="Btn-Cancelar" type="button" class="btn btn-primary">Cancelar</button>
+    </div>
      </section>
      <section class="Cartel-Carga">
       <ul id="listaLoading" class="lista-Cargas invisible">

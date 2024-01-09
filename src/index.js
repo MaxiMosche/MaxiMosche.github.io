@@ -10,6 +10,7 @@ import ModificarRegistros from './ModificarRegistros.js';
 import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js';
 import GetCurso from './GetCurso.js';
 import Validar from './Validar.js';
+import LibroExel from './LibroExel.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -18,7 +19,9 @@ if (!(window.location.href.includes("index.html") || window.location.href.includ
     window.location.href = "index.html"
   }
 }
-
+const listaAlumnos = [];
+const arrayDni ={};
+let contadorCarteles = 0;
 const apiService = new ApiService();
 const enviarButton = document.getElementById('Btn-login');
 const storedNotification = localStorage.getItem('notification');
@@ -106,6 +109,98 @@ async function enviarSeleccionados(Materias) {
   document.getElementById("list-aprobadas-rechazadas").innerHTML = arraystrng + botones
 }
 
+async function CargarCartelHerramienta(Cartel) {
+  const nuevoCartel = document.createElement('li');
+  nuevoCartel.classList.add('Carteles-loading');
+  nuevoCartel.id = `cartel-${contadorCarteles}`;
+  nuevoCartel.innerHTML = `
+    <h4>${Cartel}</h4>
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 1%" data-progress="0"></div>
+    <div class="Div-Cant"><span></span></div>
+  `;
+  document.getElementById('listaLoading').appendChild(nuevoCartel);
+  contadorCarteles++;
+}
+
+
+
+////////////////////////////
+async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConContenido) {
+  let pasadas = 0;
+
+  if (arrayDni[ParaElFor].length !== 0) {
+    document.getElementById('listaLoading').classList.remove('invisible');
+    const ul = document.getElementById('listaLoading');
+    const lis = ul.getElementsByTagName('li');
+
+    await CargarCartelHerramienta(NombreCartel);
+    const nuevoCartelId = `cartel-${contadorCarteles - 1}`;
+    const progressBar = document.getElementById(nuevoCartelId).querySelector('.progress-bar');
+    const text = document.getElementById(nuevoCartelId).querySelector('.Div-Cant');
+    let token = sessionStorage.getItem('TokenLogin');
+    const ObjetoArmado = [];
+
+    for (const dni of arrayDni[ParaElFor]) {
+      const Alumno = await ModificarAlumno.filtrarPorId(dni);
+
+      if (NombreCartel === `Verificando Alumnos`) {
+        const verificacion = await Validar.verificarAlumno(parseInt(dni), token);
+      }
+
+      if (NombreCartel === `Asignar Alumnos`) {
+        const alumnoExistente = await ModificarAlumno.filtrarPorId(dni);
+        
+        if (alumnoExistente) {
+          let selectElement = document.getElementById('Select-Curso1').value.toLowerCase();
+          
+          if (selectElement !== "curso") {
+            alumnoExistente.curso = selectElement;
+            await ModificarAlumno.enviarDatos(alumnoExistente, token);
+          }
+        } else {
+          console.error("El Alumno No Existe");
+        }
+      }
+
+      if (NombreCartel === `Descargar Exel`) {
+        const miObjeto = {};
+
+        for (const atributo of atributosConContenido) {
+          if (atributo === "nombreCompleto") {
+            miObjeto.NombreCompleto = Alumno.nombreCompleto;
+          }
+          if (atributo === "numeroDocumento") {
+            miObjeto.numeroDocumento = Alumno.numeroDocumento;
+          }
+          if (atributo === "carrera") {
+            miObjeto.carrera = Alumno.carrera;
+          }
+          if (atributo === "curso") {
+            miObjeto.curso = Alumno.curso;
+          }
+          if (atributo === "anio") {
+            miObjeto.año = Alumno.anio;
+          }
+        }
+
+        ObjetoArmado.push(miObjeto);
+      }
+
+      pasadas++;
+      const progreso = `${pasadas}/${arrayDni[ParaElFor].length}`;
+      const porcentaje = (pasadas / arrayDni[ParaElFor].length) * 100;
+      progressBar.style.width = porcentaje + '%';
+      text.innerText = progreso;
+    }
+     const NuevoLibro = new LibroExel()
+     const nombre = document.getElementById('Nombre-Atributo').value
+    NuevoLibro.generarYDescargarExcel(ObjetoArmado , atributosConContenido , nombre)
+    document.getElementById(nuevoCartelId).classList.add('invisible');
+    document.getElementById('Nombre-Atributo').value= "";
+  }
+}
+
+
 async function loadicon(){
   var iconosEdicion = document.querySelectorAll('.bx-edit');
   console.log("Cantidad de iconos encontrados:", iconosEdicion.length);
@@ -170,7 +265,6 @@ export async function CrearMenuAlumno()
         } 
         else
         {
-          console.log(Alumno.listaMateria[i].id)
         examenes += `<div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia.toUpperCase()}</span><i id="rotate-icon" data-id-valor="${Alumno.listaMateria[i].id}" class='rotate-icon col-9 bx bxs-brightness'></i></div>`
         }
       }
@@ -332,7 +426,7 @@ lista.obtenerPaginas(token)
            dato += `<li class="Elemento ElementoEstilo" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
           <input class="form-check-input me-1" type="checkbox" id="firstCheckbox">
           <label class="form-check-label" for="firstCheckbox" >${Alumno[i].numeroDocumento}&nbsp&nbsp</label>
-          <label class="form-check-label Label-Invisible" for="firstCheckbox" >-&nbsp&nbsp${capitalizarPrimeraLetra(Alumno[i].nombreCompleto)}</label>
+          <label class="form-check-label Label-Invisible" for="firstCheckbox" >-&nbsp&nbsp${Alumno[i].nombreCompleto.toUpperCase()}</label>
         </li>`
          }
          document.getElementById("myList").innerHTML = inicio + dato;
@@ -591,45 +685,65 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
   } // temina el if
   if (window.location.href.includes("Herramientas.html")){
+    document.getElementById('section-atributos').classList.add('invisible');
   await CrearHerramientasAdministrador()
   await selectcarrera()
   await selectCurso()
-  var CartelesLoading = "";
    const filters = {
      buscador: "",
      año: "",
      carrera: "",
      curso: ""
    };
-
-   const boton = document.getElementById('Btn-verificar');
-   boton.addEventListener('click', async () => {  
-    CartelesLoading +=`<li class="ContenidoVisible"><h4>Verificando Alumnos</h4>
-    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"  style="width: 1%"></div>
-    <div class="Div-Cant"><span></span></div>
-  </li>`
-  document.getElementById('listaLoading').classList.remove('invisible');
-  document.getElementById('listaLoading').innerHTML=CartelesLoading;
-    const ListaAlumnos = [];
-    let pasadas = 0
-    const progressBar = document.querySelector('.progress-bar');
-    const text = document.querySelector('.Div-Cant');
-    const arrayDni = await ObtenerArregloHerramienta();
-    let token = sessionStorage.getItem('TokenLogin');
-    for (const dni of arrayDni) {
-      const Alumno = await ModificarAlumno.filtrarPorId(dni);
-      ListaAlumnos.push(Alumno);
-      const verificacion = await Validar.verificarAlumno(parseInt(dni), token);
-      pasadas++
-      const progreso = `${pasadas}/${arrayDni.length}`;
-      const porcentaje = (pasadas / arrayDni.length) * 100;
-      progressBar.style.width = porcentaje + '%';
-      text.innerText = pasadas + "/" + arrayDni.length
-    }
-
-    document.getElementById('listaLoading').classList.add('invisible');
+   const visible = document.getElementById('Btn-DescargarExel');;
+   visible.addEventListener('click', async () => {
+    document.getElementById('section-atributos').classList.remove('invisible');
    });
 
+   const cancelar = document.getElementById('Btn-Cancelar');;
+   cancelar.addEventListener('click', async () => {
+    document.getElementById('section-atributos').classList.add('invisible');
+   });
+   
+   const boton = document.getElementById('Btn-verificar');
+   let contadorArrays = 1;
+   boton.addEventListener('click', async () => {
+     var ParaElFor = contadorArrays;
+     arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
+     contadorArrays++;
+     await forCartelHerramienta(ParaElFor , `Verificando Alumnos`);
+   });
+   const boton2 = document.getElementById('Btn-agregar' , []);
+   boton2.addEventListener('click', async () => {
+     var ParaElFor = contadorArrays;
+     arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
+     contadorArrays++;
+     await forCartelHerramienta(ParaElFor , `Asignar Alumnos` , []);
+   });
+   const boton3 = document.getElementById('Btn-Guardar');//////
+   boton3.addEventListener('click', async () => {
+   const checkboxes = document.querySelectorAll('.check-atribute');
+   const valoresCheckboxes = {};
+   checkboxes.forEach(checkbox => { 
+     const id = checkbox.id;
+     const estaSeleccionado = checkbox.checked; 
+     valoresCheckboxes[id] = estaSeleccionado ? document.querySelector(`label[for="${id}"]`).innerText : "";
+   });
+   const atributosConContenido = [];
+   for (const campo in valoresCheckboxes) {
+      if (valoresCheckboxes[campo] !== "") {
+         atributosConContenido.push(campo);
+  }
+}
+     document.getElementById('section-atributos').classList.add('invisible');
+     var ParaElFor = contadorArrays;
+     arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
+     contadorArrays++;
+     await forCartelHerramienta(ParaElFor , `Descargar Exel` , atributosConContenido);
+   });
+   
+
+  
    document.addEventListener("keyup", e => {
      if (e.target.matches("#buscador")) {
        if (e.key === "Escape") {
@@ -1026,6 +1140,23 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     const incremento = (100 / (duracion / intervalo)); 
     
+    window.addEventListener("resize", function() {
+      var rowElement = document.getElementById("row");
+      var windowWidth = window.innerWidth;
+    
+      if (windowWidth <= 950) {
+        if (rowElement.classList.contains("row")) {
+          rowElement.classList.remove("row");
+        }
+      } else {
+        if (!rowElement.classList.contains("row")) {
+          rowElement.classList.add("row");
+        }
+      }
+    });
+
+
+
     const intervalID = setInterval(() => {
       if (width >= 100) {
         clearInterval(intervalID); 
@@ -1058,9 +1189,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 if (enviarButton !== null) {
-  console.log("SALE EL BOTON LOGIN")
   enviarButton.addEventListener("click", async () => {
-    console.log("hace el click")
     cardLoading.classList.remove('invisible');
     cardLoading.classList.add('visible');
     const usuario = document.getElementById("Login").value; 
