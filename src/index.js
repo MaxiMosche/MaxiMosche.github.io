@@ -33,6 +33,13 @@ function capitalizarPrimeraLetra(cadena) {
   return cadena.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase()});
 }
 
+function formatearDocumento(numero) {
+  numero = numero.toString();
+  let documentoFormateado = numero.substring(0, 2) + '.' + numero.substring(2, 5) + '.' + numero.substring(5);
+  return documentoFormateado;
+}
+
+
 const notification = storedNotification ? JSON.parse(storedNotification) : {
   success: {
     inicioOk: false,
@@ -127,7 +134,10 @@ async function CargarCartelHerramienta(Cartel) {
 ////////////////////////////
 async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConContenido) {
   let pasadas = 0;
-  const nombre = document.getElementById('Nombre-Atributo').value
+  let nombre = document.getElementById('Nombre-Atributo').value
+  if(nombre == ""){
+    nombre = "DEFAULT"
+  }
   document.getElementById('Nombre-Atributo').value= "";
   if (arrayDni[ParaElFor].length !== 0) {
     document.getElementById('listaLoading').classList.remove('invisible');
@@ -157,6 +167,7 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
           if (selectElement !== "curso") {
             alumnoExistente.curso = selectElement;
             await ModificarAlumno.enviarDatos(alumnoExistente, token);
+
           }
         } else {
           console.error("El Alumno No Existe");
@@ -171,7 +182,7 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
             miObjeto.NombreCompleto = Alumno.nombreCompleto;
           }
           if (atributo === "numeroDocumento") {
-            miObjeto.numeroDocumento = Alumno.numeroDocumento;
+            miObjeto.numeroDocumento = formatearDocumento(Alumno.numeroDocumento);
           }
           if (atributo === "carrera") {
             miObjeto.carrera = Alumno.carrera;
@@ -183,7 +194,6 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
             miObjeto.año = Alumno.anio;
           }
         }
-
         ObjetoArmado.push(miObjeto);
       }
 
@@ -193,8 +203,14 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
       progressBar.style.width = porcentaje + '%';
       text.innerText = progreso;
     }
-     const NuevoLibro = new LibroExel()
-    NuevoLibro.generarYDescargarExcel(ObjetoArmado , atributosConContenido , nombre)
+    if (NombreCartel === `Asignar Alumnos`){
+      await CrearHerramientasAdministrador()
+    }
+       
+    if (NombreCartel === `Descargar Exel`){
+        const NuevoLibro = new LibroExel()
+        NuevoLibro.generarYDescargarExcel(ObjetoArmado , atributosConContenido , nombre)
+    }
     document.getElementById(nuevoCartelId).classList.add('invisible');
   }
 }
@@ -424,7 +440,7 @@ lista.obtenerPaginas(token)
           for(let i = 0 ; i < Alumno.length ; i++){ 
            dato += `<li class="Elemento ElementoEstilo" data-id="${Alumno[i].nombreCompleto}" data-dni="${Alumno[i].numeroDocumento}" data-c="${Alumno[i].carrera}" data-i="${Alumno[i].anio}" data-cu="${Alumno[i].curso}">
           <input class="form-check-input me-1" type="checkbox" id="firstCheckbox">
-          <label class="form-check-label" for="firstCheckbox" >${Alumno[i].numeroDocumento}&nbsp&nbsp</label>
+          <label class="form-check-label" for="firstCheckbox" >${formatearDocumento(Alumno[i].numeroDocumento)}&nbsp&nbsp</label>
           <label class="form-check-label Label-Invisible" for="firstCheckbox" >-&nbsp&nbsp${Alumno[i].nombreCompleto.toUpperCase()}</label>
         </li>`
          }
@@ -509,7 +525,7 @@ lista.obtenerPaginas(token)
       </tr>
       <tr>
       <td>DNI</td>
-      <td>${Alumno[i].numeroDocumento}</td>
+      <td>${formatearDocumento(Alumno[i].numeroDocumento)}</td>
       <td></td>
       </tr>
       <tr>
@@ -696,6 +712,7 @@ document.addEventListener('DOMContentLoaded', async function () {
    };
    const visible = document.getElementById('Btn-DescargarExel');;
    visible.addEventListener('click', async () => {
+    console.log("entra por aca")
     document.getElementById('section-atributos').classList.remove('invisible');
    });
 
@@ -733,12 +750,26 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (valoresCheckboxes[campo] !== "") {
          atributosConContenido.push(campo);
   }
-}
-     document.getElementById('section-atributos').classList.add('invisible');
+   }
+    let todosVacios = 0;
+    for (const campo in valoresCheckboxes) {
+        if (valoresCheckboxes[campo] !== "") {    
+          todosVacios ++;
+        }
+    }
+    console.log(todosVacios)
+    if (todosVacios > 0){
+    console.log(todosVacios)
      var ParaElFor = contadorArrays;
      arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
      contadorArrays++;
+     document.getElementById('section-atributos').classList.add('invisible');
      await forCartelHerramienta(ParaElFor , `Descargar Exel` , atributosConContenido);
+    }else
+    {
+      const toastCreator = new ToastCreator(notifications);
+      toastCreator.createToast('error' , 'Al menos un atributo debe estar seleccionado' );
+    }
    });
    
 

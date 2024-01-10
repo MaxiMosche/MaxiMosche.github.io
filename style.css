@@ -37,7 +37,9 @@ body{
   padding: 10px;
   z-index: 9999;
 }
-
+.container-conf-perf h2{
+  font-size: 15px;
+}
 .Cartel-Carga .lista-Cargas::-webkit-scrollbar{
   width: 2px;
 }
