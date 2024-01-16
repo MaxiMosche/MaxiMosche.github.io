@@ -11,6 +11,10 @@ import { ToastCreator, obtenerValorInput , cargarSweetAlert } from './Alerts.js'
 import GetCurso from './GetCurso.js';
 import Validar from './Validar.js';
 import LibroExel from './LibroExel.js';
+import PostMateria from './PostMateria.js';
+import DeleteMateria from './DeleteMateria.js';
+import PutCarrera from './PutCarrera.js';
+import EstadoInscripcion from './EstadoInscripciones.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -37,6 +41,16 @@ function formatearDocumento(numero) {
   numero = numero.toString();
   let documentoFormateado = numero.substring(0, 2) + '.' + numero.substring(2, 5) + '.' + numero.substring(5);
   return documentoFormateado;
+}
+
+function formatearFecha(fecha) {
+  var dia = fecha.getDate();
+  var mes = fecha.getMonth() + 1; 
+  var año = fecha.getFullYear() % 100;
+  dia = (dia < 10) ? '0' + dia : dia;
+  mes = (mes < 10) ? '0' + mes : mes;
+
+  return dia + '/' + mes + '/' + año;
 }
 
 
@@ -131,7 +145,7 @@ async function CargarCartelHerramienta(Cartel) {
 
 
 
-////////////////////////////
+
 async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConContenido) {
   let pasadas = 0;
   let nombre = document.getElementById('Nombre-Atributo').value
@@ -216,6 +230,32 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
 }
 
 
+async function TablaCursosAlumnos(){
+ const Nuevalista = new GetCarrera()
+ const ListaCarrera = await Nuevalista.BuscarLista()
+ let inicio = ` <thead>
+ <tr>
+  <th >Carrera</th>
+  <th >Curso</th>
+  <th >Alumnos</th>
+  </tr>
+  </thead>
+  <tbody>`
+  console.log (ListaCarrera)
+  let fin = `</tbody></table>`
+  
+ for (var carrera of ListaCarrera){
+    inicio += `<tr>
+    <td>${capitalizarPrimeraLetra(carrera.nombreCarrera)}</td>
+    <td>${carrera.ncursos}</td>
+    <td>${carrera.nalumnos}</td>
+    </tr>`
+ }
+
+ document.getElementById('tabla-carrara-control').innerHTML = inicio + fin
+}
+
+
 async function loadicon(){
   var iconosEdicion = document.querySelectorAll('.bx-edit');
   console.log("Cantidad de iconos encontrados:", iconosEdicion.length);
@@ -250,7 +290,8 @@ export async function CrearMenuAlumno()
   document.getElementById("Nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
   document.getElementById("Eimail").innerText = capitalizarPrimeraLetra(Alumno.email);
   document.getElementById("Carrera").innerText = capitalizarPrimeraLetra(Alumno.carrera);
-  document.getElementById("Año").innerText = capitalizarPrimeraLetra(Alumno.anio);
+  document.getElementById("Año").innerText = capitalizarPrimeraLetra(Alumno.anio) + "  " + capitalizarPrimeraLetra(Alumno.curso);
+  document.getElementById("FC").innerText =  formatearFecha(new Date(Alumno.fechaRegistro));
   var primero = `<div class="accordion"><div class="accordion-header border-accordion">
   <span class="arrow-container ">
     <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
@@ -312,12 +353,35 @@ export async function CrearMenuAlumno()
   var nuevalista = new GetCarrera()
   var ListaCarreras = `<option selected>CARRERA</option>`;
   document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
-  console.log(document.getElementById("Select-Carrera").innerHTML = ListaCarreras)
   const listacarreras = await nuevalista.BuscarLista()
   for(let i = 0 ; i < listacarreras.length ; i++){
     ListaCarreras += `<option value="${listacarreras[i].nombreCarrera}">${capitalizarPrimeraLetra(listacarreras[i].nombreCarrera)}</option>`
   }
   document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
+ }
+
+ async function selectcarreraConId(){
+  var nuevalista = new GetCarrera()
+  var ListaCarreras = `<option selected>CARRERA</option>`;
+  document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
+  const listacarreras = await nuevalista.BuscarLista()
+  for(let i = 0 ; i < listacarreras.length ; i++){
+    ListaCarreras += `<option value="${listacarreras[i].iDcarrera}">${capitalizarPrimeraLetra(listacarreras[i].nombreCarrera)}</option>`
+  }
+  document.getElementById("Select-Carrera").innerHTML = ListaCarreras;
+ }
+
+ async function selectMateria(materia){
+  let token = sessionStorage.getItem('TokenLogin');
+  var nuevalista = new GetMateria(materia)
+  var ListaCarreras = `<option selected>CARGANDO...</option>`;
+  document.getElementById("Select-Mateira").innerHTML = ListaCarreras;
+  const listacarreras = await nuevalista.BuscarLista(token);
+  ListaCarreras = `<option value="a-1" selected>MATERIAS</option>`;
+  for(let i = 0 ; i < listacarreras.length ; i++){
+    ListaCarreras += `<option value="${listacarreras[i].iDmateria}">${listacarreras[i].nombreMateria.toUpperCase()}</option>`
+  }
+  document.getElementById("Select-Mateira").innerHTML = ListaCarreras;
  }
  
  async function CrearRegistro() {
@@ -712,7 +776,6 @@ document.addEventListener('DOMContentLoaded', async function () {
    };
    const visible = document.getElementById('Btn-DescargarExel');;
    visible.addEventListener('click', async () => {
-    console.log("entra por aca")
     document.getElementById('section-atributos').classList.remove('invisible');
    });
 
@@ -736,7 +799,7 @@ document.addEventListener('DOMContentLoaded', async function () {
      contadorArrays++;
      await forCartelHerramienta(ParaElFor , `Asignar Alumnos` , []);
    });
-   const boton3 = document.getElementById('Btn-Guardar');//////
+   const boton3 = document.getElementById('Btn-Guardar');
    boton3.addEventListener('click', async () => {
    const checkboxes = document.querySelectorAll('.check-atribute');
    const valoresCheckboxes = {};
@@ -955,7 +1018,69 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   } // temina el if
 
-  if (window.location.href.includes("/BorrarExamenes.html")){
+  if (window.location.href.includes("/PanelControl.html")){
+    selectcarreraConId()
+    TablaCursosAlumnos()
+    let token = sessionStorage.getItem('TokenLogin');
+    const estadoIncripcion = new EstadoInscripcion()
+    const estadoCheck = await estadoIncripcion.obtenerEstadoInscripcion(token)
+    if(estadoCheck){
+      document.getElementById('Activar-Inscripciones').checked = true;
+    }else{
+      document.getElementById('Activar-Inscripciones').checked = false;
+    }
+
+
+    const ActualizarEstado = document.getElementById('Actualizar-Estado');
+    ActualizarEstado.addEventListener('click', async () => {
+      const check = document.getElementById('Activar-Inscripciones').checked
+      const verificador = await estadoIncripcion.enviarEstadoInscripcion(token , check)
+      if(verificador){
+        const toastCreator = new ToastCreator(notifications);
+        toastCreator.createToast('success' , 'Se cambió el estado de inscripción con éxito' );
+      }else
+      {
+        const toastCreator = new ToastCreator(notifications);
+        toastCreator.createToast('error' , 'Algo salio mal' );
+      }
+    });
+
+
+    const ActualizarCursos = document.getElementById('Actualizar-Cursos');
+    ActualizarCursos.addEventListener('click', async () => {
+      let valoresInputs = [];
+      const checkboxes = document.querySelectorAll('.input-control input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        const input = checkbox.parentNode.nextElementSibling;   
+        const defaultValue = input.getAttribute("data-default-value");
+        const inputValue = checkbox.checked ? input.value : defaultValue;
+        valoresInputs.push(inputValue);
+    });
+    const selectCarrera = document.getElementById('Select-Carrera');
+    const selectedValue = selectCarrera.value; 
+    const selectedText = selectCarrera.options[selectCarrera.selectedIndex].text;
+     const modificarCarrera = new PutCarrera()
+     const Carrera = {
+      iDcarrera : selectedValue,
+      nombreCarrera: selectedText.toLowerCase(),
+      nalumnos: valoresInputs[1],
+      ncursos: valoresInputs[0]
+    }
+    const response = await modificarCarrera.enviarDatos(Carrera , token )
+    if (response.ok) {
+      await TablaCursosAlumnos();
+      await selectcarreraConId();
+      const toastCreator = new ToastCreator(notifications);
+      toastCreator.createToast('success' , 'Se cambiaron los valores con éxito' );
+    }else
+    {
+      const toastCreator = new ToastCreator(notifications);
+      toastCreator.createToast('error' , 'Algo salio mal' );
+    }
+    });
+    
+
+
     const botonBorrar = document.getElementById('BorrarRegistros');
     botonBorrar.addEventListener('click', accionBorrar);
    async function accionBorrar() {
@@ -973,6 +1098,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 }
 
+if (window.location.href.includes("/Modificar-Informacion.html") || window.location.href.includes("/Inscripcion-Por-Curso.html")){
+  console.log("entra a  Modificar-Informacion")
+  const editButtons = document.querySelectorAll(".Editar");
+    editButtons.forEach(button => {
+    button.onclick = function () {
+    const container = button.closest(".container-config-administrador");
+    const inputDisplay = container.querySelector(".container-input-display");
+    const labelDisplay = container.querySelector(".container-label-display");
+    inputDisplay.classList.remove("settingoff");
+    inputDisplay.classList.add("settingon");
+    labelDisplay.classList.remove("settingon");
+    labelDisplay.classList.add("settingoff");
+  };
+});
+
+}
   if (window.location.href.includes("Modificar.html")) {
     function handleClickModificar(buttonId) {
       var elemento = document.getElementById(buttonId);
@@ -1093,6 +1234,86 @@ document.addEventListener('DOMContentLoaded', async function () {
           }
         }
       }
+      if (window.location.href.includes("/Eliminar-Materia.html")){
+         selectcarrera()
+         var selectElement = document.getElementById("Select-Carrera");
+         selectElement.addEventListener("change", function() {
+          if(selectElement.value != "CARRERA"){
+            selectMateria(selectElement.value);
+          }
+          else
+          {
+            document.getElementById("Select-Mateira").innerHTML = `<option selected>Selecciona una carrera</option>`;
+          }
+          document.getElementById('Eliminar-Materia').addEventListener('click', async function() {
+            let token = sessionStorage.getItem('TokenLogin');
+            const Materia = document.getElementById('Select-Mateira').value;
+            const EliminarMateria = {
+              iDmateria: Materia,
+              nombreMateria: "nombremateria",
+              carrera: "carrera",
+              anio: "anio"
+            };
+            if(Materia != "a-1"){
+              var eliminar = new DeleteMateria()
+              var verificar = await eliminar.EliminarMateria(EliminarMateria , token );
+              if(verificar.ok){
+                const toastCreator = new ToastCreator(notifications);
+                toastCreator.createToast('success', verificar.data);
+              }
+              else
+              {
+                const toastCreator = new ToastCreator(notifications);
+                for (var error of verificar.data.errors.NombreMateria){
+                  toastCreator.createToast('error', error);
+                }
+              }
+            }
+            else
+            {
+              const toastCreator = new ToastCreator(notifications);
+              toastCreator.createToast('error', 'Selecciona una materia para eliminar');
+            }
+
+          });
+        });
+      }
+      if (window.location.href.includes("/Agregar-Materia.html")){
+        selectcarrera()
+        document.getElementById('Agregar-Materia').addEventListener('click', async function() {
+          const nombreMateria = document.getElementById('text-Nombre').value;
+          const carrera = document.getElementById('Select-Carrera').value;
+          const anio = document.getElementById('select-curso').value;
+          let token = sessionStorage.getItem('TokenLogin');
+          const nuevaMateria = {
+            iDmateria: 0,
+            nombreMateria: nombreMateria.toLowerCase(),
+            carrera: carrera,
+            anio: anio
+          };
+          if(carrera != "Carrera" && anio != "Año" ){
+            var AgregarMateria = new PostMateria()
+            var verificar =  await AgregarMateria.agregarMateria( nuevaMateria , token)
+            if(verificar.ok){
+              const toastCreator = new ToastCreator(notifications);
+              toastCreator.createToast('success', verificar.data);
+            }
+            else
+            {
+              const toastCreator = new ToastCreator(notifications);
+              for (var error of verificar.data.errors.NombreMateria){
+                toastCreator.createToast('error', error);
+              }
+            }
+          }else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error', 'Selecciona una carrera y un año');
+          }
+
+        });
+      }
+
       if (window.location.href.includes("Perfil-Alumno.html")) {
       console.log("pasa por perfil alumno")
         try {

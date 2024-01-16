@@ -73,7 +73,7 @@
           <i class='bx bx-trash'></i>&nbsp;<a href="/Perfil-AdministradorMaster/Eliminar-Carrera.html">Eliminar</a>
       </div>
     </div>
-    <div class="container-conf-perf">
+    <div class="container-conf-perf ultimo-menu">
       <h2>Configurar Materias</h2>
       <div class="container-menu-icon">
         <i class='bx bxs-check-circle'></i>&nbsp;<a href="/Perfil-AdministradorMaster/Agregar-Materia.html">Agregar</a>
@@ -247,38 +247,82 @@
 
 
     <section id="content" class="container-page">
-      <div class="config-alumno">
-        <h2>Agregar Materia</h2>
-      <div class="container-contrasenia container-contrasenia-celular">
-          <div class="contaner-inputs-Eliminar  Eliminar-Materia">
-              <span >Seleccionar&nbsp;Carrera&nbsp;:</span>  
-              <div class="container-select cont-select-materia">
-                <div class="select">
-                  <select id="Select-Carrera" class="form-select">
-                    <option selected>Carrera</option>
-                  </select>
-                </div>
-              </div>
+      <h2>Menu Control</h2>
+      <div class="config-alumno tablas-configuracion-inscripciones">
+        <div class="container-contrasenia container-contrasenia-celular">
+          <table id="tabla-carrara-control" class="table table-dark table-hover">
+          </table>
+        </div>
+      </div>
 
-              <span >Seleccionar&nbsp;Materia&nbsp;:</span>  
-              <div class="container-select cont-select-materia">
-                <div class="select">
-                  <select id="Select-Mateira" class="form-select">
-                    <option value="a-1" selected>Selecciona una carrera</option>
-                  </select>
-                  <div class="contaner-inputs cont-materia">
-                  <button id="Eliminar-Materia" class="link-light">Eliminar&nbsp;Materia</button>
+
+      <div class="config-alumno tablas-configuracion-inscripciones">
+        <div class="container-contrasenia container-contrasenia-celular">
+            <div class="contaner-inputs-Eliminar">
+                <span>Seleccionar Carrera:</span>
+                <div class="container-select cont-select-materia">
+                    <select id="Select-Carrera" class="form-select">
+                        <option selected>Carrera</option>
+                    </select>
+                </div>
+                <div class="contaner-inputs cont-materia">
+                  <div class="input-group mb-4 input-control">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" onchange="updateValue(this)">
+                  </div>
+                  <input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Curso aquí..." data-default-value="0">
+                </div>
+                <div class="input-group mb-3 input-control">
+                  <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" onchange="updateValue(this)">
+                  </div>
+                  <input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Alumnos aquí..." data-default-value="0">
+                </div>
+                    <button id="Actualizar-Cursos" class="link-light">Asignar&nbsp;Cursos</button>
+                    <div class="form-check form-switch center-icon">
+                      <input class="form-check-input " type="checkbox" id="Activar-Inscripciones">
+                      <label class="form-check-label text-control" for="Activar-Inscripciones"></label>
+                    </div>
+                    <button id="Actualizar-Estado" class="link-light">Actualizar&nbsp;Inscripciones</button>
                   </div>
                 </div>
-              </div>          
+                
+            </div>
+        </div>
 
+
+           <br>
+
+
+
+        <div class="config-alumno">
+        <div class="container-config-administrador">
+          <div><span>Borrar Registros De Examenes</span></div>
+           <div class="container-input-display">
+            <button class="btn-danger">BORRAR</button>
+           </div>
           </div>
-     </div>
-    </div>
+          <div class="config-alumno">
+          <div class="container-config-administrador">
+            <div><span>Borrar Registros De Examenes</span></div>
+             <div class="container-input-display">
+              <button class="btn-danger">BORRAR</button>
+             </div>
+            </div>
+            <div class="config-alumno">
+            <div class="container-config-administrador">
+              <div><span>Borrar Registros</span></div>
+               <div class="container-input-display">
+                <button id="BorrarRegistros" class="btn-danger">BORRAR</button>
+               </div>
+              </div>
+
+
      </section>
      </div>
      <script type="module" src="/src/index.js"></script>
      <script src="/src/Visual.js"></script>
 </body>
 </html>
+
 

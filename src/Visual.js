@@ -6,13 +6,6 @@ $openClose.addEventListener("click",()=>{
   $page.classList.toggle("open");
 }) 
 
-function borrarTexto(elementId) {
-  document.getElementById(elementId).value = '';
-}
-
-function restaurarTexto(elementId) {
-  document.getElementById(elementId).value = "Escribe aquí...";
-}
 
 const Modificar = document.querySelectorAll(".link-light");
   Modificar.forEach(button => {
@@ -93,7 +86,6 @@ editButtons2.forEach(button => {
     const container = button.closest(".container-config-administrador");
     const inputDisplay = container.querySelector(".container-input-display");
     const labelDisplay = container.querySelector(".container-label-display");
-
     inputDisplay.classList.remove("settingoff");
     inputDisplay.classList.add("settingon");
     labelDisplay.classList.remove("settingon");

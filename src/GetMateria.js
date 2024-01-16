@@ -1,6 +1,6 @@
 class ListaMaterias {
     constructor(carrera) {
-      this.apiUrl = `https://beppolevi.azurewebsites.net/api/Materias/FiltroCarrera?carrera=${carrera}`;
+      this.apiUrlGetCarrera = `https://beppolevi.azurewebsites.net/api/Materias/FiltroCarrera?carrera=${carrera}`;
     }
     async BuscarLista(token) {       
       const requestOptions = {
@@ -11,10 +11,9 @@ class ListaMaterias {
         }
       };
       try {
-        const response = await fetch(this.apiUrl, requestOptions);
+        const response = await fetch(this.apiUrlGetCarrera, requestOptions);
         if (response.ok) {
           const responseData = await response.json();
-          console.log(responseData)
           return responseData;
         } else {
           throw new Error('Error en la solicitud');
