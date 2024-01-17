@@ -17,6 +17,85 @@
     box-sizing: border-box;
     margin: 0;
 }
+
+.Card-Loading-incripcion .Exitosa{
+  border: 1px solid var(--border-color);
+  height: 70px;
+  align-items: center;
+  text-align: center;
+}
+.Card-Loading-incripcion .bx.bx-check {
+  font-size: 25px !important;
+}
+
+.Card-Loading-incripcion .Exitosa i.bx {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.Card-Loading-incripcion .Exitosa span {
+  vertical-align: middle;
+}
+
+.Card-Loading-incripcion .Exitosa{
+  border: 1px solid var(--border-color);
+  height: 70px;
+  align-items: center;
+  text-align: center;
+}
+.Card-Loading-incripcion .bx.bx-check {
+  font-size: 25px !important;
+}
+
+.Card-Loading-incripcion .Exitosa i.bx {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.Card-Loading-incripcion .Exitosa span {
+  vertical-align: middle;
+}
+
+
+
+.Card-Loading-incripcion .Erronea{
+  border: 1px solid var(--border-color);
+  height: 70px;
+  align-items: center;
+  text-align: center;
+}
+.Card-Loading-incripcion .bx.bx-x {
+  font-size: 25px !important;
+}
+
+.Card-Loading-incripcion .Erronea i.bx {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.Card-Loading-incripcion .Erronea span {
+  vertical-align: middle;
+}
+
+.Card-Loading-incripcion .Erronea{
+  border: 1px solid var(--border-color);
+  height: 70px;
+  align-items: center;
+  text-align: center;
+}
+.Card-Loading-incripcion .bx.bx-check {
+  font-size: 25px !important;
+}
+
+.Card-Loading-incripcion .Erronea i.bx {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.Card-Loading-incripcion .Erronea span {
+  vertical-align: middle;
+}
+
 html{
     font-size: 62.5%;
     font-family: sans-serif;
@@ -521,6 +600,13 @@ body::-webkit-scrollbar-thumb{
   position: absolute;
   bottom: 100px !important;
 }
+.recorte .btn-dark{
+  color: var(--text-color)!important;
+  background-color: var(--items-color)!important;
+  border-color: var(--border-color)!important;
+  width: 200px;
+}
+
 .menu-herramientas{
   position: absolute;
   left: 280px;
@@ -1222,6 +1308,7 @@ h2{
 
 .input-control{
 margin-top: 10px;
+width: 50px !important;
 }
 
 .input-control .form-check-input{
@@ -1481,13 +1568,12 @@ left: 10px !important;
   border-color: var(--text-color);
 }
 
-
-.container-registro{
+/*.container-registro{
   position: relative;
   left: 30%;
   width: 500px!important;
   text-align: center;
-}
+}*/
 
 .container-registro .form-select{
   margin-top: 5px;
@@ -1935,7 +2021,7 @@ color: var(--text-color);
   }
   .Lista-Materias{
     position: relative;
-    top: 5px ;
+    top: 37px ;
   }
   .progress-bar{
     height: 25px !important;
@@ -2000,6 +2086,7 @@ color: var(--text-color);
       width: 100%;
       font-size: 18px;
     }
+
     
 
     .search-input {
@@ -2016,7 +2103,7 @@ color: var(--text-color);
       .container-input{
         position: relative;
         left: 6%;
-        width: calc(100% - 100px);
+        width: calc(100% - 10px);
         background-color: var(--items-color);
         overflow: auto;
       }
@@ -2047,13 +2134,15 @@ color: var(--text-color);
         position: relative;
         left: -76px;
       }
-
-
   }
 
   @media screen and (max-width: 950px) {
     .Regularidad-w800{
       display: none;
+    }
+
+    .Card-Loading-incripcion{
+      width: 550px !important;
     }
 
     .Seleccion-Atributos-Nombre{

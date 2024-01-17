@@ -111,10 +111,11 @@ async function enviarSeleccionados(Materias) {
       const objeto = Materias[i];
       const radioValuesInstance = new Inscipcion();
       const resultado = await radioValuesInstance.enviarDatos(objeto, token);
+      console.log(resultado)
       if (resultado === 'Se agrego la materia con éxito') {
-        arraystrng +=`<li class="Exitosa"><i class='bx bx-check'></i><span>${Materias[i].materia.toUpperCase()}</span></li>`
+        arraystrng +=`<li class="Exitosa"><i class='bx bx-check'></i><span>${Materias[i].materia.toUpperCase()}</span><br><span>Se agrego la materia con éxito</span></li>`
       } else {
-        arraystrng +=`<li class="Erronea"><i class='bx bx-x'></i><span>${Materias[i].materia.toUpperCase()}</span></li>`
+        arraystrng +=`<li class="Erronea"><i class='bx bx-x'></i><span>${Materias[i].materia.toUpperCase()}</span><br><span>${resultado}</span></li>`
       }
       document.getElementById("list-aprobadas-rechazadas").innerHTML = arraystrng
     }
@@ -922,7 +923,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById("container-materia").innerHTML = texthtml ;
     const btninscripcion = document.getElementById('btn-inscripcion');
     btninscripcion.addEventListener('click', async function() {
-    
     const radioValuesInstance = new Inscipcion();
     const ancla = document.getElementById('mi-ancla');
     ancla.scrollIntoView({ behavior: 'smooth' });
@@ -979,7 +979,20 @@ document.addEventListener('DOMContentLoaded', async function () {
         const btnAceptar = document.getElementById('btn-cartel-aceptar');
                   btnAceptar.addEventListener('click', () => {
                   btnAceptar.click();
-                  window.location.href = '/Perfil-Alumno.html';
+                  if (window.location.href.includes("Perfil-Alumno/Incripcion-Materia.html")){
+                    window.location.href = '/Perfil-Alumno.html';
+                  }
+                  else
+                  {
+                    if (window.location.href.includes("/Perfil-AdministradorMaster/ModificarInfoAlumno/Incripcion-Materia.html")){
+                      window.location.href =  '/Perfil-AdministradorMaster.html'
+                    }
+                    else
+                    {
+                      window.location.href =  '/Perfil-Administrador.html'
+                    }
+                    
+                  }
                  });
       })
       .catch((error) => {
@@ -1098,8 +1111,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 }
 
-if (window.location.href.includes("/Modificar-Informacion.html") || window.location.href.includes("/Inscripcion-Por-Curso.html")){
-  console.log("entra a  Modificar-Informacion")
+if (window.location.href.includes("/Modificar-Informacion.html")){
   const editButtons = document.querySelectorAll(".Editar");
     editButtons.forEach(button => {
     button.onclick = function () {
@@ -1186,8 +1198,11 @@ if (window.location.href.includes("/Modificar-Informacion.html") || window.locat
 
   if (window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
       window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html") ||
-      window.location.href.includes("Perfil-Alumno/Modificar-Contrase") ) {
+      window.location.href.includes("Perfil-Alumno/Modificar-Contrase")||
+      window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno/Modificar-Contrase") )
+       {
       let idAlumno = localStorage.getItem('idAlumno');
+      
       if(window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
       window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html")){
         document.getElementById("Label-nombre").innerText = "Cargando...";
@@ -1195,11 +1210,22 @@ if (window.location.href.includes("/Modificar-Informacion.html") || window.locat
         document.getElementById("Label-localidad").innerText = "Cargando...";
         document.getElementById("Label-telefono").innerText = "Cargando...";
         document.getElementById("Label-email").innerText = "Cargando...";
+        const inscribirMaterias = document.getElementById("Inscribir-materia")
+              inscribirMaterias.addEventListener('click', function () {
+              window.location.href = "ModificarInfoAlumno/Incripcion-Materia.html"
+              });
+        const modificarContraseña = document.getElementById("Modificar-Contraseña")
+              modificarContraseña.addEventListener('click', function () {
+              window.location.href = "ModificarInfoAlumno/Modificar-Contraseña.html"
+              });
       }
       ModificarAlumno.filtrarPorId(idAlumno)
   .then(Alumno => {
-    if(window.location.href.includes("Perfil-Alumno/Modificar-Contrase"))
+    if(window.location.href.includes("Perfil-Alumno/Modificar-Contrase")|| 
+    window.location.href.includes("Perfil-Alumno/Modificar-Contrase")||
+    window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno/Modificar-Contrase"))
     {
+      console.log("pasapor aca")
       handleClickpss("input-password" ,"Button-Password");       
     }else
     {

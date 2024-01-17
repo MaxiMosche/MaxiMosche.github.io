@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeppoLevi</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Tourney&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <ul class="notifications"></ul>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <nav>
+        <span id="open-close"><i id="menu" class='bx bx-list-minus'></i></span>
+        <img src="/icono.png" class="icono" alt="">
+        <span class="Beppo">Beppo Levi</span>
+    </nav>
+    <aside class="aside" id="aside">
+      <div class="Perfil-Syle">
+        <h2>Perfil</h2>
+        <div class="Name-perfil-menu container-menu-icon"><a href="/Perfil-Alumno.html">
+          <i class='bx bxs-home-circle'></i><span id="nombrecompleto-perfil"></span></a><br>
+        </div>
+    </div>
+        <div class="container-conf-perf">
+            <h2>ConfiguracionCuenta</h2>
+            <div class="container-menu-icon">
+                <i class='bx bx-edit'></i>&nbsp;<a href="/Perfil-Alumno/Incripcion-Examenes.html">Incripcion Examenes</a>
+            </div>
+            <div class="container-menu-icon">
+                <i class='bx bxs-edit-alt'></i>&nbsp;<a href="/Perfil-Alumno/Modificar-Informacion.html">Modificar Informacion</a>
+            </div>
+            <div class="container-menu-icon">
+                <i class='bx bxs-shield'></i>&nbsp;<a href="/Perfil-Alumno/Modificar-Contraseña.html">Modificar Contraseña</a>
+            </div>
+            <div class="container-menu-icon">
+              <i class='bx bx-exit'></i>&nbsp;<a href="/index.html">Cerrar Sesion</a>
+          </div>
+        </div>
+        <div class="container-accordion">
+          <h2>Carreras</h2>
+          <div>
+              <div class="accordion-menu">
+                  <div class="accordion-header">
+                    <span class="arrow-container">
+                      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+                    </span>
+                    <span>Desarrollo de Software</span>
+                  </div>
+                  <div class="accordion-content container-opcion">
+                    <div><a href="/index-Alumno.html#Desarrollo de Software-Objetivos">Objetivos de la carrera</a></div>
+                    <div><a href="/index-Alumno.html#Desarrollo de Software-Objetivos">Materias</a></div>
+                    <div><a href="/index-Alumno.html#Desarrollo de Software-Objetivos">Régimen De Correlatividades</a></div>
+                  </div>
+              </div>
+      </div>
+      
+      <!-- ***********************************************************-->
+      <div class="accordion-menu">
+        <div class="accordion-header">
+          <span class="arrow-container">
+            <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+          </span>
+          <span>Analista&nbsp;en&nbsp;Medio Ambiente</span>
+        </div>
+        <div class="accordion-content container-opcion">
+          <div><a href="/index-Alumno.html#Ambiente-Objetivos">Objetivos de la carrera</a></div>
+          <div><a href="/index-Alumno.html#AnalistaenMedio Ambiente-Materias">Materias</a></div>
+          <div><a href="/index-Alumno.html#AnalistaenMedio Ambiente-Regimen">Régimen De Correlatividades</a></div>
+        </div>
+      </div>
+      </div>
+      <!-- ***********************************************************-->
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Comercio&nbsp;Exterior</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#ComercioExterior-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#ComercioExterior-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#ComercioExterior-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Comercialización&nbsp;y Administración de Empresas</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#ComercializaciónyAdministracióndeEmpresas-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#ComercializaciónyAdministracióndeEmpresas-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#ComercializaciónyAdministracióndeEmpresas-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Higiene&nbsp;y&nbsp;Seguridad en el Trabajo</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#HigieneySeguridadenelTrabajo-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#HigieneySeguridadenelTrabajo-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#HigieneySeguridadenelTrabajo-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Sistema&nbsp;de&nbsp;Control</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#SistemadeControl-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#SistemadeControl-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#SistemadeControl-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Microelectrónica</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#Microelectrónica-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#Microelectrónica-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#Microelectrónica-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span>Químico&nbsp;Superior Industrial</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#QuímicouperiorIndustrial-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#QuímicouperiorIndustrial-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#QuímicouperiorIndustrial-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+      
+      <div class="accordion-menu">
+      <div class="accordion-header">
+      <span class="arrow-container">
+      <i class='bx bx-chevron-right arrow arrow-menu-size'></i>
+      </span>
+      <span class="materia" >Químico&nbsp;Superior Analista</span>
+      </div>
+      <div class="accordion-content container-opcion">
+      <div><a href="/index-Alumno.html#QuímicoSuperior Analista-Objetivos">Objetivos de la carrera</a></div>
+      <div><a href="/index-Alumno.html#QuímicoSuperior Analista-Materias">Materias</a></div>
+      <div><a href="/index-Alumno.html#QuímicoSuperior Analista-Regimen">Régimen De Correlatividades</a></div>
+      </div>
+      </div>
+      </div>
+        <div class="container-svg">
+            <h2>Nuestras Sedes</h2>
+            <div>
+                <span>Reconquista 813</span>
+            </div>
+            <div>
+                <span>Avda. San Martín 245</span>
+            </div>
+            <div>
+                <span>9 de Julio 1247</span>
+            </div>
+        </div>
+        <div class="container-svg">
+            <h2>Contactanos</h2>
+            <div>
+                <!---->
+            </div>
+            <div>
+                <!---->
+            </div>
+            <div>
+                <!---->
+            </div>
+        </div>
+    </aside>
+        <section id="content" class="container-page">
+          <div class="container-input">
+         <div class="container-registro">
+          <h1 id="mi-ancla" >INSCRIPCIÓN</h1>
+          <div class="Card-Loading-incripcion  invisible ">
+            <li id="li-loading" class="progress-materia">
+              <div class="progress-bar progress-materiadiv progress-bar-striped progress-bar-animated bg-success" role="progressbar"  style="width: 1%"></div>
+            </li>
+             <ul id="list-aprobadas-rechazadas">
+             </ul>
+          </div>
+          <div id="contenerdor-visual-materias">
+          <div id="container-materia"></div>
+        <div class="botones-registro">
+          <button id="btn-inscripcion" class="btn btn-light">INSCRIPCIÓN</button>
+          <button class="btn btn-light">CANCELAR</button>
+      </div>
+    </div>
+       </section>
+</div>
+<script type="module" src="/src/index.js"></script>
+<script src="/src/Visual.js"></script>
+</body>
+</html>

@@ -17,6 +17,7 @@ class Inscipcion {
       };
       return fetch(url, parametrosSolicitud)
         .then(respuesta => {
+          console.log(respuesta)
           if (!respuesta.ok) {
             throw new Error(`Ocurrió un error: ${respuesta.status}`);
           }
@@ -47,7 +48,8 @@ class Inscipcion {
           regularidad: Array.from(this.radios[groupName])
             .filter(radio => radio.checked)
             .map(radio => radio.value)[0] || null,
-          tiempo: tiempo_
+          tiempo: tiempo_,
+          tiket : 0
         };
         selectedRadioValues.push(values);
       }
