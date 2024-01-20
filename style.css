@@ -607,6 +607,10 @@ body::-webkit-scrollbar-thumb{
   width: 200px;
 }
 
+.recorte .btn-danger{
+  width: 200px;
+}
+
 .menu-herramientas{
   position: absolute;
   left: 280px;
@@ -1568,12 +1572,12 @@ left: 10px !important;
   border-color: var(--text-color);
 }
 
-/*.container-registro{
+ .Cont-Reg .container-registro{
   position: relative;
   left: 30%;
   width: 500px!important;
   text-align: center;
-}*/
+}
 
 .container-registro .form-select{
   margin-top: 5px;

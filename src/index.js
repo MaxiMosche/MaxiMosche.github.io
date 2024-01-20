@@ -15,6 +15,11 @@ import PostMateria from './PostMateria.js';
 import DeleteMateria from './DeleteMateria.js';
 import PutCarrera from './PutCarrera.js';
 import EstadoInscripcion from './EstadoInscripciones.js';
+import CrearAdministrador from './CrearAdministrador.js';
+import PutAdministrador from './PutAdministrador.js';
+import GetAdministrador from './GetAdministrador.js';
+import PostCarrera from './PostCarrera.js';
+import DeleteCarrera from './DeleteCarrera.js';
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -1031,6 +1036,195 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
   } // temina el if
 
+  
+  if (window.location.href.includes("Perfil-AdministradorMaster/Modificar-Informacion.html")|| window.location.href.includes("Perfil-Administrador/Modificar-Informacion.html")){
+    var elemento = document.getElementById("Modificar-administrador");
+      elemento.addEventListener('click', async function () {
+        let iDadministrador = sessionStorage.getItem('iDadministrador');
+        console.log(iDadministrador)
+        const Usuario = document.getElementById('Usuario-Administrador').value;
+        if(Usuario != ""){
+          let token = sessionStorage.getItem('TokenLogin');
+          const BuscarAdministrdor = new GetAdministrador()
+          let administrador = await BuscarAdministrdor.EviarDatos(iDadministrador ,token)
+          administrador.usuario = Usuario
+          const ModificarAdministrador = new PutAdministrador();
+          const nota = await ModificarAdministrador.EnviarDato(administrador , token)
+          if(nota == "Se modifico con éxito"){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('success' , nota );
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , nota );
+          }
+        }
+        else
+        {
+          ///ERROR
+        }
+      });
+  }
+
+  if (window.location.href.includes("Perfil-AdministradorMaster/Modificar-Contrase")|| window.location.href.includes("Perfil-Administrador/Modificar-Contrase")){
+    var elemento = document.getElementById("Cambiar-pass");
+      elemento.addEventListener('click', async function () {
+        let iDadministrador = sessionStorage.getItem('iDadministrador');
+        const pass = document.getElementById('pass-admin').value;
+        const Repass = document.getElementById('re-pass-admin').value;
+        if(pass != "" || pass == Repass){
+          let token = sessionStorage.getItem('TokenLogin');
+          const BuscarAdministrdor = new GetAdministrador()
+          let administrador = await BuscarAdministrdor.EviarDatos(iDadministrador ,token)
+          administrador.contrasenia = pass
+          const ModificarAdministrador = new PutAdministrador();
+          const nota = await ModificarAdministrador.EnviarDato(administrador , token)
+          if(nota == "Se modifico con éxito"){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('success' , nota );
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , nota );
+          }
+        }
+        else
+        {
+          if(pass == Repass){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , 'Las contraseñas no son iguales' );
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , 'El campo Contraseña es obligatorio' );
+          }
+        }
+      });
+  }
+  if (window.location.href.includes("Perfil-AdministradorMaster/CrearCuenta.html")){
+    var elemento = document.getElementById("CrearAdministrador");
+      elemento.addEventListener('click', async function () {
+        let token = sessionStorage.getItem('TokenLogin');
+        const Usuario = document.getElementById('usuario').value;
+        const pass = document.getElementById('pass').value;
+        const Repass = document.getElementById('repass').value;
+        if(Usuario != "" && pass != "" && pass == pass){
+          const Administrador = {
+            iDadministrador: 0,
+            usuario: Usuario,
+            contrasenia: pass
+          }
+          const crearadmin = new CrearAdministrador();
+          const nota = await crearadmin.EnviarDatos(Administrador , token );
+          if(nota == "Se creo la cuenta con éxito"){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('success' , nota);
+            document.getElementById('usuario').value = "";
+            document.getElementById('pass').value= "";
+            document.getElementById('repass').value= "";
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , nota );
+          }
+        }
+        else
+        {
+          if(Usuario == "" && pass == ""){
+            if(Usuario == ""){
+              const toastCreator = new ToastCreator(notifications);
+              toastCreator.createToast('error' , 'Usuario es un campo obligatorio' );
+            }
+            else
+            {
+              const toastCreator = new ToastCreator(notifications);
+              toastCreator.createToast('error' , 'Contraseña es un campo obligatorio' );
+            }
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , 'Las contraseñas no son iguales' );
+          }
+        }
+      })
+  }
+
+  if (window.location.href.includes("/Agregar-Carrera.html")){
+    let token = sessionStorage.getItem('TokenLogin');
+    var elemento = document.getElementById("Agregar-Carrera");
+      elemento.addEventListener('click', async function () {
+         const NombreCarrera = document.getElementById("Nombre-Carrera").value;
+         if(NombreCarrera != ""){
+          const Carrera = {
+            iDcarrera: 0,
+            NombreCarrera: NombreCarrera,
+            nalumnos: 0,
+            ncursos: 0
+          }
+           const NuevaCarrera = new PostCarrera();
+           const nota = await NuevaCarrera.enviarDato(Carrera , token )
+           if(nota == "Se agrego con éxito"){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('success' , nota);
+            document.getElementById("Nombre-Carrera").value = "";
+           }
+           else
+           {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error' , nota);
+           }
+         }
+         else
+         {
+          const toastCreator = new ToastCreator(notifications);
+          toastCreator.createToast('error' , "NombreCarrera es requerido");
+         }
+        
+
+      });
+  }
+  /////
+  if (window.location.href.includes("/Perfil-AdministradorMaster/Eliminar-Carrera.html")){
+    await selectcarreraConId()
+    var elemento = document.getElementById("Eliminar-Carrera");
+    elemento.addEventListener('click', async function () {
+      const selectCarrera = document.getElementById('Select-Carrera');
+      let token = sessionStorage.getItem('TokenLogin');
+      const EliminarCarrera = new DeleteCarrera()
+      const selectedValue = selectCarrera.value;
+      const selectedText = selectCarrera.options[selectCarrera.selectedIndex].text;
+      if(selectedText.toLowerCase() != "carrera"){
+        const Carrera = {
+          iDcarrera: selectedValue,
+          nombreCarrera:  selectedText.toLowerCase(),
+          nalumnos: 0,
+          ncursos: 0
+        }
+        const nota = await EliminarCarrera.EnviarDato(Carrera , token )
+        if(nota == "Se elimino con éxito"){
+          const toastCreator = new ToastCreator(notifications);
+          toastCreator.createToast('success' , nota);
+        }
+        else
+        {
+          const toastCreator = new ToastCreator(notifications);
+          toastCreator.createToast('error' , nota);
+        }
+      }
+      else
+      {
+        const toastCreator = new ToastCreator(notifications);
+        toastCreator.createToast('error' , 'Seleccione una carrera');
+      }
+
+    })
+  }
+
   if (window.location.href.includes("/PanelControl.html")){
     selectcarreraConId()
     TablaCursosAlumnos()
@@ -1203,21 +1397,24 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
        {
       let idAlumno = localStorage.getItem('idAlumno');
       
-      if(window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
-      window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html")){
+      if(window.location.href.includes("/Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
+      window.location.href.includes("/Perfil-Alumno/Modificar-Informacion.html")){
         document.getElementById("Label-nombre").innerText = "Cargando...";
         document.getElementById("Label-direccion").innerText = "Cargando...";
         document.getElementById("Label-localidad").innerText = "Cargando...";
         document.getElementById("Label-telefono").innerText = "Cargando...";
         document.getElementById("Label-email").innerText = "Cargando...";
-        const inscribirMaterias = document.getElementById("Inscribir-materia")
-              inscribirMaterias.addEventListener('click', function () {
-              window.location.href = "ModificarInfoAlumno/Incripcion-Materia.html"
-              });
-        const modificarContraseña = document.getElementById("Modificar-Contraseña")
-              modificarContraseña.addEventListener('click', function () {
-              window.location.href = "ModificarInfoAlumno/Modificar-Contraseña.html"
-              });
+        if(window.location.href.includes("/Perfil-AdministradorMaster/ModificarInfoAlumno.html")){
+          const inscribirMaterias = document.getElementById("Inscribir-materia")
+          inscribirMaterias.addEventListener('click', function () {
+          window.location.href = "ModificarInfoAlumno/Incripcion-Materia.html"
+          });
+          const modificarContraseña = document.getElementById("Modificar-Contraseña")
+          modificarContraseña.addEventListener('click', function () {
+          window.location.href = "ModificarInfoAlumno/Modificar-Contraseña.html"
+          });
+
+        }
       }
       ModificarAlumno.filtrarPorId(idAlumno)
   .then(Alumno => {
@@ -1480,11 +1677,14 @@ if (enviarButton !== null) {
         {
           sessionStorage.setItem('TokenLogin', responseData.value.token);
           updateNotification(true, responseData.value.msg);
+          sessionStorage.setItem('iDadministrador', responseData.value.iDadministrador);
           window.location.href = "Perfil-AdministradorMaster.html"
         }
         else 
         {
+        
           sessionStorage.setItem('TokenLogin', responseData.value.token);
+          sessionStorage.setItem('iDadministrador', responseData.value.iDadministrador);
           window.location.href = "Perfil-Administrador.html"
         }
       }
