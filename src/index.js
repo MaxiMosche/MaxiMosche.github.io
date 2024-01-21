@@ -20,6 +20,8 @@ import PutAdministrador from './PutAdministrador.js';
 import GetAdministrador from './GetAdministrador.js';
 import PostCarrera from './PostCarrera.js';
 import DeleteCarrera from './DeleteCarrera.js';
+import AsignarTiket from './AsignarTiket.js'
+import DeleteAlumno from './DeleteAlumno.js'
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -280,7 +282,6 @@ async function loadicon(){
 
 export async function CrearMenuAlumno()
 {
-  console.log("esta entrando a crearmenualumno")
   let idAlumno = localStorage.getItem('idAlumno');
   console.log(idAlumno)
   document.getElementById("nombrecompleto-perfil").innerText = "Cargando..." 
@@ -530,6 +531,52 @@ lista.obtenerPaginas(token)
   })
 }
 
+
+async function agregarEventosTiket() {
+  let token = sessionStorage.getItem('TokenLogin');
+  var elementosTiket = document.querySelectorAll('.Elemento-Tiket');
+
+  elementosTiket.forEach(async function(elemento) {
+    elemento.addEventListener('click', async function() {
+      var Id = this.getAttribute('data-id');
+      const AlumnoMateria = {
+        ID: Id,
+        NumeroDocumento: 12345678,
+        Materia: "Matemáticas",
+        Regularidad: "semestral",
+        Tiempo: "2024-01-21",
+        tiket: 987
+      }
+      const asignarTiket = new AsignarTiket();
+      const nota = await asignarTiket.EnviarDato(AlumnoMateria, token)
+      if(nota == "Se modifico la materia con éxito"){
+        const toastCreator = new ToastCreator(notifications);
+        toastCreator.createToast('success', nota);
+      }
+      else
+      {
+        const toastCreator = new ToastCreator(notifications);
+        toastCreator.createToast('error', nota);
+      }
+      await CrearMenuTiket();
+      await agregarEventosTiket();
+    });
+  });
+}
+
+
+async function CrearMenuTiket(){
+  let idAlumno = localStorage.getItem('idAlumno');
+  let token = sessionStorage.getItem('TokenLogin');
+  const NuevaLista = await ModificarAlumno.ObtenerAlumnoDatos(idAlumno, token);
+  let dato = ``
+  console.log(NuevaLista.listaMateria)
+  for(let materia of NuevaLista.listaMateria){
+    dato += `<li><h1>${materia.materia.toUpperCase()} :</h1><div class="Elemento-Tiket" data-id="${materia.id}" ><i class='bx bx-plus-circle'></i><samp>${materia.tiket} Tiket</samp></div></li>`
+  }
+  document.getElementById("Lista-Materias-Tiket").innerHTML = dato
+}
+
 async function CrearMenuAdministrador() {
   var dato = ""
   let token = sessionStorage.getItem('TokenLogin');
@@ -537,7 +584,6 @@ const lista = new ListaAlumnos();
 (async () => {
     const paginas = await listaAlumnos.obtenerPaginas(token);
     const alumno = await listaAlumnos.obtenerAlumnos(token, paginas);
-    console.log(alumno);
 })();
 lista.obtenerPaginas(token)
   .then(async (paginas) => {
@@ -826,9 +872,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           todosVacios ++;
         }
     }
-    console.log(todosVacios)
     if (todosVacios > 0){
-    console.log(todosVacios)
      var ParaElFor = contadorArrays;
      arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
      contadorArrays++;
@@ -1209,6 +1253,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if(nota == "Se elimino con éxito"){
           const toastCreator = new ToastCreator(notifications);
           toastCreator.createToast('success' , nota);
+          await selectcarreraConId()
         }
         else
         {
@@ -1390,6 +1435,12 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
     handleClickModificar("Btn-ModificarAlumnoMateria");
   }
 
+  if (window.location.href.includes("/Perfil-AdministradorMaster/ModificarInfoAlumno/Agregar-Tiket.html")) {
+    await CrearMenuTiket();
+    await agregarEventosTiket();
+  
+  }
+
   if (window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno.html") ||
       window.location.href.includes("Perfil-Alumno/Modificar-Informacion.html") ||
       window.location.href.includes("Perfil-Alumno/Modificar-Contrase")||
@@ -1413,7 +1464,51 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
           modificarContraseña.addEventListener('click', function () {
           window.location.href = "ModificarInfoAlumno/Modificar-Contraseña.html"
           });
-
+          const agregarTiket = document.getElementById("Asignar-Tiket")
+          agregarTiket.addEventListener('click', function () {
+          window.location.href = "ModificarInfoAlumno/Agregar-Tiket.html"
+          });
+          const EliminarAlumno = document.getElementById("Eliminar-Alumno")
+          EliminarAlumno.addEventListener('click', async function () { 
+            let token = sessionStorage.getItem('TokenLogin');
+            const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
+            const Delete = new DeleteAlumno();
+            cargarSweetAlert().then(async function()  {
+              Swal.fire({
+                title: '¿Estás seguro que quieres eliminar al Alumno?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  if (alert) {
+                    cargarSweetAlert().then(async function()  {
+                      Swal.fire({
+                        title: '¡Se elimino con Éxito!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                      }).then(async function() {
+                        const dato = await Delete.EnviarDato(Alumno , token)
+                        if(window.location.href.includes("/Perfil-AdministradorMaster/ModificarInfoAlumno.html")){
+                          window.location.href = "/Perfil-AdministradorMaster.html";
+                        }
+                        else
+                        {
+                          window.location.href = "/Perfil-Administrador.html";
+                        }
+                        
+                      });
+                    })
+                  } else {
+                    toastCreator.createToast('error', "No se pudo eliminar");
+                  }
+                }
+              });
+            });         
+          });
         }
       }
       ModificarAlumno.filtrarPorId(idAlumno)
@@ -1422,7 +1517,6 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
     window.location.href.includes("Perfil-Alumno/Modificar-Contrase")||
     window.location.href.includes("Perfil-AdministradorMaster/ModificarInfoAlumno/Modificar-Contrase"))
     {
-      console.log("pasapor aca")
       handleClickpss("input-password" ,"Button-Password");       
     }else
     {

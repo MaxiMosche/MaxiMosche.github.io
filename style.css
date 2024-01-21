@@ -18,6 +18,48 @@
     margin: 0;
 }
 
+.container-registro .Cont-Tiket{
+  list-style-type: none;
+}
+
+.container-registro.contenedor-tikets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Cont-Tiket .bxs-plus-circle{
+ font-size: 40px;
+}
+
+.Cont-Tiket{
+  list-style: none;
+}
+
+.container-registro .Cont-Tiket li{
+  text-align: center;
+}
+
+.container-registro .Cont-Tiket h1{
+  font-size: 35px;
+  
+}
+
+.container-registro .Cont-Tiket i{
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.container-registro .Cont-Tiket div{
+  border: 1px solid var(--border-color);
+  background-color: var(--items-color);
+}
+
+.container-registro .Cont-Tiket div:hover{
+  background-color: var(--background-hover);
+  cursor: pointer;
+}
+
 .Card-Loading-incripcion .Exitosa{
   border: 1px solid var(--border-color);
   height: 70px;
