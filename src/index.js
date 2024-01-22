@@ -22,6 +22,7 @@ import PostCarrera from './PostCarrera.js';
 import DeleteCarrera from './DeleteCarrera.js';
 import AsignarTiket from './AsignarTiket.js'
 import DeleteAlumno from './DeleteAlumno.js'
+import ActualizarAlumno from './ActualizarAlumno.js'
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -180,6 +181,27 @@ async function forCartelHerramienta(ParaElFor, NombreCartel, atributosConConteni
         const verificacion = await Validar.verificarAlumno(parseInt(dni), token);
       }
 
+      if (NombreCartel === `Actualizando Alumnos`){
+        const Actualizar = new ActualizarAlumno()
+        const datos = {
+          "numeroDocumento": dni,
+          "nombreCompleto": "default",
+          "direccion": "default",
+          "carrera": "default",
+          "localidad": "default",
+          "curso": "default",
+          "anio": "default",
+          "verificacion": true,
+          "telefono": "1234567890",
+          "email": "default@example.com",
+          "contrasenia": "default",
+          "fechaRegistro":"2024-01-20T12:34:56Z",
+          "listaMateria": [],
+          "actualizado": false
+      };
+        const Nota = Actualizar.EnviarDatos(datos , token)
+      }
+
       if (NombreCartel === `Asignar Alumnos`) {
         const alumnoExistente = await ModificarAlumno.filtrarPorId(dni);
         
@@ -266,7 +288,6 @@ async function TablaCursosAlumnos(){
 
 async function loadicon(){
   var iconosEdicion = document.querySelectorAll('.bx-edit');
-  console.log("Cantidad de iconos encontrados:", iconosEdicion.length);
   iconosEdicion.forEach(function (icono) {
     icono.addEventListener('click', function () {
       var idAlumno = icono.getAttribute('data-id');
@@ -283,7 +304,7 @@ async function loadicon(){
 export async function CrearMenuAlumno()
 {
   let idAlumno = localStorage.getItem('idAlumno');
-  console.log(idAlumno)
+  let token = sessionStorage.getItem('TokenLogin');
   document.getElementById("nombrecompleto-perfil").innerText = "Cargando..." 
   const Alumno = await ModificarAlumno.filtrarPorId(idAlumno);
   sessionStorage.setItem('NombreAlumno', Alumno.nombreCompleto);
@@ -294,52 +315,106 @@ export async function CrearMenuAlumno()
   } else {
     elemento.classList.add("NoVerificado");
   }
-  document.getElementById("Nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
-  document.getElementById("Eimail").innerText = capitalizarPrimeraLetra(Alumno.email);
-  document.getElementById("Carrera").innerText = capitalizarPrimeraLetra(Alumno.carrera);
-  document.getElementById("Año").innerText = capitalizarPrimeraLetra(Alumno.anio) + "  " + capitalizarPrimeraLetra(Alumno.curso);
-  document.getElementById("FC").innerText =  formatearFecha(new Date(Alumno.fechaRegistro));
-  var primero = `<div class="accordion"><div class="accordion-header border-accordion">
-  <span class="arrow-container ">
-    <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
-  </span> <h4 class="h4">Materias</h4></div>
-  <div class="accordion-content container-opcion ">`
-  var fin = `</div></div>`
-  var examenes = `<div class="accordion">
-  <div class="accordion-header examen-posit border-accordion">
-    <span class="arrow-container">
-      <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
-    </span>
-     <h4 class="h4">Examenes</h4>
-  </div>
-  <div class="accordion-content examen-stilo">`
-   const tieneTiempoPermanente = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'permanente');
-   const tieneTiempotemporal = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'temporal');
-   if (!tieneTiempoPermanente) {
-    var boton = `<div class="alert alert-primary" role="alert">
-    No estas inscripto a ninguna materia , <a id="Btn-incripcion-materias" href="#" class="alert-link">INSCRIBIRME</a></div>`
-    document.getElementById("Lista-Materias").innerHTML = boton  
-   }else{
-      for(var i = 0 ; i < Alumno.listaMateria.length ; i++)
-      {
-        if(Alumno.listaMateria[i].tiempo === "permanente")
-        {
-        primero += `<div class=" materia-form"><span class="Regularidad2-w800">${Alumno.listaMateria[i].materia.toUpperCase()}</span><span id="Regularidad-w800" class="Regularidad-w800">${Alumno.listaMateria[i].regularidad.toUpperCase()}</span></div>`
-        } 
-        else
-        {
-        examenes += `<div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia.toUpperCase()}</span><i id="rotate-icon" data-id-valor="${Alumno.listaMateria[i].id}" class='rotate-icon col-9 bx bxs-brightness'></i></div>`
+  if(!Alumno.actualizado){
+    cargarSweetAlert().then(async function() {
+      Swal.fire({
+        title: '¿Qué acción deseas realizar en tu Carrera?',
+        text: 'Esta elección afectará tu información personal.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#d33',
+        showDenyButton: true,
+        denyButtonText: 'Pasar de Año',
+        denyButtonColor: '#007bff',
+        confirmButtonText: 'Recursar'
+      }).then(async function(result) {
+        if (result.isConfirmed) {
+          if (alert) {
+            cargarSweetAlert().then(async function() {
+              Swal.fire({
+                title: '¡Se actualizó con éxito!',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'  
+              }).then(async function() {
+                const Actualizar = new ActualizarAlumno();
+                Alumno.actualizado = true;
+                const Nota = await Actualizar.EnviarDatos(Alumno, token);
+                CrearMenuAlumno();
+              });
+            });
+          } else {
+            toastCreator.createToast('error', 'No se pudo actualizar');
+          }
+        } else if (result.isDenied) {
+          console.log("pasa por dentro de pasar de año")
+          const Actualizar = new ActualizarAlumno();
+          if (Alumno.anio == "primero") {
+            Alumno.anio = "segundo";
+          } else if (Alumno.anio == "segundo") {
+            Alumno.anio = "tercero";
+          } else {
+            Alumno.anio = "tercero";
+          }
+          Alumno.actualizado = true;
+          console.log(Alumno)
+          await ModificarAlumno.enviarDatos(Alumno, token)
+          const Nota = await Actualizar.EnviarDatos(Alumno, token);
+          CrearMenuAlumno();
+        } else {
+          window.location.href = "/index.html";
+          borrarTodasLasCookies();
         }
+      });
+    });
+  }else{
+    document.getElementById("Nombre").innerText = capitalizarPrimeraLetra(Alumno.nombreCompleto);
+    document.getElementById("Eimail").innerText = capitalizarPrimeraLetra(Alumno.email);
+    document.getElementById("Carrera").innerText = capitalizarPrimeraLetra(Alumno.carrera);
+    document.getElementById("Año").innerText = capitalizarPrimeraLetra(Alumno.anio) + "  " + capitalizarPrimeraLetra(Alumno.curso);
+    document.getElementById("FC").innerText =  formatearFecha(new Date(Alumno.fechaRegistro));
+    var primero = `<div class="accordion"><div class="accordion-header border-accordion">
+    <span class="arrow-container ">
+      <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
+    </span> <h4 class="h4">Materias</h4></div>
+    <div class="accordion-content container-opcion ">`
+    var fin = `</div></div>`
+    var examenes = `<div class="accordion">
+    <div class="accordion-header examen-posit border-accordion">
+      <span class="arrow-container">
+        <i class='bx bx-chevron-right arrow acordion-perfil-arrow'></i>
+      </span>
+       <h4 class="h4">Examenes</h4>
+    </div>
+    <div class="accordion-content examen-stilo">`
+     const tieneTiempoPermanente = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'permanente');
+     const tieneTiempotemporal = Alumno.listaMateria.some(objeto => objeto.hasOwnProperty('tiempo') && objeto.tiempo === 'temporal');
+     if (!tieneTiempoPermanente) {
+      var boton = `<div class="alert alert-primary" role="alert">
+      No estas inscripto a ninguna materia , <a id="Btn-incripcion-materias" href="#" class="alert-link">INSCRIBIRME</a></div>`
+      document.getElementById("Lista-Materias").innerHTML = boton  
+     }else{
+        for(var i = 0 ; i < Alumno.listaMateria.length ; i++)
+        {
+          if(Alumno.listaMateria[i].tiempo === "permanente")
+          {
+          primero += `<div class=" materia-form"><span class="Regularidad2-w800">${Alumno.listaMateria[i].materia.toUpperCase()}</span><span id="Regularidad-w800" class="Regularidad-w800">${Alumno.listaMateria[i].regularidad.toUpperCase()}</span></div>`
+          } 
+          else
+          {
+          examenes += `<div class="row cont-exam"><span class="col-3">${Alumno.listaMateria[i].materia.toUpperCase()}</span><i id="rotate-icon" data-id-valor="${Alumno.listaMateria[i].id}" class='rotate-icon col-9 bx bxs-brightness'></i></div>`
+          }
+        }
+        if (!tieneTiempotemporal)
+        {
+          document.getElementById("Lista-Examenes").innerHTML = ""
+        }else
+        {
+          document.getElementById("Lista-Examenes").innerHTML = examenes + fin
+        }
+        document.getElementById("Lista-Materias").innerHTML = primero + fin
       }
-      if (!tieneTiempotemporal)
-      {
-        document.getElementById("Lista-Examenes").innerHTML = ""
-      }else
-      {
-        document.getElementById("Lista-Examenes").innerHTML = examenes + fin
-      }
-      document.getElementById("Lista-Materias").innerHTML = primero + fin
-    }
+  }
  }
 
  async function selectCurso(){
@@ -850,6 +925,13 @@ document.addEventListener('DOMContentLoaded', async function () {
      arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
      contadorArrays++;
      await forCartelHerramienta(ParaElFor , `Asignar Alumnos` , []);
+   });
+   const boton4 = document.getElementById('Btn-Actualizar' , []);
+    boton4.addEventListener('click', async () => {
+     var ParaElFor = contadorArrays;
+     arrayDni[contadorArrays] = await ObtenerArregloHerramienta();
+     contadorArrays++;
+     await forCartelHerramienta(ParaElFor , `Actualizando Alumnos` , []);
    });
    const boton3 = document.getElementById('Btn-Guardar');
    boton3.addEventListener('click', async () => {
