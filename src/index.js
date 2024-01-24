@@ -23,6 +23,7 @@ import DeleteCarrera from './DeleteCarrera.js';
 import AsignarTiket from './AsignarTiket.js'
 import DeleteAlumno from './DeleteAlumno.js'
 import ActualizarAlumno from './ActualizarAlumno.js'
+import RecuperarContrasenia from './RecuperarContraseña.js'
 
 if (!(window.location.href.includes("index.html") || window.location.href.includes("Registro-Alumno.html") || window.location.href.includes("RecuperarContrasenia.html"))){
   let token = sessionStorage.getItem('TokenLogin');
@@ -84,20 +85,30 @@ function borrarTodasLasCookies() {
 }
 
 
+
 async function loadHTMLFromAPI() {
   await CrearMenuAdministrador();
   var container = document.getElementById("myList");
-  container.addEventListener("click", function(event) {
-      if (event.target.classList.contains("acordion")) {
-          event.target.classList.toggle("active");
-          var panel = event.target.nextElementSibling;
+
+  container.addEventListener("click", function (event) {
+      var target = event.target;
+      if (target.tagName === 'SPAN') {
+          target = target.closest('.acordion');
+      }
+  
+      if (target && target.classList.contains("acordion")) {
+          target.classList.toggle("active");
+          var panel = target.nextElementSibling;
+  
           if (panel.style.display === "block") {
               panel.style.display = "none";
           } else {
               panel.style.display = "block";
           }
-          var icon = event.target.querySelector("i");
+  
+          var icon = target.querySelector("i");
           var currentClass = icon.className;
+  
           if (currentClass.includes("bx-show")) {
               icon.className = currentClass.replace("bx-show", "bx-hide");
           } else {
@@ -273,14 +284,13 @@ async function TablaCursosAlumnos(){
   <tbody>`
   console.log (ListaCarrera)
   let fin = `</tbody></table>`
-  
- for (var carrera of ListaCarrera){
+  for (var carrera of ListaCarrera) {
     inicio += `<tr>
     <td>${capitalizarPrimeraLetra(carrera.nombreCarrera)}</td>
-    <td>${carrera.ncursos}</td>
-    <td>${carrera.nalumnos}</td>
-    </tr>`
- }
+    <td>${carrera.ncursos !== 0 ? carrera.ncursos : '-'}</td>
+    <td>${carrera.nalumnos !== 0 ? carrera.nalumnos : '-'}</td>
+    </tr>`;
+}
 
  document.getElementById('tabla-carrara-control').innerHTML = inicio + fin
 }
@@ -396,9 +406,11 @@ export async function CrearMenuAlumno()
      }else{
         for(var i = 0 ; i < Alumno.listaMateria.length ; i++)
         {
-          if(Alumno.listaMateria[i].tiempo === "permanente")
+          if(Alumno.listaMateria[i].tiempo === "permanente" )
           {
-          primero += `<div class=" materia-form"><span class="Regularidad2-w800">${Alumno.listaMateria[i].materia.toUpperCase()}</span><span id="Regularidad-w800" class="Regularidad-w800">${Alumno.listaMateria[i].regularidad.toUpperCase()}</span></div>`
+            if(Alumno.listaMateria[i].tiket > 0){
+              primero += `<div class=" materia-form"><span class="Regularidad2-w800">${Alumno.listaMateria[i].materia.toUpperCase()}</span><span id="Regularidad-w800" class="Regularidad-w800">${Alumno.listaMateria[i].regularidad.toUpperCase()}</span></div>`
+            }
           } 
           else
           {
@@ -424,7 +436,7 @@ export async function CrearMenuAlumno()
   console.log(document.getElementById("Select-Curso"))
   const listacarreras = await nuevalista.BuscarLista()
   for(let i = 0 ; i < listacarreras.length ; i++){
-    console.log(listacarreras[i].letraEscala)
+    
     ListaCarreras += `<option value="${listacarreras[i].letraEscala}">${capitalizarPrimeraLetra(listacarreras[i].letraEscala)}</option>`
   }
   document.getElementById("Select-Curso").innerHTML = ListaCarreras;
@@ -755,18 +767,21 @@ lista.obtenerPaginas(token)
       {
       if(Alumno[i].listaMateria[x].tiempo === "permanente")
       {
-      Lpermanente +=`<tr>
-       <td>${Alumno[i].listaMateria[x].materia.toUpperCase()}</td> 
-       <td>Primero</td>
-       <td>libre</td>
-       </tr>`
+        console.log("tiket : " + Alumno[i].listaMateria[x].tiket)
+        if (Alumno[i].listaMateria[x].tiket > 0){
+          Lpermanente +=`<tr>
+          <td>${Alumno[i].listaMateria[x].materia.toUpperCase()}</td> 
+          <td>${Alumno[i].listaMateria[x].anio.toUpperCase()}</td>
+          <td>${Alumno[i].listaMateria[x].regularidad.toUpperCase()}</td>
+          </tr>`
+        }
       }
       else
       {
       Ltemporal += `<tr>
        <td>${Alumno[i].listaMateria[x].materia.toUpperCase()}</td> 
-       <td>Primero</td>
-       <td>libre</td>
+       <td>${Alumno[i].listaMateria[x].anio.toUpperCase()}</td>
+       <td>${Alumno[i].listaMateria[x].regularidad.toUpperCase()}</td>
        </tr>`
       }
       }        
@@ -819,9 +834,18 @@ if (window.location.href.includes("Perfil-AdministradorMaster")){
   document.getElementById("id-perfil").innerText = "ADMIN-MASTER";
 }
 
-
 document.addEventListener('DOMContentLoaded', async function () {
-  if (window.location.href.includes("Perfil-AdministradorMaster.html") || window.location.href.includes("index-AdministradorMaster.html") ) {
+
+  if (window.location.href.includes("Perfil-Administrador")||window.location.href.includes("index-Administrador")){
+    let iDadministrador = sessionStorage.getItem('iDadministrador');
+    let token = sessionStorage.getItem('TokenLogin');
+    const buscarAdministrador = new GetAdministrador()
+    const Administrador = await buscarAdministrador.EviarDatos(iDadministrador , token )
+    document.getElementById("id-perfil").innerText = capitalizarPrimeraLetra(Administrador.usuario);
+  }
+
+
+  if (window.location.href.includes("Perfil-AdministradorMaster.html") || window.location.href.includes("index-AdministradorMaster.html") || window.location.href.includes("index-Administrador.html")|| window.location.href.includes("Perfil-Administrador.html")) {
     await loadHTMLFromAPI()
     selectcarrera()
     selectCurso()
@@ -1024,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', async function () {
    }
   }
   
-  if (window.location.href.includes("index.html")){
+  if (window.location.href.includes("index.html") || window.location.href.includes("RecuperarContrasenia.html")|| window.location.href.includes("Registro-Alumno.html")){
     document.getElementById('registro').addEventListener('click', function() {
       window.location.href = 'Registro-Alumno.html';
     });
@@ -1412,23 +1436,112 @@ document.addEventListener('DOMContentLoaded', async function () {
       toastCreator.createToast('error' , 'Algo salio mal' );
     }
     });
+
+    const botonBorrarMaterias = document.getElementById('Btn-BorrarMaterias');
+    botonBorrarMaterias.addEventListener('click', accionBorrarMaterias);
+   async function accionBorrarMaterias() {
+    cargarSweetAlert().then(() => {
+      Swal.fire({
+        title: '¿Estás seguro que quieres eliminar el registro?',
+        text:"Se procederá a la eliminación de todos los registros de materias de la base de datos."  ,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (alert) {
+            let token = sessionStorage.getItem('TokenLogin');
+            var NuevoModificar = new ModificarRegistros()
+             NuevoModificar.EliminarMateria(token)
+            cargarSweetAlert().then(() => {
+              Swal.fire({
+                title: '¡Se elimino con Éxito!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(() => {
+              });
+            })
+          } else {
+            toastCreator.createToast('error', "No se pudo eliminar");
+          }
+        }
+      });
+    });
+    }
+
+    const botonBorrarExamenes = document.getElementById('Btn-BorrarExamenes');
+    botonBorrarExamenes.addEventListener('click', accionBorrarExamenes);
+   async function accionBorrarExamenes() {
+    cargarSweetAlert().then(() => {
+      Swal.fire({
+        title: '¿Estás seguro que quieres eliminar el registro?',
+        text:
+        "Se procederá a la eliminación de todos los registros de exámenes que hayan transcurrido más de tres meses desde su ingreso a la base de datos."  ,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (alert) {
+            let token = sessionStorage.getItem('TokenLogin');
+            var NuevoModificar = new ModificarRegistros()
+             NuevoModificar.EliminarExamenes(token)
+            cargarSweetAlert().then(() => {
+              Swal.fire({
+                title: '¡Se elimino con Éxito!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(() => {
+              });
+            })
+          } else {
+            toastCreator.createToast('error', "No se pudo eliminar");
+          }
+        }
+      });
+    });
+    }
     
 
-
-    const botonBorrar = document.getElementById('BorrarRegistros');
-    botonBorrar.addEventListener('click', accionBorrar);
-   async function accionBorrar() {
-     let token = sessionStorage.getItem('TokenLogin');
-     var NuevoModificar = new ModificarRegistros()
-     var verificar = await NuevoModificar.EliminarRegistros(token)
-     if(verificar){
-       const toastCreator = new ToastCreator(notifications);
-       toastCreator.createToast('success', "Se Eliminaron Los Registros Con Éxito");
-     }else
-     {
-       const toastCreator = new ToastCreator(notifications);
-       toastCreator.createToast('error', "Algo Salio Mal");
-     }
+    const botonBorrarRegistros = document.getElementById('BorrarRegistros');
+    botonBorrarRegistros.addEventListener('click', accionBorrarRegistros);
+   async function accionBorrarRegistros() {
+    cargarSweetAlert().then(() => {
+      Swal.fire({
+        title: '¿Estás seguro que quieres eliminar el registro ?',
+        text:"Se procederá a la eliminación de todos los registros de exámenes y materias de la base de datos.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (alert) {
+            let token = sessionStorage.getItem('TokenLogin');
+            var NuevoModificar = new ModificarRegistros()
+             NuevoModificar.EliminarRegistros(token)
+            cargarSweetAlert().then(() => {
+              Swal.fire({
+                title: '¡Se elimino con Éxito!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+              }).then(() => {
+              });
+            })
+          } else {
+            toastCreator.createToast('error', "No se pudo eliminar");
+          }
+        }
+      });
+    });
     }
 }
 
@@ -1677,6 +1790,30 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
           });
         });
       }
+      if (window.location.href.includes("/RecuperarContrasenia.html")){
+        document.getElementById("RecuperarContraseña").addEventListener("click", async function() {
+          var usuario = document.getElementById("recuperar-usuario").value;
+          var email = document.getElementById("recuperar-email").value;
+          var recuperar = {
+              "usuario": usuario,
+              "email": email
+          };
+          const RecuperarPASS = new RecuperarContrasenia()
+          const Nota = await RecuperarPASS.enviarDato(recuperar)
+          console.log(Nota)
+
+          if(Nota == "El Email se envio con exito , revisar su casilla"){
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('success', 'Nota');
+          }
+          else
+          {
+            const toastCreator = new ToastCreator(notifications);
+            toastCreator.createToast('error', 'Nota');
+          }
+      });
+      }
+
       if (window.location.href.includes("/Agregar-Materia.html")){
         selectcarrera()
         document.getElementById('Agregar-Materia').addEventListener('click', async function() {
@@ -1714,7 +1851,6 @@ if (window.location.href.includes("/Modificar-Informacion.html")){
       }
 
       if (window.location.href.includes("Perfil-Alumno.html")) {
-      console.log("pasa por perfil alumno")
         try {
           document.getElementById('Nombre').innerText = "Cargando...";
           document.getElementById('Eimail').innerText = "Cargando...";

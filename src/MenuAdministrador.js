@@ -53,6 +53,8 @@ class ListaAlumnos {
       const response = await fetch(`${this.apiUrl}${pagina}`, requestOptions);
       if (response.ok) {
         const responseData = await response.json();
+        console.log("este es el json alumno")
+        console.log(response)
         return responseData;
       } else {
         throw new Error(`Error al obtener la página ${pagina}`);

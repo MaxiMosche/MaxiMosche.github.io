@@ -18,7 +18,7 @@
     <div class="spinner-border text-light" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <span class="Card-Loading-span" >Cargando...</span>
+    <span class="Card-Loading-span" >Cargando</span>
   </div>
     <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -219,16 +219,15 @@
       </div>
     </aside>
     <section id="content" class="container-page">
-        <div class="container-input">
-       <div class="container-registro">
+      <div class="container-input Cont-Reg">
+     <div class="container-registro">
         <div class="registro-cuenta">
             <h2>RECUPERAR CONTRASEÑA</h2>
-          <label for="">DOCUMENTO</label><input class="form-control" type="text">
-          <label for="">EMAIL</label><input class="form-control" type="text">
+          <label for="">DOCUMENTO</label><input id="recuperar-usuario" class="form-control" type="text">
+          <label for="">EMAIL</label><input id="recuperar-email" class="form-control" type="text">
         </div>
           <div class="botones-registro">
-            <button class="btn btn-light">RECUPERAR</button>
-            <button class="btn btn-light">CANCELAR</button>
+            <button id="RecuperarContraseña" class="btn btn-light">RECUPERAR</button>
         </div>
         </div>
         </div>
